@@ -24,25 +24,40 @@ class State
     public void AddAction(Action act)
     {
         Action lasta = null, a = firstAction;
-        while (a != null && act.typ >= a.typ) { lasta = a; a = a.next; }
+        while (a != null && act.typ >= a.typ)
+        {
+            lasta = a;
+            a = a.next;
+        }
         // collecting classes at the beginning gives better performance
         act.next = a;
-        if (a == firstAction) firstAction = act; else lasta.next = act;
+        if (a == firstAction)
+            firstAction = act;
+        else
+            lasta.next = act;
     }
 
     public void DetachAction(Action act)
     {
         Action lasta = null, a = firstAction;
-        while (a != null && a != act) { lasta = a; a = a.next; }
+        while (a != null && a != act)
+        {
+            lasta = a;
+            a = a.next;
+        }
         if (a != null)
-            if (a == firstAction) firstAction = a.next; else lasta.next = a.next;
+            if (a == firstAction)
+                firstAction = a.next;
+            else
+                lasta.next = a.next;
     }
 
     public void MeltWith(State s)
-    { // copy actions of s to state
+    {
+        // copy actions of s to state
         for (Action action = s.firstAction; action != null; action = action.next)
         {
-            Action a = new Action(action.typ, action.sym, action.tc);
+            var a = new Action(action.typ, action.sym, action.tc);
             a.AddTargets(action);
             AddAction(a);
         }
@@ -165,27 +180,29 @@ class Melted
 //  Comment
 //-----------------------------------------------------------------------------
 
-class Comment
-{                   // info about comment syntax
-    public string start;
-    public string stop;
-    public bool nested;
-    public Comment next;
-
+/// <summary>
+/// The information about comment syntax.
+/// </summary>
+sealed class Comment
+{
     public Comment(string start, string stop, bool nested)
     {
-        this.start = start; this.stop = stop; this.nested = nested;
+        Start = start;
+        Stop = stop;
+        Nested = nested;
     }
 
+    public string Start { get; }
+    public string Stop { get; }
+    public bool Nested { get; }
+    public required Comment Next { get; init; }
 }
 
-//-----------------------------------------------------------------------------
-//  CharSet
-//-----------------------------------------------------------------------------
-
-class CharSet
+/// <summary>
+/// The set of characters/
+/// </summary>
+sealed class CharSet
 {
-
     public class Range
     {
         public int from, to;
@@ -224,19 +241,27 @@ class CharSet
             }
             prev = cur; cur = cur.next;
         }
-        Range n = new Range(i, i);
-        n.next = cur;
-        if (prev == null) head = n; else prev.next = n;
+        var n = new Range(i, i)
+        {
+            next = cur
+        };
+        if (prev == null)
+            head = n;
+        else
+            prev.next = n;
     }
 
     public CharSet Clone()
     {
-        CharSet s = new CharSet();
+        var s = new CharSet();
         Range prev = null;
         for (Range cur = head; cur != null; cur = cur.next)
         {
-            Range r = new Range(cur.from, cur.to);
-            if (prev == null) s.head = r; else prev.next = r;
+            var r = new Range(cur.from, cur.to);
+            if (prev == null)
+                s.head = r;
+            else
+                prev.next = r;
             prev = r;
         }
         return s;
@@ -244,11 +269,14 @@ class CharSet
 
     public bool Equals(CharSet s)
     {
-        Range p = head, q = s.head;
+        var p = head;
+        var q = s.head;
         while (p != null && q != null)
         {
-            if (p.from != q.from || p.to != q.to) return false;
-            p = p.next; q = q.next;
+            if (p.from != q.from || p.to != q.to)
+                return false;
+            p = p.next;
+            q = q.next;
         }
         return p == q;
     }
@@ -256,7 +284,8 @@ class CharSet
     public int Elements()
     {
         int n = 0;
-        for (Range p = head; p != null; p = p.next) n += p.to - p.from + 1;
+        for (var p = head; p != null; p = p.next)
+            n += p.to - p.from + 1;
         return n;
     }
 
@@ -268,14 +297,14 @@ class CharSet
 
     public void Or(CharSet s)
     {
-        for (Range p = s.head; p != null; p = p.next)
+        for (var p = s.head; p != null; p = p.next)
             for (int i = p.from; i <= p.to; i++) Set(i);
     }
 
     public void And(CharSet s)
     {
-        CharSet x = new CharSet();
-        for (Range p = head; p != null; p = p.next)
+        var x = new CharSet();
+        for (var p = head; p != null; p = p.next)
             for (int i = p.from; i <= p.to; i++)
                 if (s[i]) x.Set(i);
         head = x.head;
@@ -283,8 +312,8 @@ class CharSet
 
     public void Subtract(CharSet s)
     {
-        CharSet x = new CharSet();
-        for (Range p = head; p != null; p = p.next)
+        var x = new CharSet();
+        for (var p = head; p != null; p = p.next)
             for (int i = p.from; i <= p.to; i++)
                 if (!s[i]) x.Set(i);
         head = x.head;
@@ -292,7 +321,7 @@ class CharSet
 
     public bool Includes(CharSet s)
     {
-        for (Range p = s.head; p != null; p = p.next)
+        for (var p = s.head; p != null; p = p.next)
             for (int i = p.from; i <= p.to; i++)
                 if (!this[i]) return false;
         return true;
@@ -300,7 +329,7 @@ class CharSet
 
     public bool Intersects(CharSet s)
     {
-        for (Range p = s.head; p != null; p = p.next)
+        for (var p = s.head; p != null; p = p.next)
             for (int i = p.from; i <= p.to; i++)
                 if (this[i]) return true;
         return false;
@@ -354,7 +383,8 @@ class Generator
         string fn = Path.Combine(tab.outDir, target);
         try
         {
-            if (File.Exists(fn)) File.Copy(fn, fn + ".old", true);
+            if (File.Exists(fn))
+                File.Copy(fn, fn + ".old", true);
             gen = new StreamWriter(new FileStream(fn, FileMode.Create)); /* pdt */
         }
         catch (IOException)
@@ -368,9 +398,12 @@ class Generator
     public void GenCopyright()
     {
         string copyFr = null;
-        if (tab.frameDir != null) copyFr = Path.Combine(tab.frameDir, "Copyright.frame");
-        if (copyFr == null || !File.Exists(copyFr)) copyFr = Path.Combine(tab.srcDir, "Copyright.frame");
-        if (copyFr == null || !File.Exists(copyFr)) return;
+        if (tab.frameDir != null)
+            copyFr = Path.Combine(tab.frameDir, "Copyright.frame");
+        if (!File.Exists(copyFr))
+            copyFr = Path.Combine(tab.srcDir, "Copyright.frame");
+        if (!File.Exists(copyFr))
+            return;
 
         try
         {
@@ -416,20 +449,24 @@ class Generator
                 int i = 0;
                 do
                 {
-                    if (i == endOfStopString) return; // stop[0..i] found
+                    if (i == endOfStopString)
+                        return; // stop[0..i] found
                     ch = framRead(); i++;
                 } while (ch == stop[i]);
                 // stop[0..i-1] found; continue with last read character
-                if (generateOutput) gen.Write(stop.Substring(0, i));
+                if (generateOutput)
+                    gen.Write(stop.Substring(0, i));
             }
             else
             {
-                if (generateOutput) gen.Write((char)ch);
+                if (generateOutput)
+                    gen.Write((char)ch);
                 ch = framRead();
             }
         }
 
-        if (stop != null) throw new FatalError("Incomplete or corrupt frame file: " + frameFile);
+        if (stop != null)
+            throw new FatalError("Incomplete or corrupt frame file: " + frameFile);
     }
 
     int framRead()
@@ -987,8 +1024,11 @@ class DFA
 
     public void NewComment(Node from, Node to, bool nested)
     {
-        Comment c = new Comment(CommentStr(from), CommentStr(to), nested);
-        c.next = firstComment; firstComment = c;
+        var c = new Comment(CommentStr(from), CommentStr(to), nested)
+        {
+            Next = firstComment
+        };
+        firstComment = c;
     }
 
 
@@ -997,8 +1037,8 @@ class DFA
     void GenComBody(Comment com)
     {
         gen.WriteLine("\t\t\tfor(;;) {");
-        gen.Write("\t\t\t\tif ({0}) ", ChCond(com.stop[0])); gen.WriteLine("{");
-        if (com.stop.Length == 1)
+        gen.Write("\t\t\t\tif ({0}) ", ChCond(com.Stop[0])); gen.WriteLine("{");
+        if (com.Stop.Length == 1)
         {
             gen.WriteLine("\t\t\t\t\tlevel--;");
             gen.WriteLine("\t\t\t\t\tif (level == 0) { oldEols = line - line0; NextCh(); return true; }");
@@ -1007,21 +1047,21 @@ class DFA
         else
         {
             gen.WriteLine("\t\t\t\t\tNextCh();");
-            gen.WriteLine("\t\t\t\t\tif ({0}) {{", ChCond(com.stop[1]));
+            gen.WriteLine("\t\t\t\t\tif ({0}) {{", ChCond(com.Stop[1]));
             gen.WriteLine("\t\t\t\t\t\tlevel--;");
             gen.WriteLine("\t\t\t\t\t\tif (level == 0) { oldEols = line - line0; NextCh(); return true; }");
             gen.WriteLine("\t\t\t\t\t\tNextCh();");
             gen.WriteLine("\t\t\t\t\t}");
         }
-        if (com.nested)
+        if (com.Nested)
         {
-            gen.Write("\t\t\t\t}"); gen.Write(" else if ({0}) ", ChCond(com.start[0])); gen.WriteLine("{");
-            if (com.start.Length == 1)
+            gen.Write("\t\t\t\t}"); gen.Write(" else if ({0}) ", ChCond(com.Start[0])); gen.WriteLine("{");
+            if (com.Start.Length == 1)
                 gen.WriteLine("\t\t\t\t\tlevel++; NextCh();");
             else
             {
                 gen.WriteLine("\t\t\t\t\tNextCh();");
-                gen.Write("\t\t\t\t\tif ({0}) ", ChCond(com.start[1])); gen.WriteLine("{");
+                gen.Write("\t\t\t\t\tif ({0}) ", ChCond(com.Start[1])); gen.WriteLine("{");
                 gen.WriteLine("\t\t\t\t\t\tlevel++; NextCh();");
                 gen.WriteLine("\t\t\t\t\t}");
             }
@@ -1036,7 +1076,7 @@ class DFA
         gen.WriteLine();
         gen.Write("\tbool Comment{0}() ", i); gen.WriteLine("{");
         gen.WriteLine("\t\tint level = 1, pos0 = pos, line0 = line, col0 = col, charPos0 = charPos;");
-        if (com.start.Length == 1)
+        if (com.Start.Length == 1)
         {
             gen.WriteLine("\t\tNextCh();");
             GenComBody(com);
@@ -1044,7 +1084,7 @@ class DFA
         else
         {
             gen.WriteLine("\t\tNextCh();");
-            gen.Write("\t\tif ({0}) ", ChCond(com.start[1])); gen.WriteLine("{");
+            gen.Write("\t\tif ({0}) ", ChCond(com.Start[1])); gen.WriteLine("{");
             gen.WriteLine("\t\t\tNextCh();");
             GenComBody(com);
             gen.WriteLine("\t\t} else {");
@@ -1208,7 +1248,7 @@ class DFA
         while (com != null)
         {
             GenComment(com, comIdx);
-            com = com.next; comIdx++;
+            com = com.Next; comIdx++;
         }
         g.CopyFramePart("-->literals"); GenLiterals();
         g.CopyFramePart("-->scan1");
@@ -1221,10 +1261,10 @@ class DFA
             com = firstComment; comIdx = 0;
             while (com != null)
             {
-                gen.Write(ChCond(com.start[0]));
+                gen.Write(ChCond(com.Start[0]));
                 gen.Write(" && Comment{0}()", comIdx);
-                if (com.next != null) gen.Write(" ||");
-                com = com.next; comIdx++;
+                if (com.Next != null) gen.Write(" ||");
+                com = com.Next; comIdx++;
             }
             gen.Write(") return NextToken();");
         }
