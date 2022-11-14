@@ -376,46 +376,30 @@ class Generator
         return fram;
     }
 
-
-
     public StreamWriter OpenGen(string target)
     {
-        string fn = Path.Combine(tab.outDir, target);
-        try
-        {
-            if (File.Exists(fn))
-                File.Copy(fn, fn + ".old", true);
-            gen = new StreamWriter(new FileStream(fn, FileMode.Create)); /* pdt */
-        }
-        catch (IOException)
-        {
-            throw new FatalError("Cannot generate file: " + fn);
-        }
-        return gen;
-    }
+        string filePath = Path.Combine(tab.outDir, target);
 
+        if (File.Exists(filePath))
+            File.Copy(filePath, filePath + ".old", true);
+
+        return gen = new StreamWriter(new FileStream(filePath, FileMode.Create));
+    }
 
     public void GenCopyright()
     {
-        string copyFr = null;
+        string filePath = null;
         if (tab.frameDir != null)
-            copyFr = Path.Combine(tab.frameDir, "Copyright.frame");
-        if (!File.Exists(copyFr))
-            copyFr = Path.Combine(tab.srcDir, "Copyright.frame");
-        if (!File.Exists(copyFr))
+            filePath = Path.Combine(tab.frameDir, "Copyright.frame");
+        if (!File.Exists(filePath))
+            filePath = Path.Combine(tab.srcDir, "Copyright.frame");
+        if (!File.Exists(filePath))
             return;
 
-        try
-        {
-            FileStream scannerFram = fram;
-            fram = new FileStream(copyFr, FileMode.Open, FileAccess.Read, FileShare.Read);
-            CopyFramePart(null);
-            fram = scannerFram;
-        }
-        catch (FileNotFoundException)
-        {
-            throw new FatalError("Cannot open Copyright.frame");
-        }
+        FileStream scannerFram = fram;
+        fram = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+        CopyFramePart(null);
+        fram = scannerFram;
     }
 
     public void SkipFramePart(string stop)
@@ -466,7 +450,7 @@ class Generator
         }
 
         if (stop != null)
-            throw new FatalError("Incomplete or corrupt frame file: " + frameFile);
+            throw new Exception("Incomplete or corrupt frame file: " + frameFile);
     }
 
     int framRead()
@@ -475,9 +459,9 @@ class Generator
         {
             return fram.ReadByte();
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            throw new FatalError("Error reading frame file: " + frameFile);
+            throw new Exception("Error reading frame file: " + frameFile, e);
         }
     }
 }
