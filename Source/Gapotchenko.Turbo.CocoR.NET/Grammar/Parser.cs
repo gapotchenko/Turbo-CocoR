@@ -3,7 +3,7 @@ namespace Gapotchenko.Turbo.CocoR.NET.Grammar;
 
 
 
-public class Parser
+class Parser
 {
     public const int _EOF = 0;
     public const int _ident = 1;
@@ -954,7 +954,7 @@ public class Errors
 } // Errors
 
 
-public class FatalError : Exception
+class FatalError : Exception
 {
     public FatalError(string m) : base(m) { }
 }

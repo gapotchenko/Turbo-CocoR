@@ -3,7 +3,7 @@ using System;
 
 -->namespace
 
-public class Parser {
+class Parser {
 -->constants
 	const bool _T = true;
 	const bool _x = false;
@@ -125,6 +125,6 @@ public class Errors {
 } // Errors
 
 
-public class FatalError: Exception {
+class FatalError: Exception {
 	public FatalError(string m): base(m) {}
 }

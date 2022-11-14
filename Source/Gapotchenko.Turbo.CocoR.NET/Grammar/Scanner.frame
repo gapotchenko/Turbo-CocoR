@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 -->namespace
 
-public class Token {
+class Token {
 	public int kind;    // token kind
 	public int pos;     // token position in bytes in the source text (starting at 0)
 	public int charPos;  // token position in characters in the source text (starting at 0)
@@ -18,7 +18,7 @@ public class Token {
 //-----------------------------------------------------------------------------------
 // Buffer
 //-----------------------------------------------------------------------------------
-public class Buffer {
+class Buffer {
 	// This Buffer supports the following cases:
 	// 1) seekable stream (file)
 	//    a) whole stream in buffer
@@ -162,7 +162,7 @@ public class Buffer {
 //-----------------------------------------------------------------------------------
 // UTF8Buffer
 //-----------------------------------------------------------------------------------
-public class UTF8Buffer: Buffer {
+class UTF8Buffer: Buffer {
 	public UTF8Buffer(Buffer b): base(b) {}
 
 	public override int Read() {
@@ -200,7 +200,7 @@ public class UTF8Buffer: Buffer {
 //-----------------------------------------------------------------------------------
 // Scanner
 //-----------------------------------------------------------------------------------
-public class Scanner {
+class Scanner {
 	const char EOL = '\n';
 	const int eofSym = 0; /* pdt */
 -->declarations

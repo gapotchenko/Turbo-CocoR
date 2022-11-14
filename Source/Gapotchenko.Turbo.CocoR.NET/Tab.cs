@@ -7,7 +7,7 @@ using Gapotchenko.Turbo.CocoR.NET.Grammar;
 namespace Gapotchenko.Turbo.CocoR.NET;
 
 
-public class Position
+class Position
 {  // position of source code stretch (e.g. semantic action, resolver expressions)
     public readonly int beg;      // start relative to the beginning of the file
     public readonly int end;      // end of stretch
@@ -25,7 +25,7 @@ public class Position
 // Symbol
 //=====================================================================
 
-public class Symbol
+class Symbol
 {
 
     // token kinds
@@ -60,7 +60,7 @@ public class Symbol
 // Node
 //=====================================================================
 
-public class Node
+class Node
 {
     // constants for node kinds
     public const int t = 1;  // terminal symbol
@@ -109,7 +109,7 @@ public class Node
 // Graph 
 //=====================================================================
 
-public class Graph
+class Graph
 {
     public Node l;  // left end of graph = head
     public Node r;  // right end of graph = list of nodes to be linked to successor graph
@@ -134,7 +134,7 @@ public class Graph
 // Sets 
 //=====================================================================
 
-public class Sets
+class Sets
 {
 
     public static int Elements(BitArray s)
@@ -174,7 +174,7 @@ public class Sets
 // CharClass
 //=====================================================================
 
-public class CharClass
+class CharClass
 {
     public int n;           // class number
     public string name;     // class name
@@ -191,7 +191,7 @@ public class CharClass
 // Tab
 //=====================================================================
 
-public class Tab
+class Tab
 {
     public Position semDeclPos;       // position of global semantic declarations
     public CharSet ignored;           // characters ignored by the scanner

@@ -7,13 +7,11 @@ namespace Gapotchenko.Turbo.CocoR.NET;
 
 using Buffer = Grammar.Buffer;
 
-public class ParserGen
+class ParserGen
 {
     const int maxTerm = 3;      // sets of size < maxTerm are enumerated
     const char CR = '\r';
     const char LF = '\n';
-    const int EOF = -1;
-
     const int tErr = 0;         // error codes
     const int altErr = 1;
     const int syncErr = 2;
@@ -437,6 +435,4 @@ public class ParserGen
         usingPos = null;
     }
 
-} // end ParserGen
-
-// end namespace
+}

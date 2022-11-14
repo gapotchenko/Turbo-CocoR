@@ -1,7 +1,7 @@
 namespace Gapotchenko.Turbo.CocoR.NET.Grammar;
 
 
-public class Token
+class Token
 {
     public int kind;    // token kind
     public int pos;     // token position in bytes in the source text (starting at 0)
@@ -15,7 +15,7 @@ public class Token
 //-----------------------------------------------------------------------------------
 // Buffer
 //-----------------------------------------------------------------------------------
-public class Buffer
+class Buffer
 {
     // This Buffer supports the following cases:
     // 1) seekable stream (file)
@@ -161,7 +161,7 @@ public class Buffer
     // Read the next chunk of bytes from the stream, increases the buffer
     // if needed and updates the fields fileLen and bufLen.
     // Returns the number of bytes read.
-    private int ReadNextStreamChunk()
+    int ReadNextStreamChunk()
     {
         int free = buf.Length - bufLen;
         if (free == 0)
@@ -189,7 +189,7 @@ public class Buffer
 //-----------------------------------------------------------------------------------
 // UTF8Buffer
 //-----------------------------------------------------------------------------------
-public class UTF8Buffer : Buffer
+class UTF8Buffer : Buffer
 {
     public UTF8Buffer(Buffer b) : base(b) { }
 
@@ -237,7 +237,7 @@ public class UTF8Buffer : Buffer
 //-----------------------------------------------------------------------------------
 // Scanner
 //-----------------------------------------------------------------------------------
-public class Scanner
+class Scanner
 {
     const char EOL = '\n';
     const int eofSym = 0; /* pdt */
@@ -583,7 +583,7 @@ public class Scanner
         return t;
     }
 
-    private void SetScannerBehindT()
+    void SetScannerBehindT()
     {
         buffer.Pos = t.pos;
         NextCh();

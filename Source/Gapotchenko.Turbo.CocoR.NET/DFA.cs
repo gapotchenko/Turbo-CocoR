@@ -13,7 +13,7 @@ namespace Gapotchenko.Turbo.CocoR.NET;
 /// <summary>
 /// The state of a finite automaton.
 /// </summary>
-public class State
+class State
 {
     public int nr;                      // state number
     public Action firstAction;// to first action of this state
@@ -57,7 +57,7 @@ public class State
 /// <summary>
 /// The action of a finite automaton.
 /// </summary>
-public class Action
+class Action
 {
     public int typ;                 // type of action symbol: clas, chr
     public int sym;                 // action symbol
@@ -130,7 +130,7 @@ public class Action
 /// <summary>
 /// The set of states that are reached by an action.
 /// </summary>
-public class Target
+class Target
 {
     /// <summary>
     /// The target state.
@@ -149,7 +149,7 @@ public class Target
 //  Melted
 //-----------------------------------------------------------------------------
 
-public class Melted
+class Melted
 {                   // info about melted states
     public BitArray set;                // set of old states
     public State state;                 // new state
@@ -165,7 +165,7 @@ public class Melted
 //  Comment
 //-----------------------------------------------------------------------------
 
-public class Comment
+class Comment
 {                   // info about comment syntax
     public string start;
     public string stop;
@@ -183,7 +183,7 @@ public class Comment
 //  CharSet
 //-----------------------------------------------------------------------------
 
-public class CharSet
+class CharSet
 {
 
     public class Range
@@ -318,12 +318,12 @@ public class CharSet
 //-----------------------------------------------------------------------------
 class Generator
 {
-    private const int EOF = -1;
+    const int EOF = -1;
 
-    private FileStream fram;
-    private StreamWriter gen;
-    private readonly Tab tab;
-    private string frameFile;
+    FileStream fram;
+    StreamWriter gen;
+    readonly Tab tab;
+    string frameFile;
 
     public Generator(Tab tab)
     {
@@ -397,7 +397,7 @@ class Generator
     }
 
     // if stop == null, copies until end of file
-    private void CopyFramePart(string stop, bool generateOutput)
+    void CopyFramePart(string stop, bool generateOutput)
     {
         char startCh = (char)0;
         int endOfStopString = 0;
@@ -432,7 +432,7 @@ class Generator
         if (stop != null) throw new FatalError("Incomplete or corrupt frame file: " + frameFile);
     }
 
-    private int framRead()
+    int framRead()
     {
         try
         {
@@ -449,40 +449,40 @@ class Generator
 //  DFA
 //-----------------------------------------------------------------------------
 
-public class DFA
+class DFA
 {
-    private int maxStates;
-    private int lastStateNr;   // highest state number
-    private State firstState;
-    private State lastState;   // last allocated state
-    private int lastSimState;  // last non melted state
-    private FileStream fram;   // scanner frame input
-    private StreamWriter gen;  // generated scanner file
-    private Symbol curSy;      // current token to be recognized (in FindTrans)
-    private bool dirtyDFA;     // DFA may become nondeterministic in MatchLiteral
+    int maxStates;
+    int lastStateNr;   // highest state number
+    State firstState;
+    State lastState;   // last allocated state
+    int lastSimState;  // last non melted state
+    FileStream fram;   // scanner frame input
+    StreamWriter gen;  // generated scanner file
+    Symbol curSy;      // current token to be recognized (in FindTrans)
+    bool dirtyDFA;     // DFA may become nondeterministic in MatchLiteral
 
     public bool ignoreCase;   // true if input should be treated case-insensitively
     public bool hasCtxMoves;  // DFA has context transitions
 
     // other Coco objects
-    private Parser parser;
-    private Tab tab;
-    private Errors errors;
-    private TextWriter trace;
+    Parser parser;
+    Tab tab;
+    Errors errors;
+    TextWriter trace;
 
     //---------- Output primitives
-    private string Ch(int ch)
+    string Ch(int ch)
     {
         if (ch < ' ' || ch >= 127 || ch == '\'' || ch == '\\') return Convert.ToString(ch);
         else return string.Format("'{0}'", (char)ch);
     }
 
-    private string ChCond(char ch)
+    string ChCond(char ch)
     {
         return string.Format("ch == {0}", Ch(ch));
     }
 
-    private void PutRange(CharSet s)
+    void PutRange(CharSet s)
     {
         for (CharSet.Range r = s.head; r != null; r = r.next)
         {
