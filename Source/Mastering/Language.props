@@ -1,0 +1,17 @@
+﻿<Project>
+
+  <!-- Language Configuration -->
+  <PropertyGroup>
+    <LangVersion>11.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <NoWarn>$(NoWarn),CS8524</NoWarn>
+    <WarningsAsErrors>$(WarningsAsErrors),CS8509</WarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Using Include="System.ComponentModel" />
+    <Using Include="System.Diagnostics" />
+  </ItemGroup>
+  
+</Project>

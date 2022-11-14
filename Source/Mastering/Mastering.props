@@ -1,0 +1,24 @@
+<Project>
+
+  <PropertyGroup>
+    <MasteringDir>$(MSBuildThisFileDirectory)</MasteringDir>
+    <MasteringProjectModulePrefix>Gapotchenko.Turbo.CocoR.NET</MasteringProjectModulePrefix>
+  </PropertyGroup>
+
+  <Import Project="Traits.props" />
+
+  <PropertyGroup>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <!-- GenerateDocumentationFile Condition=" '$(MasteringProjectKind)' == 'module' ">true</GenerateDocumentationFile -->
+  </PropertyGroup>
+
+  <Import Project="Product.props" />
+  <Import Project="Version.props" />
+  <Import Project="Language.props" />
+  <Import Project="Targeting.props" />
+  <Import Project="Debug.props" />
+  <Import Project="AssemblySignature.props" />
+  <Import Project="NuGet.props" />
+  <Import Project="Polyfills.props" />
+
+</Project>

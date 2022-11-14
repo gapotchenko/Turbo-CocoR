@@ -1,0 +1,10 @@
+﻿<Project>
+
+  <!-- Product Information -->
+  <PropertyGroup>
+    <Product>Turbo Coco/R</Product>
+    <Company>Gapotchenko</Company>
+    <Copyright>Copyright © Gapotchenko and Contributors</Copyright>
+  </PropertyGroup>
+
+</Project>

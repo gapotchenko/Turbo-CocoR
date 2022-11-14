@@ -1,0 +1,51 @@
+<Project>
+
+  <PropertyGroup Condition=" '$(MasteringProjectKind)' == 'module' ">
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net6.0;net7.0</TargetFrameworks>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <MasteringFrameworkIdentifier>$([MSBuild]::GetTargetFrameworkIdentifier($(TargetFramework)))</MasteringFrameworkIdentifier>
+    <MasteringFrameworkVersion>$([MSBuild]::GetTargetFrameworkVersion($(TargetFramework)))</MasteringFrameworkVersion>
+  </PropertyGroup>
+
+  <!-- ================================================================== -->
+
+  <!-- 
+    TFF_ prefix in MasteringFrameworkFeature items is the abbreviation for
+    target framework feature.
+  -->
+
+  <!-- ================================================================== -->
+  <!-- .NET Standard -->
+  <!-- ================================================================== -->
+
+  <!-- .NET Standard 2.1 -->
+  <ItemGroup Condition=" '$(MasteringFrameworkIdentifier)' == '.NETStandard' AND $([MSBuild]::VersionGreaterThanOrEquals($(MasteringFrameworkVersion), '2.1')) ">
+    <MasteringFrameworkFeature Include="TFF_ASYNC_DISPOSABLE;TFF_DEFAULT_INTERFACE;TFF_VALUETASK" />
+  </ItemGroup>
+
+  <!-- ================================================================== -->
+  <!-- .NET Core -->
+  <!-- ================================================================== -->
+
+  <!-- .NET Core 1.0 -->
+  <ItemGroup Condition=" '$(MasteringFrameworkIdentifier)' == '.NETCoreApp' AND $([MSBuild]::VersionGreaterThanOrEquals($(MasteringFrameworkVersion), '1.0')) ">
+    <MasteringFrameworkFeature Include="TFF_VALUETASK" />
+  </ItemGroup>
+
+  <!-- .NET Core 3.0 -->
+  <ItemGroup Condition=" '$(MasteringFrameworkIdentifier)' == '.NETCoreApp' AND $([MSBuild]::VersionGreaterThanOrEquals($(MasteringFrameworkVersion), '3.0')) ">
+    <MasteringFrameworkFeature Include="TFF_ASYNC_DISPOSABLE;TFF_DEFAULT_INTERFACE" />
+  </ItemGroup>
+
+  <!-- ================================================================== -->
+
+  <Target Name="DefineMasteringTargetFrameworkFeatureConstants"
+          BeforeTargets="CoreCompile">
+    <PropertyGroup>
+      <DefineConstants Condition=" @(MasteringFrameworkFeature->Count()) != 0 ">$(DefineConstants),@(MasteringFrameworkFeature, ',')</DefineConstants>
+    </PropertyGroup>
+  </Target>
+
+</Project>

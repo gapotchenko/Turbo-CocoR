@@ -1,0 +1,16 @@
+<Project>
+
+  <PropertyGroup>
+    <PackageLicenseExpression>GPL-2.0-only</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/gapotchenko/TurboCocoR</PackageProjectUrl>
+    <PackageIcon>docs\assets\package-icon.png</PackageIcon>
+
+    <IsPackable>false</IsPackable>
+    <PackageOutputPath>bin\$(Configuration)\nuget</PackageOutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)Assets\NuGet\Package Icon.png" Pack="true" PackagePath="$(PackageIcon)" Visible="false" />
+  </ItemGroup>
+
+</Project>
