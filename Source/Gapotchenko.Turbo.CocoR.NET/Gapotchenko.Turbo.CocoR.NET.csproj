@@ -5,7 +5,7 @@
     <Nullable>disable</Nullable>
     <IsPackable>true</IsPackable>
     <PackAsTool>true</PackAsTool>
-    <ToolCommandName>turbo-coco-.net</ToolCommandName>
+    <ToolCommandName>turbo-coco-dotnet</ToolCommandName>
   </PropertyGroup>
 
 </Project>
