@@ -1409,17 +1409,18 @@ class Tab
         }
     }
 
-    public void SetOption(string s)
+    public void SetOption(ReadOnlySpan<char> s)
     {
-        string[] option = s.Split(new char[] { '=' }, 2);
+        string[] option = s.ToString().Split(new char[] { '=' }, 2);
         string name = option[0], value = option[1];
-        if ("$namespace".Equals(name))
+        if ("$namespace".Equals(name, StringComparison.Ordinal))
         {
-            if (nsName == null) nsName = value;
+            if (nsName == null)
+                nsName = value;
         }
-        else if ("$checkEOF".Equals(name))
+        else if ("$checkEOF".Equals(name, StringComparison.Ordinal))
         {
-            checkEOF = "true".Equals(value);
+            checkEOF = "true".Equals(value, StringComparison.Ordinal);
         }
     }
 
