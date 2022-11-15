@@ -961,7 +961,7 @@ class DFA
         {
             if (m.state.nr == nr) return m.set; else m = m.next;
         }
-        throw new FatalError("compiler error in Melted.Set");
+        throw new Exception("compiler error in Melted.Set");
     }
 
     Melted StateWithSet(BitArray s)
@@ -1156,7 +1156,7 @@ class DFA
             gen.Write("t.kind = {0}; ", endOf.n);
             if (endOf.tokenKind == Symbol.classLitToken)
             {
-                gen.WriteLine("t.val = new String(tval, 0, tlen); CheckLiteral(); return t;}");
+                gen.WriteLine("t.val = new String(tval, 0, tlen); CheckLiteral(t); return t;}");
             }
             else
             {

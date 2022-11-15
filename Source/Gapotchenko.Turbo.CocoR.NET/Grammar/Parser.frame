@@ -1,7 +1,7 @@
 -->begin
-using System;
-
 #nullable disable
+
+#pragma warning disable IDE0161 // Convert to file-scoped namespace
 
 -->namespace
 
@@ -81,7 +81,6 @@ class Parser {
 
 	public void Parse() {
 		la = new Token();
-		la.val = "";		
 		Get();
 -->parseRoot
 	}
@@ -125,8 +124,3 @@ public class Errors {
 		errorStream.WriteLine(s);
 	}
 } // Errors
-
-
-class FatalError: Exception {
-	public FatalError(string m): base(m) {}
-}

@@ -1,9 +1,7 @@
 
-using System;
-using System.IO;
-using System.Collections.Generic;
+#nullable enable
 
-#nullable disable
+#pragma warning disable IDE0161 // Convert to file-scoped namespace
 
 namespace Gapotchenko.Turbo.CocoR.NET.Grammar {
 
@@ -13,8 +11,8 @@ class Token {
 	public int charPos;  // token position in characters in the source text (starting at 0)
 	public int col;     // token column (starting at 1)
 	public int line;    // token line (starting at 1)
-	public string val;  // token value
-	public Token next;  // ML 2005-03-11 Tokens are kept in linked list
+	public string val = string.Empty;  // token value
+	public Token? next;  // ML 2005-03-11 Tokens are kept in linked list
 }
 
 //-----------------------------------------------------------------------------------
@@ -35,7 +33,7 @@ class Buffer {
 	int bufLen;         // length of buffer
 	int fileLen;        // length of input stream (may change if the stream is no file)
 	int bufPos;         // current position in buffer
-	Stream stream;      // input stream (seekable)
+	Stream? stream;      // input stream (seekable)
 	bool isUserStream;  // was the stream opened by the user?
 	
 	public Buffer (Stream s, bool isUserStream) {
@@ -151,10 +149,13 @@ class Buffer {
 			buf = newBuf;
 			free = bufLen;
 		}
-		int read = stream.Read(buf, bufLen, free);
-		if (read > 0) {
-			fileLen = bufLen = (bufLen + read);
-			return read;
+		if (stream != null)
+		{
+			int read = stream.Read(buf, bufLen, free);
+			if (read > 0) {
+				fileLen = bufLen = (bufLen + read);
+				return read;
+			}
 		}
 		// end of stream reached
 		return 0;
@@ -211,7 +212,7 @@ class Scanner {
 
 	public Buffer buffer; // scanner buffer
 	
-	Token t;          // current token
+	Token? t;          // current token
 	int ch;           // current input character
 	int pos;          // byte position of current character
 	int charPos;      // position by unicode characters starting with 0
@@ -267,6 +268,7 @@ class Scanner {
 		Init();
 	}
 	
+	[MemberNotNull(nameof(pt), nameof(tokens))]
 	void Init() {
 		pos = -1; line = 1; col = 0; charPos = -1;
 		oldEols = 0;
@@ -358,7 +360,7 @@ class Scanner {
 	}
 
 
-	void CheckLiteral() {
+	void CheckLiteral(Token t) {
 		switch (t.val) {
 			case "COMPILER": t.kind = 6; break;
 			case "IGNORECASE": t.kind = 7; break;
@@ -399,14 +401,14 @@ class Scanner {
 			case 0: {
 				if (recKind != noSym) {
 					tlen = recEnd - t.pos;
-					SetScannerBehindT();
+					SetScannerBehindT(t);
 				}
 				t.kind = recKind; break;
 			} // NextCh already done
 			case 1:
 				recEnd = pos; recKind = 1;
 				if (ch >= '0' && ch <= '9' || ch >= 'A' && ch <= 'Z' || ch == '_' || ch >= 'a' && ch <= 'z') {AddCh(); goto case 1;}
-				else {t.kind = 1; t.val = new String(tval, 0, tlen); CheckLiteral(); return t;}
+				else {t.kind = 1; t.val = new String(tval, 0, tlen); CheckLiteral(t); return t;}
 			case 2:
 				recEnd = pos; recKind = 2;
 				if (ch >= '0' && ch <= '9') {AddCh(); goto case 2;}
@@ -509,7 +511,7 @@ class Scanner {
 		return t;
 	}
 	
-	private void SetScannerBehindT() {
+	void SetScannerBehindT(Token t) {
 		buffer.Pos = t.pos;
 		NextCh();
 		line = t.line; col = t.col; charPos = t.charPos;

@@ -2,9 +2,9 @@ using System.IO;
 
 
 
-using System;
-
 #nullable disable
+
+#pragma warning disable IDE0161 // Convert to file-scoped namespace
 
 namespace Gapotchenko.Turbo.CocoR.NET.Grammar {
 
@@ -678,7 +678,6 @@ const int id = 0;
 
 	public void Parse() {
 		la = new Token();
-		la.val = "";		
 		Get();
 		Coco();
 		Expect(0);
@@ -797,9 +796,4 @@ public class Errors {
 		errorStream.WriteLine(s);
 	}
 } // Errors
-
-
-class FatalError: Exception {
-	public FatalError(string m): base(m) {}
-}
 }

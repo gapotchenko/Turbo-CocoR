@@ -24,7 +24,7 @@ static class Program
     {
         Console.WriteLine("Turbo Coco/R .NET 2022.1.1");
         string srcName = null, nsName = null, frameDir = null, ddtString = null,
-        traceFileName = null, outDir = null;
+        outDir = null;
         bool emitLines = false;
         int retVal = 1;
         for (int i = 0; i < arg.Length; i++)
@@ -42,12 +42,17 @@ static class Program
             try
             {
                 string srcDir = Path.GetDirectoryName(srcName);
+                bool keepOldFiles = outDir == null;
+                outDir ??= srcDir;
+
+                string traceFilePath = Path.Combine(outDir, "Trace.txt");
 
                 var scanner = new Scanner(srcName);
-                var parser = new Parser(scanner);
+                var parser = new Parser(scanner)
+                {
+                    trace = new StreamWriter(new FileStream(traceFilePath, FileMode.Create))
+                };
 
-                traceFileName = Path.Combine(srcDir, "trace.txt");
-                parser.trace = new StreamWriter(new FileStream(traceFileName, FileMode.Create));
                 parser.tab = new Tab(parser);
                 parser.dfa = new DFA(parser);
                 parser.pgen = new ParserGen(parser);
@@ -56,18 +61,18 @@ static class Program
                 parser.tab.srcDir = srcDir;
                 parser.tab.nsName = nsName;
                 parser.tab.frameDir = frameDir;
-                parser.tab.outDir = outDir != null ? outDir : srcDir;
+                parser.tab.outDir = outDir;
                 parser.tab.emitLines = emitLines;
                 if (ddtString != null) parser.tab.SetDDT(ddtString);
 
                 parser.Parse();
 
                 parser.trace.Close();
-                var f = new FileInfo(traceFileName);
+                var f = new FileInfo(traceFilePath);
                 if (f.Length == 0)
                     f.Delete();
                 else
-                    Console.WriteLine("trace output is in " + traceFileName);
+                    Console.WriteLine("Trace output has been written to \"{0}\" file.", traceFilePath);
                 Console.WriteLine("{0} errors detected.", parser.errors.count);
                 if (parser.errors.count == 0)
                     retVal = 0;
