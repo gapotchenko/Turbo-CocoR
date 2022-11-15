@@ -1077,12 +1077,8 @@ class DFA
         g.SkipFramePart("-->begin");
 
         g.CopyFramePart("-->namespace");
-        if (tab.nsName != null && tab.nsName.Length > 0)
-        {
-            gen.Write("namespace ");
-            gen.Write(tab.nsName);
-            gen.Write(" {");
-        }
+        if (!string.IsNullOrEmpty(tab.nsName))
+            g.BeginNamespace(tab.nsName);
         g.CopyFramePart("-->declarations");
         gen.WriteLine("\tconst int maxT = {0};", tab.terminals.Count - 1);
         gen.WriteLine("\tconst int noSym = {0};", tab.noSym.n);
@@ -1132,7 +1128,8 @@ class DFA
         for (State state = firstState.next; state != null; state = state.next)
             WriteState(state);
         g.CopyFramePart(null);
-        if (tab.nsName != null && tab.nsName.Length > 0) gen.Write("}");
+        if (!string.IsNullOrEmpty(tab.nsName))
+            g.EndNamespace();
         gen.Close();
     }
 

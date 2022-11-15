@@ -393,11 +393,8 @@ class ParserGen
         if (usingPos != null) { CopySourcePart(usingPos, 0); gen.WriteLine(); }
         g.CopyFramePart("-->namespace");
         /* AW open namespace, if it exists */
-        if (tab.nsName != null && tab.nsName.Length > 0)
-        {
-            gen.WriteLine("namespace {0} {{", tab.nsName);
-            gen.WriteLine();
-        }
+        if (!string.IsNullOrEmpty(tab.nsName))
+            g.BeginNamespace(tab.nsName);
         g.CopyFramePart("-->constants");
         GenTokens(); /* ML 2002/09/07 write the token kinds */
         gen.WriteLine("\tpublic const int maxT = {0};", tab.terminals.Count - 1);
@@ -410,7 +407,8 @@ class ParserGen
         g.CopyFramePart("-->errors"); gen.Write(err.ToString());
         g.CopyFramePart(null);
         /* AW 2002-12-20 close namespace, if it exists */
-        if (tab.nsName != null && tab.nsName.Length > 0) gen.Write("}");
+        if (!string.IsNullOrEmpty(tab.nsName))
+            g.EndNamespace();
         gen.Close();
         buffer.Pos = oldPos;
     }

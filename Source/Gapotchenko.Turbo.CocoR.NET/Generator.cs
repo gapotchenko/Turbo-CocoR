@@ -117,4 +117,16 @@ sealed class Generator
             throw new Exception("Error reading frame file: " + frameFile, e);
         }
     }
+
+    public void BeginNamespace(ReadOnlySpan<char> name)
+    {
+        gen.Write("namespace ");
+        gen.WriteLine(name);
+        gen.WriteLine('{');
+    }
+
+    public void EndNamespace()
+    {
+        gen.WriteLine('}');
+    }
 }
