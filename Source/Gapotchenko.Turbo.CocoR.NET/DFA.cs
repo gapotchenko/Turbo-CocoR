@@ -359,21 +359,16 @@ class Generator
         this.tab = tab;
     }
 
-    public FileStream OpenFrame(string frame)
+    public FileStream OpenFrame(string fileName)
     {
-        if (tab.frameDir != null) frameFile = Path.Combine(tab.frameDir, frame);
-        if (frameFile == null || !File.Exists(frameFile)) frameFile = Path.Combine(tab.srcDir, frame);
-        if (frameFile == null || !File.Exists(frameFile)) throw new FatalError("Cannot find : " + frame);
+        if (tab.frameDir != null)
+            frameFile = Path.Combine(tab.frameDir, fileName);
+        if (frameFile == null || !File.Exists(frameFile))
+            frameFile = Path.Combine(tab.srcDir, fileName);
+        if (frameFile == null || !File.Exists(frameFile))
+            throw new Exception("Cannot find : " + fileName);
 
-        try
-        {
-            fram = new FileStream(frameFile, FileMode.Open, FileAccess.Read, FileShare.Read);
-        }
-        catch (FileNotFoundException)
-        {
-            throw new FatalError("Cannot open frame file: " + frameFile);
-        }
-        return fram;
+        return fram = new FileStream(frameFile, FileMode.Open, FileAccess.Read, FileShare.Read);
     }
 
     public StreamWriter OpenGen(string target)

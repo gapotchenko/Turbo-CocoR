@@ -22,7 +22,7 @@ static class Program
 {
     public static int Main(string[] arg)
     {
-        Console.WriteLine("Turbo Coco/R .NET 2022.1 (Release build 2022.1.1)");
+        Console.WriteLine("Turbo Coco/R .NET 2022.1.1");
         string srcName = null, nsName = null, frameDir = null, ddtString = null,
         traceFileName = null, outDir = null;
         bool emitLines = false;
@@ -38,12 +38,13 @@ static class Program
         }
         if (arg.Length > 0 && srcName != null)
         {
+            Console.WriteLine();
             try
             {
                 string srcDir = Path.GetDirectoryName(srcName);
 
-                Scanner scanner = new Scanner(srcName);
-                Parser parser = new Parser(scanner);
+                var scanner = new Scanner(srcName);
+                var parser = new Parser(scanner);
 
                 traceFileName = Path.Combine(srcDir, "trace.txt");
                 parser.trace = new StreamWriter(new FileStream(traceFileName, FileMode.Create));
@@ -62,17 +63,16 @@ static class Program
                 parser.Parse();
 
                 parser.trace.Close();
-                FileInfo f = new FileInfo(traceFileName);
-                if (f.Length == 0) f.Delete();
-                else Console.WriteLine("trace output is in " + traceFileName);
-                Console.WriteLine("{0} errors detected", parser.errors.count);
-                if (parser.errors.count == 0) { retVal = 0; }
+                var f = new FileInfo(traceFileName);
+                if (f.Length == 0)
+                    f.Delete();
+                else
+                    Console.WriteLine("trace output is in " + traceFileName);
+                Console.WriteLine("{0} errors detected.", parser.errors.count);
+                if (parser.errors.count == 0)
+                    retVal = 0;
             }
-            catch (IOException)
-            {
-                Console.WriteLine("-- could not open " + traceFileName);
-            }
-            catch (FatalError e)
+            catch (Exception e)
             {
                 Console.WriteLine("-- " + e.Message);
             }

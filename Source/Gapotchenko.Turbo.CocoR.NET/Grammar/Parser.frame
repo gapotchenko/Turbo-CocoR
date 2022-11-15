@@ -1,6 +1,8 @@
 -->begin
 using System;
 
+#nullable disable
+
 -->namespace
 
 class Parser {
