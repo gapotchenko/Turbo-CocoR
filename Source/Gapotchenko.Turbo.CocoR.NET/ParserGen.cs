@@ -378,7 +378,7 @@ class ParserGen
 
     public void WriteParser()
     {
-        Generator g = new Generator(tab);
+        var g = new Generator(tab);
         int oldPos = buffer.Pos;  // Pos is modified by CopySourcePart
         symSet.Add(tab.allSyncSets);
 

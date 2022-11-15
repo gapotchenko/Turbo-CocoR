@@ -700,28 +700,35 @@ class DFA
         do
         {
             changed = false;
-            for (Action a = state.firstAction; a != null; a = a.next)
-                for (Action b = a.next; b != null; b = b.next)
-                    if (Overlap(a, b)) { SplitActions(state, a, b); changed = true; }
+            for (var a = state.firstAction; a != null; a = a.next)
+            {
+                for (var b = a.next; b != null; b = b.next)
+                {
+                    if (Overlap(a, b))
+                    {
+                        SplitActions(state, a, b);
+                        changed = true;
+                    }
+                }
+            }
         } while (changed);
     }
 
     void MeltStates(State state)
     {
-        bool ctx;
-        BitArray targets;
-        Symbol endOf;
-        for (Action action = state.firstAction; action != null; action = action.next)
+        for (var action = state.firstAction; action != null; action = action.next)
         {
             if (action.target.next != null)
             {
-                GetTargetStates(action, out targets, out endOf, out ctx);
+                GetTargetStates(action, out var targets, out var endOf, out var ctx);
                 Melted melt = StateWithSet(targets);
                 if (melt == null)
                 {
-                    State s = NewState(); s.endOf = endOf; s.ctx = ctx;
-                    for (Target targ = action.target; targ != null; targ = targ.next)
-                        s.MeltWith(targ.state);
+                    var s = NewState();
+                    s.endOf = endOf;
+                    s.ctx = ctx;
+                    for (var target = action.target; target != null; target = target.next)
+                        s.MeltWith(target.state);
                     MakeUnique(s);
                     melt = NewMelted(targets, s);
                 }
@@ -733,20 +740,20 @@ class DFA
 
     void FindCtxStates()
     {
-        for (State state = firstState; state != null; state = state.next)
-            for (Action a = state.firstAction; a != null; a = a.next)
-                if (a.tc == Node.contextTrans) a.target.state.ctx = true;
+        for (var state = firstState; state != null; state = state.next)
+            for (var a = state.firstAction; a != null; a = a.next)
+                if (a.tc == Node.contextTrans)
+                    a.target.state.ctx = true;
     }
 
     public void MakeDeterministic()
     {
-        State state;
         lastSimState = lastState.nr;
         maxStates = 2 * lastSimState; // heuristic for set size in Melted.set
         FindCtxStates();
-        for (state = firstState; state != null; state = state.next)
+        for (var state = firstState; state != null; state = state.next)
             MakeUnique(state);
-        for (state = firstState; state != null; state = state.next)
+        for (var state = firstState; state != null; state = state.next)
             MeltStates(state);
         DeleteRedundantStates();
         CombineShifts();
