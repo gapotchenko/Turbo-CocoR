@@ -7,7 +7,7 @@ sealed class Generator
     FileStream fram;
     StreamWriter gen;
     readonly Tab tab;
-    string frameFile;
+    string frameFilePath;
 
     public Generator(Tab tab)
     {
@@ -16,14 +16,15 @@ sealed class Generator
 
     public FileStream OpenFrame(string fileName)
     {
-        if (tab.frameDir != null)
-            frameFile = Path.Combine(tab.frameDir, fileName);
-        if (frameFile == null || !File.Exists(frameFile))
-            frameFile = Path.Combine(tab.srcDir, fileName);
-        if (frameFile == null || !File.Exists(frameFile))
+        frameFilePath = null;
+        if (!File.Exists(frameFilePath))
+            frameFilePath = Path.Combine(tab.srcDir, fileName);
+        if (!File.Exists(frameFilePath) && tab.frameDir != null)
+            frameFilePath = Path.Combine(tab.frameDir, fileName);
+        if (!File.Exists(frameFilePath))
             throw new Exception("Cannot find : " + fileName);
 
-        return fram = new FileStream(frameFile, FileMode.Open, FileAccess.Read, FileShare.Read);
+        return fram = new FileStream(frameFilePath, FileMode.Open, FileAccess.Read, FileShare.Read);
     }
 
     public StreamWriter OpenGen(string target)
@@ -103,7 +104,7 @@ sealed class Generator
         }
 
         if (stop != null)
-            throw new Exception("Incomplete or corrupt frame file: " + frameFile);
+            throw new Exception("Incomplete or corrupt frame file: " + frameFilePath);
     }
 
     int framRead()
@@ -114,7 +115,7 @@ sealed class Generator
         }
         catch (Exception e)
         {
-            throw new Exception("Error reading frame file: " + frameFile, e);
+            throw new Exception("Error reading frame file: " + frameFilePath, e);
         }
     }
 
