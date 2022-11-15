@@ -362,7 +362,7 @@ sealed class Scanner
 
 -->comments
 
-	void CheckLiteral(Token t)
+	static void CheckLiteral(Token t)
 	{
 -->literals
 	}

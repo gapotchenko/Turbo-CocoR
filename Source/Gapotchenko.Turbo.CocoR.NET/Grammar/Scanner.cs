@@ -431,7 +431,7 @@ sealed class Scanner
 	}
 
 
-	void CheckLiteral(Token t)
+	static void CheckLiteral(Token t)
 	{
 		switch (t.val) {
 			case "COMPILER": t.kind = 6; break;
