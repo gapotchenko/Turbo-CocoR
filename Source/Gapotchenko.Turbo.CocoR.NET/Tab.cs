@@ -230,6 +230,8 @@ class Tab
         literals = new Hashtable();
     }
 
+    public bool KeepOldFiles { get; init; }
+
     //---------------------------------------------------------------------
     //  Symbol list management
     //---------------------------------------------------------------------

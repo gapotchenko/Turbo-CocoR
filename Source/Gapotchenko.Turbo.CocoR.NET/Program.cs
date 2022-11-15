@@ -53,7 +53,7 @@ static class Program
                     trace = new StreamWriter(new FileStream(traceFilePath, FileMode.Create))
                 };
 
-                parser.tab = new Tab(parser);
+                parser.tab = new Tab(parser) { KeepOldFiles = keepOldFiles };
                 parser.dfa = new DFA(parser);
                 parser.pgen = new ParserGen(parser);
 
