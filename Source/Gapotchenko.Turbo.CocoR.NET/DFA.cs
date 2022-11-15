@@ -721,7 +721,7 @@ class DFA
             if (action.target.next != null)
             {
                 GetTargetStates(action, out var targets, out var endOf, out var ctx);
-                Melted melt = StateWithSet(targets);
+                var melt = StateWithSet(targets);
                 if (melt == null)
                 {
                     var s = NewState();
@@ -765,19 +765,39 @@ class DFA
         trace.WriteLine("---------- states ----------");
         for (State state = firstState; state != null; state = state.next)
         {
-            bool first = true;
-            if (state.endOf == null) trace.Write("               ");
-            else trace.Write("E({0,12})", tab.Name(state.endOf.name));
+            if (state.endOf == null)
+                trace.Write("               ");
+            else
+                trace.Write("E({0,12})", tab.Name(state.endOf.name));
             trace.Write("{0,3}:", state.nr);
-            if (state.firstAction == null) trace.WriteLine();
-            for (Action action = state.firstAction; action != null; action = action.next)
+            if (state.firstAction == null)
+                trace.WriteLine();
+
+            bool first = true;
+            for (var action = state.firstAction; action != null; action = action.next)
             {
-                if (first) { trace.Write(" "); first = false; } else trace.Write("                    ");
-                if (action.typ == Node.clas) trace.Write(((CharClass)tab.classes[action.sym]).name);
-                else trace.Write("{0, 3}", Ch(action.sym));
-                for (Target targ = action.target; targ != null; targ = targ.next)
-                    trace.Write(" {0, 3}", targ.state.nr);
-                if (action.tc == Node.contextTrans) trace.WriteLine(" context"); else trace.WriteLine();
+                if (first)
+                {
+                    trace.Write(" ");
+                    first = false;
+                }
+                else
+                {
+                    trace.Write("                    ");
+                }
+
+                if (action.typ == Node.clas)
+                    trace.Write(tab.classes[action.sym].name);
+                else
+                    trace.Write("{0, 3}", Ch(action.sym));
+
+                for (var target = action.target; target != null; target = target.next)
+                    trace.Write(" {0, 3}", target.state.nr);
+
+                if (action.tc == Node.contextTrans)
+                    trace.WriteLine(" context");
+                else
+                    trace.WriteLine();
             }
         }
         trace.WriteLine();

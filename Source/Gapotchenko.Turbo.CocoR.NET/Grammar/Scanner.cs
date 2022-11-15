@@ -3,7 +3,9 @@
 
 #pragma warning disable IDE0161 // Convert to file-scoped namespace
 
-namespace Gapotchenko.Turbo.CocoR.NET.Grammar {
+namespace Gapotchenko.Turbo.CocoR.NET.Grammar
+{
+
 
 sealed class Token
 {
