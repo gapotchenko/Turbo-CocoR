@@ -268,11 +268,6 @@ class Tab
         return null;
     }
 
-    int Num(Node p)
-    {
-        if (p == null) return 0; else return p.n;
-    }
-
     void PrintSym(Symbol sym)
     {
         trace.Write("{0,3} {1,-14} {2}", sym.n, Name(sym.name), nTyp[sym.typ]);
@@ -285,6 +280,8 @@ class Tab
         else
             trace.Write("            ");
         trace.WriteLine("{0,5} {1}", sym.line, tKind[sym.tokenKind]);
+
+        static int Num(Node p) => p?.n ?? 0;
     }
 
     public void PrintSymbolTable()
@@ -557,36 +554,40 @@ class Tab
     //  Character class management
     //---------------------------------------------------------------------
 
-    public ArrayList classes = new ArrayList();
+    public List<CharClass> classes = new();
     public int dummyName = 'A';
 
-    public CharClass NewCharClass(string name, CharSet s)
+    public CharClass NewCharClass(ReadOnlySpan<char> name, CharSet s)
     {
-        if (name == "#") name = "#" + (char)dummyName++;
-        CharClass c = new CharClass(name, s);
-        c.n = classes.Count;
+        if (name == "#")
+            name = "#" + (char)dummyName++;
+        var c = new CharClass(name.ToString(), s)
+        {
+            n = classes.Count
+        };
         classes.Add(c);
         return c;
     }
 
-    public CharClass FindCharClass(string name)
+    public CharClass FindCharClass(ReadOnlySpan<char> name)
     {
-        foreach (CharClass c in classes)
-            if (c.name == name) return c;
+        foreach (var c in classes)
+            if (name.Equals(c.name, StringComparison.Ordinal))
+                return c;
+
         return null;
     }
 
     public CharClass FindCharClass(CharSet s)
     {
-        foreach (CharClass c in classes)
-            if (s.Equals(c.set)) return c;
+        foreach (var c in classes)
+            if (s.Equals(c.set))
+                return c;
+
         return null;
     }
 
-    public CharSet CharClassSet(int i)
-    {
-        return ((CharClass)classes[i]).set;
-    }
+    public CharSet CharClassSet(int i) => classes[i].set;
 
     //----------- character class printing
 
