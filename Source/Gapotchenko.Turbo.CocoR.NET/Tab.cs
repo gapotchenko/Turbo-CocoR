@@ -3,6 +3,7 @@
 using System.Text;
 using System.Collections;
 using Gapotchenko.Turbo.CocoR.NET.Grammar;
+using System.Collections.Generic;
 
 namespace Gapotchenko.Turbo.CocoR.NET;
 
@@ -1379,24 +1380,32 @@ class Tab
         trace.WriteLine(); trace.WriteLine();
     }
 
-    public void SetDDT(string s)
+    public void SetDDT(ReadOnlySpan<char> s)
     {
-        s = s.ToUpper();
-        foreach (char ch in s)
+        foreach (var ch in s)
         {
-            if ('0' <= ch && ch <= '9') ddt[ch - '0'] = true;
-            else switch (ch)
+            if ('0' <= ch && ch <= '9')
+            {
+                ddt[ch - '0'] = true;
+            }
+            else
+            {
+                var i = char.ToUpperInvariant(ch) switch
                 {
-                    case 'A': ddt[0] = true; break; // trace automaton
-                    case 'F': ddt[1] = true; break; // list first/follow sets
-                    case 'G': ddt[2] = true; break; // print syntax graph
-                    case 'I': ddt[3] = true; break; // trace computation of first sets
-                    case 'J': ddt[4] = true; break; // print ANY and SYNC sets
-                    case 'P': ddt[8] = true; break; // print statistics
-                    case 'S': ddt[6] = true; break; // list symbol table
-                    case 'X': ddt[7] = true; break; // list cross reference table
-                    default: break;
-                }
+                    'A' => 0, // trace automaton
+                    'F' => 1, // list first/follow sets
+                    'G' => 2, // print syntax graph
+                    'I' => 3, // trace computation of first sets
+                    'J' => 4, // print ANY and SYNC sets
+                    'P' => 8, // print statistics
+                    'S' => 6, // list symbol table
+                    'X' => 7, // list cross reference table
+                    _ => -1,
+                };
+
+                if (i != -1)
+                    ddt[i] = true;
+            }
         }
     }
 
