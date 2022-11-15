@@ -937,7 +937,7 @@ class Tab
     //  String handling
     //---------------------------------------------------------------------
 
-    char Hex2Char(string s)
+    char Hex2Char(ReadOnlySpan<char> s)
     {
         int val = 0;
         for (int i = 0; i < s.Length; i++)
@@ -953,17 +953,12 @@ class Tab
         return (char)val;
     }
 
-    string Char2Hex(char ch)
-    {
-        StringWriter w = new StringWriter();
-        w.Write("\\u{0:x4}", (int)ch);
-        return w.ToString();
-    }
+    string Char2Hex(char ch) => Invariant($"\\u{(int)ch:x4}");
 
-    public string Unescape(string s)
+    public string Unescape(ReadOnlySpan<char> s)
     {
         /* replaces escape sequences in s by their Unicode values. */
-        StringBuilder buf = new StringBuilder();
+        var buf = new StringBuilder(s.Length);
         int i = 0;
         while (i < s.Length)
         {
@@ -986,7 +981,7 @@ class Tab
                     case 'x':
                         if (i + 6 <= s.Length)
                         {
-                            buf.Append(Hex2Char(s.Substring(i + 2, 4))); i += 6; break;
+                            buf.Append(Hex2Char(s.Slice(i + 2, 4))); i += 6; break;
                         }
                         else
                         {
@@ -1004,9 +999,9 @@ class Tab
         return buf.ToString();
     }
 
-    public string Escape(string s)
+    public string Escape(ReadOnlySpan<char> s)
     {
-        StringBuilder buf = new StringBuilder();
+        var buf = new StringBuilder(s.Length);
         foreach (char ch in s)
         {
             switch (ch)
@@ -1018,8 +1013,10 @@ class Tab
                 case '\r': buf.Append("\\r"); break;
                 case '\n': buf.Append("\\n"); break;
                 default:
-                    if (ch < ' ' || ch > '\u007f') buf.Append(Char2Hex(ch));
-                    else buf.Append(ch);
+                    if (ch < ' ' || ch > '\u007f')
+                        buf.Append(Char2Hex(ch));
+                    else
+                        buf.Append(ch);
                     break;
             }
         }
