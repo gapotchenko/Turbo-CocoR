@@ -13,17 +13,17 @@ namespace Gapotchenko.Turbo.CocoR.NET;
 /// <summary>
 /// The state of a finite automaton.
 /// </summary>
-class State
+class DfaState
 {
     public int nr;                      // state number
-    public Action firstAction;// to first action of this state
+    public DfaAction firstAction;// to first action of this state
     public Symbol endOf;            // recognized token if state is final
     public bool ctx;                    // true if state is reached via contextTrans
-    public State next;
+    public DfaState next;
 
-    public void AddAction(Action act)
+    public void AddAction(DfaAction act)
     {
-        Action lasta = null, a = firstAction;
+        DfaAction lasta = null, a = firstAction;
         while (a != null && act.typ >= a.typ)
         {
             lasta = a;
@@ -37,9 +37,9 @@ class State
             lasta.next = act;
     }
 
-    public void DetachAction(Action act)
+    public void DetachAction(DfaAction act)
     {
-        Action lasta = null, a = firstAction;
+        DfaAction lasta = null, a = firstAction;
         while (a != null && a != act)
         {
             lasta = a;
@@ -52,12 +52,12 @@ class State
                 lasta.next = a.next;
     }
 
-    public void MeltWith(State s)
+    public void MeltWith(DfaState s)
     {
         // copy actions of s to state
-        for (Action action = s.firstAction; action != null; action = action.next)
+        for (DfaAction action = s.firstAction; action != null; action = action.next)
         {
-            var a = new Action(action.typ, action.sym, action.tc);
+            var a = new DfaAction(action.typ, action.sym, action.tc);
             a.AddTargets(action);
             AddAction(a);
         }
@@ -72,52 +72,61 @@ class State
 /// <summary>
 /// The action of a finite automaton.
 /// </summary>
-class Action
+class DfaAction
 {
     public int typ;                 // type of action symbol: clas, chr
     public int sym;                 // action symbol
     public int tc;                  // transition code: normalTrans, contextTrans
-    public Target target;       // states reached from this action
-    public Action next;
+    public DfaTarget target;       // states reached from this action
+    public DfaAction next;
 
-    public Action(int typ, int sym, int tc)
+    public DfaAction(int typ, int sym, int tc)
     {
         this.typ = typ; this.sym = sym; this.tc = tc;
     }
 
-    public void AddTarget(Target t)
+    public void AddTarget(DfaTarget t)
     {
         // add t to the action.targets
-        Target last = null;
-        Target p = target;
+        DfaTarget last = null;
+        var p = target;
         while (p != null && t.state.nr >= p.state.nr)
         {
-            if (t.state == p.state) return;
-            last = p; p = p.next;
+            if (t.state == p.state)
+                return;
+            last = p;
+            p = p.next;
         }
         t.next = p;
-        if (p == target) target = t; else last.next = t;
+        if (p == target)
+            target = t;
+        else
+            last.next = t;
     }
 
-    public void AddTargets(Action a)
+    public void AddTargets(DfaAction a)
     {
         // add copy of a.targets to action.targets
-        for (Target p = a.target; p != null; p = p.next)
+        for (var p = a.target; p != null; p = p.next)
         {
-            Target t = new Target(p.state);
+            var t = new DfaTarget(p.state);
             AddTarget(t);
         }
-        if (a.tc == Node.contextTrans) tc = Node.contextTrans;
+        if (a.tc == Node.contextTrans)
+            tc = Node.contextTrans;
     }
 
     public CharSet Symbols(Tab tab)
     {
         CharSet s;
         if (typ == Node.clas)
+        {
             s = tab.CharClassSet(sym).Clone();
+        }
         else
         {
-            s = new CharSet(); s.Set(sym);
+            s = new CharSet();
+            s.Set(sym);
         }
         return s;
     }
@@ -145,16 +154,16 @@ class Action
 /// <summary>
 /// The set of states that are reached by an action.
 /// </summary>
-class Target
+class DfaTarget
 {
     /// <summary>
     /// The target state.
     /// </summary>
-    public State state;
+    public DfaState state;
 
-    public Target next;
+    public DfaTarget next;
 
-    public Target(State s)
+    public DfaTarget(DfaState s)
     {
         state = s;
     }
@@ -164,13 +173,13 @@ class Target
 //  Melted
 //-----------------------------------------------------------------------------
 
-class Melted
+class DfaMelted
 {                   // info about melted states
     public BitArray set;                // set of old states
-    public State state;                 // new state
-    public Melted next;
+    public DfaState state;                 // new state
+    public DfaMelted next;
 
-    public Melted(BitArray set, State state)
+    public DfaMelted(BitArray set, DfaState state)
     {
         this.set = set; this.state = state;
     }
@@ -199,7 +208,7 @@ sealed class Comment
 }
 
 /// <summary>
-/// The set of characters/
+/// The set of characters.
 /// </summary>
 sealed class CharSet
 {
@@ -349,8 +358,8 @@ class DFA
 {
     int maxStates;
     int lastStateNr;   // highest state number
-    State firstState;
-    State lastState;   // last allocated state
+    DfaState firstState;
+    DfaState lastState;   // last allocated state
     int lastSimState;  // last non melted state
     FileStream fram;   // scanner frame input
     StreamWriter gen;  // generated scanner file
@@ -391,26 +400,26 @@ class DFA
 
     //---------- State handling
 
-    State NewState()
+    DfaState NewState()
     {
-        State s = new State(); s.nr = ++lastStateNr;
+        DfaState s = new DfaState(); s.nr = ++lastStateNr;
         if (firstState == null) firstState = s; else lastState.next = s;
         lastState = s;
         return s;
     }
 
-    void NewTransition(State from, State to, int typ, int sym, int tc)
+    void NewTransition(DfaState from, DfaState to, int typ, int sym, int tc)
     {
-        Target t = new Target(to);
-        Action a = new Action(typ, sym, tc); a.target = t;
+        DfaTarget t = new DfaTarget(to);
+        DfaAction a = new DfaAction(typ, sym, tc); a.target = t;
         from.AddAction(a);
         if (typ == Node.clas) curSy.tokenKind = Symbol.classToken;
     }
 
     void CombineShifts()
     {
-        State state;
-        Action a, b, c;
+        DfaState state;
+        DfaAction a, b, c;
         CharSet seta, setb;
         for (state = firstState; state != null; state = state.next)
         {
@@ -430,47 +439,47 @@ class DFA
         }
     }
 
-    void FindUsedStates(State state, BitArray used)
+    void FindUsedStates(DfaState state, BitArray used)
     {
         if (used[state.nr]) return;
         used[state.nr] = true;
-        for (Action a = state.firstAction; a != null; a = a.next)
+        for (DfaAction a = state.firstAction; a != null; a = a.next)
             FindUsedStates(a.target.state, used);
     }
 
     void DeleteRedundantStates()
     {
-        State[] newState = new State[lastStateNr + 1];
+        DfaState[] newState = new DfaState[lastStateNr + 1];
         BitArray used = new BitArray(lastStateNr + 1);
         FindUsedStates(firstState, used);
         // combine equal final states
-        for (State s1 = firstState.next; s1 != null; s1 = s1.next) // firstState cannot be final
+        for (DfaState s1 = firstState.next; s1 != null; s1 = s1.next) // firstState cannot be final
             if (used[s1.nr] && s1.endOf != null && s1.firstAction == null && !s1.ctx)
-                for (State s2 = s1.next; s2 != null; s2 = s2.next)
+                for (DfaState s2 = s1.next; s2 != null; s2 = s2.next)
                     if (used[s2.nr] && s1.endOf == s2.endOf && s2.firstAction == null & !s2.ctx)
                     {
                         used[s2.nr] = false; newState[s2.nr] = s1;
                     }
-        for (State state = firstState; state != null; state = state.next)
+        for (DfaState state = firstState; state != null; state = state.next)
             if (used[state.nr])
-                for (Action a = state.firstAction; a != null; a = a.next)
+                for (DfaAction a = state.firstAction; a != null; a = a.next)
                     if (!used[a.target.state.nr])
                         a.target.state = newState[a.target.state.nr];
         // delete unused states
         lastState = firstState; lastStateNr = 0; // firstState has number 0
-        for (State state = firstState.next; state != null; state = state.next)
+        for (DfaState state = firstState.next; state != null; state = state.next)
             if (used[state.nr]) { state.nr = ++lastStateNr; lastState = state; }
             else lastState.next = state.next;
     }
 
-    State TheState(Node p)
+    DfaState TheState(Node p)
     {
-        State state;
+        DfaState state;
         if (p == null) { state = NewState(); state.endOf = curSy; return state; }
         else return p.state;
     }
 
-    void Step(State from, Node p, BitArray stepped)
+    void Step(DfaState from, Node p, BitArray stepped)
     {
         if (p == null) return;
         stepped[p.n] = true;
@@ -518,7 +527,7 @@ class DFA
     //  - any node after a chr, clas, opt, or alt, must get a new number
     //  - if a nested structure starts with an iteration the iter node must get a new number
     //  - if an iteration follows an iteration, it must get a new number
-    void NumberNodes(Node p, State state, bool renumIter)
+    void NumberNodes(Node p, DfaState state, bool renumIter)
     {
         if (p == null) return;
         if (p.state != null) return; // already visited;
@@ -607,8 +616,8 @@ class DFA
     {
         s = tab.Unescape(s.Substring(1, s.Length - 2));
         int i, len = s.Length;
-        State state = firstState;
-        Action a = null;
+        DfaState state = firstState;
+        DfaAction a = null;
         for (i = 0; i < len; i++)
         { // try to match s against existing DFA
             a = FindAction(state, s[i]);
@@ -623,7 +632,7 @@ class DFA
         }
         for (; i < len; i++)
         { // make new DFA for s[i..len-1], ML: i is either 0 or len
-            State to = NewState();
+            DfaState to = NewState();
             NewTransition(state, to, Node.chr, s[i], Node.normalTrans);
             state = to;
         }
@@ -638,15 +647,16 @@ class DFA
             parser.SemErr("tokens " + sym.name + " and " + matchedSym.name + " cannot be distinguished");
         }
         else
-        { // matchedSym == classToken || classLitToken
+        {
+            // matchedSym == classToken || classLitToken
             matchedSym.tokenKind = Symbol.classLitToken;
             sym.tokenKind = Symbol.litToken;
         }
     }
 
-    void SplitActions(State state, Action a, Action b)
+    void SplitActions(DfaState state, DfaAction a, DfaAction b)
     {
-        Action c; CharSet seta, setb, setc;
+        DfaAction c; CharSet seta, setb, setc;
         seta = a.Symbols(tab); setb = b.Symbols(tab);
         if (seta.Equals(setb))
         {
@@ -672,7 +682,7 @@ class DFA
             setb.Subtract(setc);
             a.ShiftWith(seta, tab);
             b.ShiftWith(setb, tab);
-            c = new Action(0, 0, Node.normalTrans);  // typ and sym are set in ShiftWith
+            c = new DfaAction(0, 0, Node.normalTrans);  // typ and sym are set in ShiftWith
             c.AddTargets(a);
             c.AddTargets(b);
             c.ShiftWith(setc, tab);
@@ -680,7 +690,7 @@ class DFA
         }
     }
 
-    bool Overlap(Action a, Action b)
+    bool Overlap(DfaAction a, DfaAction b)
     {
         CharSet seta, setb;
         if (a.typ == Node.chr)
@@ -694,7 +704,7 @@ class DFA
         }
     }
 
-    void MakeUnique(State state)
+    void MakeUnique(DfaState state)
     {
         bool changed;
         do
@@ -714,7 +724,7 @@ class DFA
         } while (changed);
     }
 
-    void MeltStates(State state)
+    void MeltStates(DfaState state)
     {
         for (var action = state.firstAction; action != null; action = action.next)
         {
@@ -763,7 +773,7 @@ class DFA
     {
         trace.WriteLine();
         trace.WriteLine("---------- states ----------");
-        for (State state = firstState; state != null; state = state.next)
+        for (DfaState state = firstState; state != null; state = state.next)
         {
             if (state.endOf == null)
                 trace.Write("               ");
@@ -807,9 +817,9 @@ class DFA
 
     //---------------------------- actions --------------------------------
 
-    public Action FindAction(State state, char ch)
+    public DfaAction FindAction(DfaState state, char ch)
     {
-        for (Action a = state.firstAction; a != null; a = a.next)
+        for (DfaAction a = state.firstAction; a != null; a = a.next)
             if (a.typ == Node.chr && ch == a.sym) return a;
             else if (a.typ == Node.clas)
             {
@@ -819,12 +829,12 @@ class DFA
         return null;
     }
 
-    public void GetTargetStates(Action a, out BitArray targets, out Symbol endOf, out bool ctx)
+    public void GetTargetStates(DfaAction a, out BitArray targets, out Symbol endOf, out bool ctx)
     {
         // compute the set of target states
         targets = new BitArray(maxStates); endOf = null;
         ctx = false;
-        for (Target t = a.target; t != null; t = t.next)
+        for (DfaTarget t = a.target; t != null; t = t.next)
         {
             int stateNr = t.state.nr;
             if (stateNr <= lastSimState) targets[stateNr] = true;
@@ -852,18 +862,18 @@ class DFA
 
     //------------------------- melted states ------------------------------
 
-    Melted firstMelted; // head of melted state list
+    DfaMelted firstMelted; // head of melted state list
 
-    Melted NewMelted(BitArray set, State state)
+    DfaMelted NewMelted(BitArray set, DfaState state)
     {
-        Melted m = new Melted(set, state);
+        DfaMelted m = new DfaMelted(set, state);
         m.next = firstMelted; firstMelted = m;
         return m;
     }
 
     BitArray MeltedSet(int nr)
     {
-        Melted m = firstMelted;
+        DfaMelted m = firstMelted;
         while (m != null)
         {
             if (m.state.nr == nr) return m.set; else m = m.next;
@@ -871,9 +881,9 @@ class DFA
         throw new Exception("compiler error in Melted.Set");
     }
 
-    Melted StateWithSet(BitArray s)
+    DfaMelted StateWithSet(BitArray s)
     {
-        for (Melted m = firstMelted; m != null; m = m.next)
+        for (DfaMelted m = firstMelted; m != null; m = m.next)
             if (Sets.Equals(s, m.set)) return m;
         return null;
     }
@@ -1018,7 +1028,7 @@ class DFA
         gen.Write("\t\t}");
     }
 
-    void WriteState(State state)
+    void WriteState(DfaState state)
     {
         Symbol endOf = state.endOf;
         gen.WriteLine("\t\t\tcase {0}:", state.nr);
@@ -1027,7 +1037,7 @@ class DFA
             gen.WriteLine("\t\t\t\trecEnd = pos; recKind = {0};", endOf.n);
         }
         bool ctxEnd = state.ctx;
-        for (Action action = state.firstAction; action != null; action = action.next)
+        for (DfaAction action = state.firstAction; action != null; action = action.next)
         {
             if (action == state.firstAction) gen.Write("\t\t\t\tif (");
             else gen.Write("\t\t\t\telse if (");
@@ -1074,7 +1084,7 @@ class DFA
 
     void WriteStartTab()
     {
-        for (Action action = firstState.firstAction; action != null; action = action.next)
+        for (DfaAction action = firstState.firstAction; action != null; action = action.next)
         {
             int targetState = action.target.state.nr;
             if (action.typ == Node.chr)
@@ -1152,7 +1162,7 @@ class DFA
         }
         if (hasCtxMoves) { gen.WriteLine(); gen.Write("\t\tint apx = 0;"); } /* pdt */
         g.CopyFramePart("-->scan3");
-        for (State state = firstState.next; state != null; state = state.next)
+        for (DfaState state = firstState.next; state != null; state = state.next)
             WriteState(state);
         g.CopyFramePart(null);
         if (!string.IsNullOrEmpty(tab.nsName))

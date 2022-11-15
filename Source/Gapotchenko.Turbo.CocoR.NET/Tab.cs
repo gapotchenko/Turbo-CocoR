@@ -97,7 +97,7 @@ class Node
                                 // sem:       pos of semantic action in source text
                                 // rslv:       pos of resolver in source text
     public int line;        // source text line number of item in this node
-    public State state; // DFA state corresponding to this node
+    public DfaState state; // DFA state corresponding to this node
                         // (only used in DFA.ConvertToStates)
 
     public Node(int typ, Symbol sym, int line)
