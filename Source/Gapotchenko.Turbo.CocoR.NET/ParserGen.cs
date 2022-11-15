@@ -20,7 +20,6 @@ class ParserGen
 
     int errorNr;      // highest parser error number
     Symbol curSy;     // symbol whose production is currently generated
-    FileStream fram;  // parser frame file
     StreamWriter gen; // generated parser source file
     StringWriter err; // generated parser error messages
     ArrayList symSet = new ArrayList();
@@ -382,7 +381,7 @@ class ParserGen
         int oldPos = buffer.Pos;  // Pos is modified by CopySourcePart
         symSet.Add(tab.allSyncSets);
 
-        fram = g.OpenFrame("Parser.frame");
+        g.CurrentFrame = g.OpenFrame("Parser.frame");
         gen = g.OpenGen("Parser.cs");
         err = new StringWriter();
         foreach (Symbol sym in tab.terminals) GenErrorMsg(tErr, sym);

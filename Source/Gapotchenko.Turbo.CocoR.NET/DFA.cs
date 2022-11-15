@@ -361,7 +361,6 @@ class DFA
     DfaState firstState;
     DfaState lastState;   // last allocated state
     int lastSimState;  // last non melted state
-    FileStream fram;   // scanner frame input
     StreamWriter gen;  // generated scanner file
     Symbol curSy;      // current token to be recognized (in FindTrans)
     bool dirtyDFA;     // DFA may become nondeterministic in MatchLiteral
@@ -1106,7 +1105,7 @@ class DFA
     public void WriteScanner()
     {
         Generator g = new Generator(tab);
-        fram = g.OpenFrame("Scanner.frame");
+        g.CurrentFrame = g.OpenFrame("Scanner.frame");
         gen = g.OpenGen("Scanner.cs");
         if (dirtyDFA) MakeDeterministic();
 

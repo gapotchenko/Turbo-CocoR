@@ -1,31 +1,34 @@
 ﻿namespace Gapotchenko.Turbo.CocoR.NET;
 
+#nullable enable
+
 sealed class Generator
 {
-    const int EOF = -1;
-
-    FileStream fram;
-    StreamWriter gen;
-    readonly Tab tab;
-    string frameFilePath;
-
     public Generator(Tab tab)
     {
         this.tab = tab;
     }
 
-    public FileStream OpenFrame(string fileName)
-    {
-        frameFilePath = null;
-        if (!File.Exists(frameFilePath))
-            frameFilePath = Path.Combine(tab.srcDir, fileName);
-        if (!File.Exists(frameFilePath) && tab.frameDir != null)
-            frameFilePath = Path.Combine(tab.frameDir, fileName);
-        if (!File.Exists(frameFilePath))
-            throw new Exception("Cannot find : " + fileName);
+    readonly Tab tab;
 
-        return fram = new FileStream(frameFilePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+    public Frame? CurrentFrame { get; set; }
+
+    public Frame? TryOpenFrame(string fileName)
+    {
+        string filePath = Path.Combine(tab.srcDir, fileName);
+        if (!File.Exists(filePath) && tab.frameDir != null)
+            filePath = Path.Combine(tab.frameDir, fileName);
+        if (!File.Exists(filePath))
+            return null;
+
+        return new Frame(filePath);
     }
+
+    public Frame OpenFrame(string fileName) =>
+        TryOpenFrame(fileName) ??
+        throw new Exception("Cannot find : " + fileName);
+
+    StreamWriter? gen;
 
     public StreamWriter OpenGen(string target)
     {
@@ -42,82 +45,18 @@ sealed class Generator
 
     public void GenCopyright()
     {
-        string filePath = null;
-        if (tab.frameDir != null)
-            filePath = Path.Combine(tab.frameDir, "Copyright.frame");
-        if (!File.Exists(filePath))
-            filePath = Path.Combine(tab.srcDir, "Copyright.frame");
-        if (!File.Exists(filePath))
-            return;
-
-        FileStream scannerFram = fram;
-        fram = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
-        CopyFramePart(null);
-        fram = scannerFram;
+        using var frame = TryOpenFrame("Copyright.frame");
+        if (frame != null)
+            frame.CopyPart(null, gen);
     }
 
-    public void SkipFramePart(string stop)
-    {
-        CopyFramePart(stop, false);
-    }
+    public void SkipFramePart(string name) => (CurrentFrame ?? throw new InvalidOperationException()).SkipPart(name);
 
-
-    public void CopyFramePart(string stop)
-    {
-        CopyFramePart(stop, true);
-    }
-
-    // if stop == null, copies until end of file
-    void CopyFramePart(string stop, bool generateOutput)
-    {
-        char startCh = (char)0;
-        int endOfStopString = 0;
-
-        if (stop != null)
-        {
-            startCh = stop[0];
-            endOfStopString = stop.Length - 1;
-        }
-
-        int ch = framRead();
-        while (ch != EOF)
-        {
-            if (stop != null && ch == startCh)
-            {
-                int i = 0;
-                do
-                {
-                    if (i == endOfStopString)
-                        return; // stop[0..i] found
-                    ch = framRead(); i++;
-                } while (ch == stop[i]);
-                // stop[0..i-1] found; continue with last read character
-                if (generateOutput)
-                    gen.Write(stop.Substring(0, i));
-            }
-            else
-            {
-                if (generateOutput)
-                    gen.Write((char)ch);
-                ch = framRead();
-            }
-        }
-
-        if (stop != null)
-            throw new Exception("Incomplete or corrupt frame file: " + frameFilePath);
-    }
-
-    int framRead()
-    {
-        try
-        {
-            return fram.ReadByte();
-        }
-        catch (Exception e)
-        {
-            throw new Exception("Error reading frame file: " + frameFilePath, e);
-        }
-    }
+    public void CopyFramePart(string? name) =>
+        (CurrentFrame ?? throw new InvalidOperationException())
+        .CopyPart(
+            name,
+            gen ?? throw new InvalidOperationException());
 
     public void BeginNamespace(ReadOnlySpan<char> name)
     {
