@@ -233,19 +233,19 @@ class Tab
     //  Symbol list management
     //---------------------------------------------------------------------
 
-    public ArrayList terminals = new ArrayList();
-    public ArrayList pragmas = new ArrayList();
-    public ArrayList nonterminals = new ArrayList();
+    public List<Symbol> terminals = new();
+    public List<Symbol> pragmas = new();
+    public List<Symbol> nonterminals = new();
 
     string[] tKind = { "fixedToken", "classToken", "litToken", "classLitToken" };
 
-    public Symbol NewSym(int typ, string name, int line)
+    public Symbol NewSym(int typ, ReadOnlySpan<char> name, int line)
     {
         if (name.Length == 2 && name[0] == '"')
         {
             parser.SemErr("empty token not allowed"); name = "???";
         }
-        Symbol sym = new Symbol(typ, name, line);
+        var sym = new Symbol(typ, name.ToString(), line);
         switch (typ)
         {
             case Node.t: sym.n = terminals.Count; terminals.Add(sym); break;
@@ -255,12 +255,16 @@ class Tab
         return sym;
     }
 
-    public Symbol FindSym(string name)
+    public Symbol? FindSym(ReadOnlySpan<char> name)
     {
-        foreach (Symbol s in terminals)
-            if (s.name == name) return s;
-        foreach (Symbol s in nonterminals)
-            if (s.name == name) return s;
+        foreach (var symbol in terminals)
+            if (name.Equals(symbol.name, StringComparison.Ordinal))
+                return symbol;
+
+        foreach (var symbol in nonterminals)
+            if (name.Equals(symbol.name, StringComparison.Ordinal))
+                return symbol;
+
         return null;
     }
 

@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <Nullable>disable</Nullable>
+    <Nullable>annotations</Nullable>
     <IsPackable>true</IsPackable>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>turbo-coco-dotnet</ToolCommandName>
