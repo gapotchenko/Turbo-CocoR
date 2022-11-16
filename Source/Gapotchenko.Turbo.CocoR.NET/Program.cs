@@ -20,23 +20,24 @@ namespace Gapotchenko.Turbo.CocoR.NET;
 
 static class Program
 {
-    public static int Main(string[] arg)
+    public static int Main(string[] args)
     {
-        Console.WriteLine("Turbo Coco/R .NET 2022.1.1");
+        Console.WriteLine("Turbo Coco/R 2022.1.1");
         string srcName = null, nsName = null, frameDir = null, ddtString = null,
         outDir = null;
         bool emitLines = false;
         int retVal = 1;
-        for (int i = 0; i < arg.Length; i++)
+        for (int i = 0; i < args.Length; i++)
         {
-            if (arg[i] == "-namespace" && i < arg.Length - 1) nsName = arg[++i].Trim();
-            else if (arg[i] == "-frames" && i < arg.Length - 1) frameDir = arg[++i].Trim();
-            else if (arg[i] == "-trace" && i < arg.Length - 1) ddtString = arg[++i].Trim();
-            else if (arg[i] == "-o" && i < arg.Length - 1) outDir = arg[++i].Trim();
-            else if (arg[i] == "-lines") emitLines = true;
-            else srcName = arg[i];
+            if (args[i] is "--namespace" or "-namespace" && i < args.Length - 1) nsName = args[++i].Trim();
+            else if (args[i] is "--frames" or "-frames" && i < args.Length - 1) frameDir = args[++i].Trim();
+            else if (args[i] is "--trace" or "-trace" && i < args.Length - 1) ddtString = args[++i].Trim();
+            else if (args[i] is "-o" or "--output" && i < args.Length - 1) outDir = args[++i].Trim();
+            else if (args[i] is "--lines" or "-lines") emitLines = true;
+            //else if (args[i].StartsWith('-')) throw new Exception(string.Format("Unknown command-line option {0}.", args[i]));
+            else srcName = args[i];
         }
-        if (arg.Length > 0 && srcName != null)
+        if (args.Length > 0 && srcName != null)
         {
             Console.WriteLine();
             try
@@ -85,14 +86,14 @@ static class Program
         else
         {
             Console.WriteLine();
-            Console.WriteLine("Usage: turbo-coco-dotnet grammar.atg <option>{0}"
+            Console.WriteLine("Usage: turbo-coco grammar.atg [options]{0}"
                               + "{0}"
                               + "Options:{0}"
-                              + "  -namespace arg  Namespace name.{0}"
-                              + "  -frames arg     Frame files directory.{0}"
-                              + "  -trace arg      Trace string (see below).{0}"
-                              + "  -o arg          Output directory.{0}"
-                              + "  -lines{0}"
+                              + "  --namespace arg      Namespace name.{0}"
+                              + "  --frames arg         Frame files directory.{0}"
+                              + "  --trace arg          Trace string (see below).{0}"
+                              + "  -o [ --output ] arg  Output directory.{0}"
+                              + "  --lines              Emit lines.{0}"
                               + "{0}"
                               + "Valid characters in the trace string:{0}"
                               + "  A  trace automaton{0}"
@@ -104,8 +105,8 @@ static class Program
                               + "  S  list symbol table{0}"
                               + "  X  list cross reference table{0}"
                               + "{0}"
-                              + "\"Scanner.frame\" and \"Parser.frame\" files needed in ATG directory{0}"
-                              + "or in a directory specified by the -frames option.",
+                              + "Scanner.frame and Parser.frame files are needed in the ATG directory{0}"
+                              + "or in a directory specified by the --frames option.",
                               Environment.NewLine);
         }
         return retVal;

@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <MasteringDir>$(MSBuildThisFileDirectory)</MasteringDir>
-    <MasteringProjectModulePrefix>Gapotchenko.Turbo.CocoR.NET</MasteringProjectModulePrefix>
+    <MasteringProjectModulePrefix>Gapotchenko.Turbo.CocoR</MasteringProjectModulePrefix>
   </PropertyGroup>
 
   <Import Project="Traits.props" />
