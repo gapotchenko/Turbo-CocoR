@@ -2,8 +2,6 @@
 
 interface IOptionsService
 {
-    #region Command-line options
-
     string SourceFileName { get; }
 
     string? FramesDirectoryName { get; }
@@ -16,8 +14,6 @@ interface IOptionsService
 
     bool EmitLines { get; }
 
-    #endregion
-
     #region Calculated options
 
     bool HasSourceFileName { get; }
@@ -27,4 +23,6 @@ interface IOptionsService
     bool KeepOldFiles { get; }
 
     #endregion
+
+    void WriteUsage(TextWriter textWriter);
 }

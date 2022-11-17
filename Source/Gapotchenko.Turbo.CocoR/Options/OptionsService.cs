@@ -47,12 +47,14 @@ sealed class OptionsService : IOptionsService
             }
         }
 
+        #region Calculated options
+
         m_SourceDirectoryName = Path.GetDirectoryName(m_SourceFileName);
         if (KeepOldFiles = m_OutputDirectoryName == null)
             m_OutputDirectoryName = m_SourceDirectoryName;
-    }
 
-    #region Command-line options
+        #endregion
+    }
 
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     string? m_SourceFileName;
@@ -72,8 +74,6 @@ sealed class OptionsService : IOptionsService
 
     public string OutputDirectoryName => m_OutputDirectoryName ?? throw new Exception("Output directory is unavailable.");
 
-    #endregion
-
     #region Calculated options
 
     public bool HasSourceFileName => m_SourceFileName != null;
@@ -86,4 +86,30 @@ sealed class OptionsService : IOptionsService
     public bool KeepOldFiles { get; }
 
     #endregion
+
+    public void WriteUsage(TextWriter textWriter)
+    {
+        textWriter.WriteLine(
+            "Options:{0}"
+            + "  --namespace arg      Namespace name.{0}"
+            + "  --frames arg         Frame files directory.{0}"
+            + "  --trace arg          Trace string (see below).{0}"
+            + "  -o [ --output ] arg  Output directory.{0}"
+            + "  --lines              Emit lines.{0}"
+            + "{0}"
+            + "Valid characters in the trace string:{0}"
+            + "  A  trace automaton{0}"
+            + "  F  list first/follow sets{0}"
+            + "  G  print syntax graph{0}"
+            + "  I  trace computation of first sets{0}"
+            + "  J  list ANY and SYNC sets{0}"
+            + "  P  print statistics{0}"
+            + "  S  list symbol table{0}"
+            + "  X  list cross reference table{0}"
+            + "{0}"
+            + "Scanner.frame and Parser.frame files are needed in the ATG directory{0}"
+            + "or in a directory specified by the --frames option.",
+            Environment.NewLine);
+    }
 }
+
