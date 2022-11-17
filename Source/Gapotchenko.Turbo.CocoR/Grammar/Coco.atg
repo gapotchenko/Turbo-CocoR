@@ -41,7 +41,7 @@ TOKENS
 	char      = '\'' ( charCh | '\\' printable { hex } ) '\''.
 
 PRAGMAS
-	ddtSym    = '$' { digit | letter }.  (. tab.SetDDT(la.val); .)
+	ddtSym    = '$' { digit | letter }.  (. tab.SetTrace(la.val); .)
 
 	optionSym = '$' letter { letter } '='
 	            { digit | letter
