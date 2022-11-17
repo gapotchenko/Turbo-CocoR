@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33103.184
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gapotchenko.Turbo.CocoR", "Gapotchenko.Turbo.CocoR.NET\Gapotchenko.Turbo.CocoR.csproj", "{61CC1A73-FB30-4D48-9A37-05ADD1A4A2E3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gapotchenko.Turbo.CocoR", "Gapotchenko.Turbo.CocoR\Gapotchenko.Turbo.CocoR.csproj", "{61CC1A73-FB30-4D48-9A37-05ADD1A4A2E3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "02. Misc", "02. Misc", "{29497675-5E90-4B88-B6A4-40BEFFCE3283}"
 EndProject

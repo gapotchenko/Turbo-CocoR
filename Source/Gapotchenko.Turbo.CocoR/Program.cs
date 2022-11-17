@@ -1,20 +1,6 @@
-﻿/*-------------------------------------------------------------------------
-  Trace output options
-  0 | A: prints the states of the scanner automaton
-  1 | F: prints the First and Follow sets of all nonterminals
-  2 | G: prints the syntax graph of the productions
-  3 | I: traces the computation of the First sets
-  4 | J: prints the sets associated with ANYs and synchronisation sets
-  6 | S: prints the symbol table (terminals, nonterminals, pragmas)
-  7 | X: prints a cross reference list of all syntax symbols
-  8 | P: prints statistics about the Coco run
-  
-  Trace output can be switched on by the pragma
-    $ { digit | letter }
-  in the attributed grammar or as a command-line option
-  -------------------------------------------------------------------------*/
-
+﻿using Gapotchenko.FX;
 using Gapotchenko.Turbo.CocoR.NET.Grammar;
+using Gapotchenko.Turbo.CocoR.Options;
 
 namespace Gapotchenko.Turbo.CocoR.NET;
 
@@ -22,49 +8,55 @@ static class Program
 {
     public static int Main(string[] args)
     {
-        Console.WriteLine("Turbo Coco/R 2022.1.1");
-        string srcName = null, nsName = null, frameDir = null, ddtString = null,
-        outDir = null;
-        bool emitLines = false;
-        int retVal = 1;
-        for (int i = 0; i < args.Length; i++)
+        try
         {
-            if (args[i] is "--namespace" or "-namespace" && i < args.Length - 1) nsName = args[++i].Trim();
-            else if (args[i] is "--frames" or "-frames" && i < args.Length - 1) frameDir = args[++i].Trim();
-            else if (args[i] is "--trace" or "-trace" && i < args.Length - 1) ddtString = args[++i].Trim();
-            else if (args[i] is "-o" or "--output" && i < args.Length - 1) outDir = args[++i].Trim();
-            else if (args[i] is "--lines" or "-lines") emitLines = true;
-            //else if (args[i].StartsWith('-')) throw new Exception(string.Format("Unknown command-line option {0}.", args[i]));
-            else srcName = args[i];
+            Run(args);
+            return 0;
         }
-        if (args.Length > 0 && srcName != null)
+        catch (ProgramExitException e)
+        {
+            return e.ExitCode;
+        }
+        catch (Exception e)
+        {
+            var output = Console.Error;
+            output.Write("Error: ");
+            output.WriteLine(e.Message);
+            return 1;
+        }
+    }
+
+    static void Run(IReadOnlyList<string> args)
+    {
+        Console.WriteLine("Turbo Coco/R 2022.1.1");
+
+        var optionsService = new OptionsService(args);
+
+        if (args.Count > 0 && optionsService.HasSourceFileName)
         {
             Console.WriteLine();
             try
             {
-                string srcDir = Path.GetDirectoryName(srcName);
-                bool keepOldFiles = outDir == null;
-                outDir ??= srcDir;
+                string traceFilePath = Path.Combine(optionsService.OutputDirectoryName, "Trace.txt");
 
-                string traceFilePath = Path.Combine(outDir, "Trace.txt");
-
-                var scanner = new Scanner(srcName);
+                var scanner = new Scanner(optionsService.SourceFileName);
                 var parser = new Parser(scanner)
                 {
                     trace = new StreamWriter(new FileStream(traceFilePath, FileMode.Create))
                 };
 
-                parser.tab = new Tab(parser) { KeepOldFiles = keepOldFiles };
+                parser.tab = new Tab(parser) { KeepOldFiles = optionsService.KeepOldFiles };
                 parser.dfa = new DFA(parser);
                 parser.pgen = new ParserGen(parser);
 
-                parser.tab.srcName = srcName;
-                parser.tab.srcDir = srcDir;
-                parser.tab.nsName = nsName;
-                parser.tab.frameDir = frameDir;
-                parser.tab.outDir = outDir;
-                parser.tab.emitLines = emitLines;
-                if (ddtString != null) parser.tab.SetDDT(ddtString);
+                parser.tab.srcName = optionsService.SourceFileName;
+                parser.tab.srcDir = optionsService.SourceDirectoryName;
+                parser.tab.nsName = optionsService.Namespace;
+                parser.tab.frameDir = optionsService.FramesDirectoryName;
+                parser.tab.outDir = optionsService.OutputDirectoryName;
+                parser.tab.emitLines = optionsService.EmitLines;
+                if (optionsService.Trace is not null and var trace)
+                    parser.tab.SetTrace(trace);
 
                 parser.Parse();
 
@@ -75,8 +67,8 @@ static class Program
                 else
                     Console.WriteLine("Trace output has been written to \"{0}\" file.", traceFilePath);
                 Console.WriteLine("{0} errors detected.", parser.errors.count);
-                if (parser.errors.count == 0)
-                    retVal = 0;
+                if (parser.errors.count != 0)
+                    throw new ProgramExitException(1);
             }
             catch (Exception e)
             {
@@ -108,7 +100,7 @@ static class Program
                               + "Scanner.frame and Parser.frame files are needed in the ATG directory{0}"
                               + "or in a directory specified by the --frames option.",
                               Environment.NewLine);
+            throw new ProgramExitException(1);
         }
-        return retVal;
     }
 }

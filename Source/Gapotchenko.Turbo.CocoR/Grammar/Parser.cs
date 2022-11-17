@@ -69,7 +69,7 @@ const int id = 0;
 			la = scanner.Scan();
 			if (la.kind <= maxT) { ++errDist; break; }
 				if (la.kind == 42) {
-				tab.SetDDT(la.val); 
+				tab.SetTrace(la.val); 
 				}
 				if (la.kind == 43) {
 				tab.SetOption(la.val); 

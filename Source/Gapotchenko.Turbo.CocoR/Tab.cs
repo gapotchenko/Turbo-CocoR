@@ -98,7 +98,7 @@ class Node
                                 // rslv:       pos of resolver in source text
     public int line;        // source text line number of item in this node
     public DfaState state; // DFA state corresponding to this node
-                        // (only used in DFA.ConvertToStates)
+                           // (only used in DFA.ConvertToStates)
 
     public Node(int typ, Symbol sym, int line)
     {
@@ -1382,32 +1382,24 @@ class Tab
         trace.WriteLine(); trace.WriteLine();
     }
 
-    public void SetDDT(ReadOnlySpan<char> s)
+    public void SetTrace(ReadOnlySpan<char> s)
     {
         foreach (var ch in s)
         {
-            if ('0' <= ch && ch <= '9')
+            var i = char.ToUpperInvariant(ch) switch
             {
-                ddt[ch - '0'] = true;
-            }
-            else
-            {
-                var i = char.ToUpperInvariant(ch) switch
-                {
-                    'A' => 0, // trace automaton
-                    'F' => 1, // list first/follow sets
-                    'G' => 2, // print syntax graph
-                    'I' => 3, // trace computation of first sets
-                    'J' => 4, // print ANY and SYNC sets
-                    'P' => 8, // print statistics
-                    'S' => 6, // list symbol table
-                    'X' => 7, // list cross reference table
-                    _ => -1,
-                };
+                'A' or '0' => 0, // trace automaton
+                'F' or '1' => 1, // list first/follow sets
+                'G' or '2' => 2, // print syntax graph
+                'I' or '3' => 3, // trace computation of first sets
+                'J' or '4' => 4, // print ANY and SYNC sets
+                'P' or '8' => 8, // print statistics
+                'S' or '6' => 6, // list symbol table
+                'X' or '7' => 7, // list cross reference table
+                _ => throw new Exception($"Unknown trace option '{ch}'."),
+            };
 
-                if (i != -1)
-                    ddt[i] = true;
-            }
+            ddt[i] = true;
         }
     }
 

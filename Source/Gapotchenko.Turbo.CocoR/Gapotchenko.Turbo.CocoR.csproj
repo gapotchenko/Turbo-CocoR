@@ -8,4 +8,8 @@
     <ToolCommandName>turbo-coco</ToolCommandName>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Gapotchenko.FX" Version="2022.2.7" />
+  </ItemGroup>
+
 </Project>
