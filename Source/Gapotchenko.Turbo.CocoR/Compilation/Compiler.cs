@@ -3,6 +3,8 @@ using Gapotchenko.Turbo.CocoR.Compilation.Grammar;
 using Gapotchenko.Turbo.CocoR.Options;
 using System.Composition;
 
+#nullable enable
+
 namespace Gapotchenko.Turbo.CocoR.Compilation;
 
 [Export]

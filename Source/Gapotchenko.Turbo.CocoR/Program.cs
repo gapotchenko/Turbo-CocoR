@@ -4,6 +4,8 @@ using Gapotchenko.Turbo.CocoR.Deployment;
 using Gapotchenko.Turbo.CocoR.Options;
 using System.Composition.Hosting;
 
+#nullable enable
+
 namespace Gapotchenko.Turbo.CocoR.NET;
 
 static class Program

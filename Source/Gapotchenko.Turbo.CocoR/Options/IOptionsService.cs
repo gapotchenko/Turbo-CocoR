@@ -1,5 +1,7 @@
 ﻿namespace Gapotchenko.Turbo.CocoR.Options;
 
+#nullable enable
+
 interface IOptionsService
 {
     string SourceFileName { get; }

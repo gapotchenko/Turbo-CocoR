@@ -1,7 +1,5 @@
 ﻿#nullable enable
 
-using Gapotchenko;
-
 namespace Gapotchenko.Turbo.CocoR.Compilation;
 
 sealed class Frame : IDisposable

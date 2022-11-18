@@ -1,5 +1,7 @@
 ﻿namespace Gapotchenko.Turbo.CocoR.Deployment;
 
+#nullable enable
+
 interface IProductInformationService
 {
     /// <summary>

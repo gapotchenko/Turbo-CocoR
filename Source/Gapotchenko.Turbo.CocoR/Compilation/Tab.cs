@@ -205,8 +205,8 @@ class Tab
 
     public string srcName;            // name of the atg file (including path)
     public string srcDir;             // directory path of the atg file
-    public string nsName;             // namespace for generated files
-    public string frameDir;           // directory containing the frame files
+    public string? nsName;             // namespace for generated files
+    public string? frameDir;           // directory containing the frame files
     public string outDir;             // directory for generated files
     public bool checkEOF = true;      // should coco generate a check for EOF at
                                       //   the end of Parser.Parse():
