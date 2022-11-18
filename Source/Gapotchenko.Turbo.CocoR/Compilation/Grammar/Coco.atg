@@ -2,7 +2,7 @@
 //
 // Compile with: Coco Coco.ATG -namespace at.jku.ssw.Coco
 
-$namespace=Gapotchenko.Turbo.CocoR.NET.Grammar
+$namespace=Gapotchenko.Turbo.CocoR.Compilation.Grammar
 
 using System.IO;
 

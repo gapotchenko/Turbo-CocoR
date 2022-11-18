@@ -1,4 +1,4 @@
-﻿namespace Gapotchenko.Turbo.CocoR.NET;
+﻿namespace Gapotchenko.Turbo.CocoR.Compilation;
 
 #nullable enable
 

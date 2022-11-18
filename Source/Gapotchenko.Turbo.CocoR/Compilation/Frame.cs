@@ -1,6 +1,8 @@
 ﻿#nullable enable
 
-namespace Gapotchenko.Turbo.CocoR.NET;
+using Gapotchenko;
+
+namespace Gapotchenko.Turbo.CocoR.Compilation;
 
 sealed class Frame : IDisposable
 {
@@ -25,7 +27,7 @@ sealed class Frame : IDisposable
     public void CopyPart(string? name, TextWriter destination)
     {
         ArgumentNullException.ThrowIfNull(nameof(destination));
-        
+
         CopyPartCore(name, destination);
     }
 

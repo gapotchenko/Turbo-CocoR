@@ -2,10 +2,10 @@
 
 using System.Text;
 using System.Collections;
-using Gapotchenko.Turbo.CocoR.NET.Grammar;
 using System.Collections.Generic;
+using Gapotchenko.Turbo.CocoR.Compilation.Grammar;
 
-namespace Gapotchenko.Turbo.CocoR.NET;
+namespace Gapotchenko.Turbo.CocoR.Compilation;
 
 
 class Position
@@ -521,7 +521,7 @@ class Tab
                 trace.Write("{0,12} ", Name(p.sym.name));
             else if (p.typ == Node.clas)
             {
-                CharClass c = (CharClass)classes[p.val];
+                CharClass c = classes[p.val];
                 trace.Write("{0,12} ", Name(c.name));
             }
             else trace.Write("             ");

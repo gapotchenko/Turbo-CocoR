@@ -1,9 +1,9 @@
 // ParserGen.cs - Generation of the Recursive Descent Parser
 
 using System.Collections;
-using Gapotchenko.Turbo.CocoR.NET.Grammar;
+using Gapotchenko.Turbo.CocoR.Compilation.Grammar;
 
-namespace Gapotchenko.Turbo.CocoR.NET;
+namespace Gapotchenko.Turbo.CocoR.Compilation;
 
 using Buffer = Grammar.Buffer;
 

@@ -1,6 +1,8 @@
 ﻿using Gapotchenko.FX;
-using Gapotchenko.Turbo.CocoR.NET.Grammar;
+using Gapotchenko.Turbo.CocoR.Compilation;
+using Gapotchenko.Turbo.CocoR.Deployment;
 using Gapotchenko.Turbo.CocoR.Options;
+using System.Composition.Hosting;
 
 namespace Gapotchenko.Turbo.CocoR.NET;
 
@@ -28,50 +30,30 @@ static class Program
 
     static void Run(IReadOnlyList<string> args)
     {
-        Console.WriteLine("Turbo Coco/R 2022.1.1");
+        var productInformationService = new ProductInformationService();
+
+        Console.Write(productInformationService.Name);
+        Console.Write(' ');
+        Console.WriteLine(productInformationService.Version.ToString(3));
         Console.WriteLine();
 
-        var optionsService = new OptionsService(args);
+        var optionsService = new OptionsService(args, productInformationService);
+
+        CompositionHost CreateContainer() =>
+            new ContainerConfiguration()
+            .WithExport<IProductInformationService>(productInformationService)
+            .WithExport<IOptionsService>(optionsService)
+            .WithAssembly(typeof(Program).Assembly)
+            .CreateContainer();
 
         if (args.Count > 0 && optionsService.HasSourceFileName)
         {
-            string traceFilePath = Path.Combine(optionsService.OutputDirectoryName, "Trace.txt");
-
-            var scanner = new Scanner(optionsService.SourceFileName);
-            var parser = new Parser(scanner)
-            {
-                trace = new StreamWriter(new FileStream(traceFilePath, FileMode.Create))
-            };
-
-            parser.tab = new Tab(parser) { KeepOldFiles = optionsService.KeepOldFiles };
-            parser.dfa = new DFA(parser);
-            parser.pgen = new ParserGen(parser);
-
-            parser.tab.srcName = optionsService.SourceFileName;
-            parser.tab.srcDir = optionsService.SourceDirectoryName;
-            parser.tab.nsName = optionsService.Namespace;
-            parser.tab.frameDir = optionsService.FramesDirectoryName;
-            parser.tab.outDir = optionsService.OutputDirectoryName;
-            parser.tab.emitLines = optionsService.EmitLines;
-            if (optionsService.Trace is not null and var trace)
-                parser.tab.SetTrace(trace);
-
-            parser.Parse();
-
-            parser.trace.Close();
-            var f = new FileInfo(traceFilePath);
-            if (f.Length == 0)
-                f.Delete();
-            else
-                Console.WriteLine("Trace output has been written to \"{0}\" file.", traceFilePath);
-            Console.WriteLine("{0} errors detected.", parser.errors.count);
-            if (parser.errors.count != 0)
-                throw new ProgramExitException(1);
+            using var container = CreateContainer();
+            var compiler = container.GetExport<Compiler>();
+            compiler.Compile();
         }
         else
         {
-            Console.WriteLine("Usage: turbo-coco grammar.atg [options]");
-            Console.WriteLine();
             optionsService.WriteUsage(Console.Out);
             throw new ProgramExitException(1);
         }

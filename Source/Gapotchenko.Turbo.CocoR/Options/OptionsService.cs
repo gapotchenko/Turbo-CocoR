@@ -1,4 +1,5 @@
 ﻿using Gapotchenko.FX;
+using Gapotchenko.Turbo.CocoR.Deployment;
 
 #nullable enable
 
@@ -6,9 +7,13 @@ namespace Gapotchenko.Turbo.CocoR.Options;
 
 sealed class OptionsService : IOptionsService
 {
-    public OptionsService(IReadOnlyList<string> args)
+    public OptionsService(
+        IReadOnlyList<string> args,
+        IProductInformationService productInformationService)
     {
-        // Keeps the compatibility with prior Coco/R versions for .NET circa 2011.
+        m_ProductInformationService = productInformationService;
+
+        // Keep the compatibility with prior Coco/R versions for .NET circa 2011.
 
         int argc = args.Count;
         for (int i = 0; i < argc; i++)
@@ -39,6 +44,9 @@ sealed class OptionsService : IOptionsService
 
         #endregion
     }
+
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    readonly IProductInformationService m_ProductInformationService;
 
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     string? m_SourceFileName;
@@ -73,6 +81,30 @@ sealed class OptionsService : IOptionsService
 
     public void WriteUsage(TextWriter textWriter)
     {
+        WriteUsageCore(textWriter);
+        textWriter.WriteLine();
+        WriteUsageExtra(textWriter);
+    }
+
+    void WriteUsageCore(TextWriter textWriter)
+    {
+        string command = m_ProductInformationService.Command;
+        textWriter.WriteLine($"Usage: {command} grammar.atg [options]");
+        textWriter.WriteLine();
+
+        textWriter.WriteLine(
+            """
+            Options:
+              --namespace arg      Namespace name.
+              --frames arg         Frame files directory.
+              --trace arg          Trace string (see below).
+              -o [ --output ] arg  Output directory.
+              --lines              Emit lines.
+            """);
+    }
+
+    static void WriteUsageExtra(TextWriter textWriter)
+    {
         /*-------------------------------------------------------------------------
           Trace output options
           0 | A: prints the states of the scanner automaton
@@ -91,13 +123,6 @@ sealed class OptionsService : IOptionsService
 
         textWriter.WriteLine(
             """
-            Options:
-              --namespace arg      Namespace name.
-              --frames arg         Frame files directory.
-              --trace arg          Trace string (see below).
-              -o [ --output ] arg  Output directory.
-              --lines              Emit lines.
-
             Valid characters in the trace string:
               A  trace automaton
               F  list first/follow sets
@@ -113,4 +138,3 @@ sealed class OptionsService : IOptionsService
             """);
     }
 }
-
