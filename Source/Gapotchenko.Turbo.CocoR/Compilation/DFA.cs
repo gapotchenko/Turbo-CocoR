@@ -1105,24 +1105,24 @@ class DFA
     public void WriteScanner()
     {
         Generator g = new Generator(tab);
-        g.CurrentFrame = g.OpenFrame("Scanner.frame");
+        using var frame = g.OpenFrame("Scanner.frame");
         gen = g.OpenGen("Scanner.cs");
         if (dirtyDFA) MakeDeterministic();
 
         g.GenCopyright();
-        g.SkipFramePart("-->begin");
+        frame.SkipPart("-->begin");
 
-        g.CopyFramePart("-->namespace");
+        frame.CopyPart("-->namespace", gen);
         if (!string.IsNullOrEmpty(tab.nsName))
             g.BeginNamespace(tab.nsName);
-        g.CopyFramePart("-->declarations");
+        frame.CopyPart("-->declarations", gen);
         gen.WriteLine("\tconst int maxT = {0};", tab.terminals.Count - 1);
         gen.WriteLine("\tconst int noSym = {0};", tab.noSym.n);
         if (ignoreCase)
             gen.Write("\tchar valCh;       // current input character (for token.val)");
-        g.CopyFramePart("-->initialization");
+        frame.CopyPart("-->initialization", gen);
         WriteStartTab();
-        g.CopyFramePart("-->casing1");
+        frame.CopyPart("-->casing1", gen);
         if (ignoreCase)
         {
             gen.WriteLine("\t\tif (ch != Buffer.EOF) {");
@@ -1130,10 +1130,10 @@ class DFA
             gen.WriteLine("\t\t\tch = char.ToLower((char) ch);");
             gen.WriteLine("\t\t}");
         }
-        g.CopyFramePart("-->casing2");
+        frame.CopyPart("-->casing2", gen);
         gen.Write("\t\t\ttval[tlen++] = ");
         if (ignoreCase) gen.Write("valCh;"); else gen.Write("(char) ch;");
-        g.CopyFramePart("-->comments");
+        frame.CopyPart("-->comments", gen);
         Comment com = firstComment;
         int comIdx = 0;
         while (com != null)
@@ -1141,11 +1141,11 @@ class DFA
             GenComment(com, comIdx);
             com = com.Next; comIdx++;
         }
-        g.CopyFramePart("-->literals"); GenLiterals();
-        g.CopyFramePart("-->scan1");
+        frame.CopyPart("-->literals", gen); GenLiterals();
+        frame.CopyPart("-->scan1", gen);
         gen.Write("\t\t\t");
         if (tab.ignored.Elements() > 0) { PutRange(tab.ignored); } else { gen.Write("false"); }
-        g.CopyFramePart("-->scan2");
+        frame.CopyPart("-->scan2", gen);
         if (firstComment != null)
         {
             gen.Write("\t\tif (");
@@ -1160,10 +1160,10 @@ class DFA
             gen.Write(") return NextToken();");
         }
         if (hasCtxMoves) { gen.WriteLine(); gen.Write("\t\tint apx = 0;"); } /* pdt */
-        g.CopyFramePart("-->scan3");
+        frame.CopyPart("-->scan3", gen);
         for (DfaState state = firstState.next; state != null; state = state.next)
             WriteState(state);
-        g.CopyFramePart(null);
+        frame.CopyRest(gen);
         if (!string.IsNullOrEmpty(tab.nsName))
             g.EndNamespace();
         gen.Close();

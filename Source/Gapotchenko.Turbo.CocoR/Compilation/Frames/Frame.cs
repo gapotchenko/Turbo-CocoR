@@ -1,8 +1,10 @@
-﻿#nullable enable
+﻿using Gapotchenko.FX;
 
-namespace Gapotchenko.Turbo.CocoR.Compilation;
+#nullable enable
 
-sealed class Frame : IDisposable
+namespace Gapotchenko.Turbo.CocoR.Compilation.Frames;
+
+sealed class Frame : IFrame
 {
     public Frame(string filePath)
     {
@@ -22,15 +24,27 @@ sealed class Frame : IDisposable
         CopyPartCore(name, null);
     }
 
-    public void CopyPart(string? name, TextWriter destination)
+    public void CopyPart(string name, TextWriter destination)
     {
-        ArgumentNullException.ThrowIfNull(nameof(destination));
+        ArgumentNullException.ThrowIfNull(name);
+        ArgumentNullException.ThrowIfNull(destination);
 
         CopyPartCore(name, destination);
     }
 
+    public void CopyRest(TextWriter destination)
+    {
+        ArgumentNullException.ThrowIfNull(destination);
+
+        int ch;
+        while ((ch = m_TextReader.Read()) != -1)
+            destination.Write((char)ch);
+    }
+
     void CopyPartCore(string? name, TextWriter? output)
     {
+        name = Empty.Nullify(name);
+
         char startCh = default;
         int endOfStopString = 0;
 

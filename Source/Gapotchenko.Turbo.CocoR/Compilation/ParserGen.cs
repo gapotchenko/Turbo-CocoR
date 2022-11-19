@@ -381,30 +381,30 @@ class ParserGen
         int oldPos = buffer.Pos;  // Pos is modified by CopySourcePart
         symSet.Add(tab.allSyncSets);
 
-        g.CurrentFrame = g.OpenFrame("Parser.frame");
+        using var frame = g.OpenFrame("Parser.frame");
         gen = g.OpenGen("Parser.cs");
         err = new StringWriter();
         foreach (Symbol sym in tab.terminals) GenErrorMsg(tErr, sym);
 
         g.GenCopyright();
-        g.SkipFramePart("-->begin");
+        frame.SkipPart("-->begin");
 
         if (usingPos != null) { CopySourcePart(usingPos, 0); gen.WriteLine(); }
-        g.CopyFramePart("-->namespace");
+        frame.CopyPart("-->namespace", gen);
         /* AW open namespace, if it exists */
         if (!string.IsNullOrEmpty(tab.nsName))
             g.BeginNamespace(tab.nsName);
-        g.CopyFramePart("-->constants");
+        frame.CopyPart("-->constants", gen);
         GenTokens(); /* ML 2002/09/07 write the token kinds */
         gen.WriteLine("\tpublic const int maxT = {0};", tab.terminals.Count - 1);
         GenPragmas(); /* ML 2005/09/23 write the pragma kinds */
-        g.CopyFramePart("-->declarations"); CopySourcePart(tab.semDeclPos, 0);
-        g.CopyFramePart("-->pragmas"); GenCodePragmas();
-        g.CopyFramePart("-->productions"); GenProductions();
-        g.CopyFramePart("-->parseRoot"); gen.WriteLine("\t\t{0}();", tab.gramSy.name); if (tab.checkEOF) gen.WriteLine("\t\tExpect(0);");
-        g.CopyFramePart("-->initialization"); InitSets();
-        g.CopyFramePart("-->errors"); gen.Write(err.ToString());
-        g.CopyFramePart(null);
+        frame.CopyPart("-->declarations", gen); CopySourcePart(tab.semDeclPos, 0);
+        frame.CopyPart("-->pragmas", gen); GenCodePragmas();
+        frame.CopyPart("-->productions", gen); GenProductions();
+        frame.CopyPart("-->parseRoot", gen); gen.WriteLine("\t\t{0}();", tab.gramSy.name); if (tab.checkEOF) gen.WriteLine("\t\tExpect(0);");
+        frame.CopyPart("-->initialization", gen); InitSets();
+        frame.CopyPart("-->errors", gen); gen.Write(err.ToString());
+        frame.CopyRest(gen);
         /* AW 2002-12-20 close namespace, if it exists */
         if (!string.IsNullOrEmpty(tab.nsName))
             g.EndNamespace();

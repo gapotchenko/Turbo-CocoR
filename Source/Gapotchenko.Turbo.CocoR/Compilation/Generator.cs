@@ -1,4 +1,6 @@
-﻿namespace Gapotchenko.Turbo.CocoR.Compilation;
+﻿using Gapotchenko.Turbo.CocoR.Compilation.Frames;
+
+namespace Gapotchenko.Turbo.CocoR.Compilation;
 
 #nullable enable
 
@@ -10,8 +12,6 @@ sealed class Generator
     }
 
     readonly Tab tab;
-
-    public Frame? CurrentFrame { get; set; }
 
     public Frame? TryOpenFrame(string fileName)
     {
@@ -47,16 +47,8 @@ sealed class Generator
     {
         using var frame = TryOpenFrame("Copyright.frame");
         if (frame != null)
-            frame.CopyPart(null, gen);
+            frame.CopyRest(gen);
     }
-
-    public void SkipFramePart(string name) => (CurrentFrame ?? throw new InvalidOperationException()).SkipPart(name);
-
-    public void CopyFramePart(string? name) =>
-        (CurrentFrame ?? throw new InvalidOperationException())
-        .CopyPart(
-            name,
-            gen ?? throw new InvalidOperationException());
 
     public void BeginNamespace(ReadOnlySpan<char> name)
     {
