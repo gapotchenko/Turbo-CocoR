@@ -9,6 +9,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Scaffolding\Templates\Preface.frame" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Scaffolding\Templates\Preface.frame" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Gapotchenko.FX" Version="2022.2.7" />
     <PackageReference Include="Gapotchenko.FX.AppModel.Information" Version="2022.2.7" />
     <PackageReference Include="System.Composition" Version="7.0.0" />

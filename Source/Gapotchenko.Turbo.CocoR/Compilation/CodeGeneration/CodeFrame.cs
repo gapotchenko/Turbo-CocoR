@@ -6,13 +6,13 @@ namespace Gapotchenko.Turbo.CocoR.Compilation.CodeGeneration;
 
 sealed class CodeFrame : ICodeFrame
 {
-    public CodeFrame(string filePath)
+    public CodeFrame(TextReader textReader, string fileName)
     {
-        m_FilePath = filePath;
-        m_TextReader = File.OpenText(m_FilePath);
+        m_FileName = fileName;
+        m_TextReader = textReader;
     }
 
-    readonly string m_FilePath;
+    readonly string m_FileName;
     readonly TextReader m_TextReader;
 
     public void Dispose() => m_TextReader.Dispose();
@@ -66,7 +66,9 @@ sealed class CodeFrame : ICodeFrame
                         return; // name[0..i] found
                     ch = m_TextReader.Read();
                     i++;
-                } while (ch == name[i]);
+                }
+                while (ch == name[i]);
+
                 // name[0..i-1] found; continue with last read character
                 output?.Write(name.AsSpan(0, i));
             }
@@ -78,6 +80,6 @@ sealed class CodeFrame : ICodeFrame
         }
 
         if (name != null)
-            throw new Exception("Incomplete or corrupt frame file: " + m_FilePath);
+            throw new Exception("Incomplete or corrupt frame file: " + m_FileName);
     }
 }

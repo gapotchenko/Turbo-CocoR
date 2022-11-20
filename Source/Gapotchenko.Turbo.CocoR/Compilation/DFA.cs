@@ -1112,7 +1112,7 @@ class DFA
         if (dirtyDFA)
             MakeDeterministic();
 
-        cgs.GenerateCopyright(codeWriter);
+        cgs.GeneratePreface(codeWriter);
         frame.SkipPart("-->begin");
 
         frame.CopyPart("-->namespace", gen);

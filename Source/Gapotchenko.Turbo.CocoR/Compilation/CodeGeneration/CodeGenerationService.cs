@@ -1,4 +1,5 @@
 ﻿using Gapotchenko.Turbo.CocoR.Options;
+using Gapotchenko.Turbo.CocoR.Scaffolding;
 using System.Composition;
 
 #nullable enable
@@ -9,22 +10,38 @@ namespace Gapotchenko.Turbo.CocoR.Compilation.CodeGeneration;
 sealed class CodeGenerationService : ICodeGenerationService
 {
     [ImportingConstructor]
-    public CodeGenerationService(IOptionsService optionsService)
+    public CodeGenerationService(IOptionsService optionsService, IScaffoldingService scaffoldingService)
     {
         m_OptionsService = optionsService;
+        m_ScaffoldingService = scaffoldingService;
     }
 
     readonly IOptionsService m_OptionsService;
+    readonly IScaffoldingService m_ScaffoldingService;
 
     public ICodeFrame? TryOpenFrame(string fileName)
     {
         string filePath = Path.Combine(m_OptionsService.SourceDirectoryName, fileName);
         if (!File.Exists(filePath) && m_OptionsService.FramesDirectoryName is not null and var frameDir)
             filePath = Path.Combine(frameDir, fileName);
-        if (!File.Exists(filePath))
-            return null;
+        if (File.Exists(filePath))
+            return new CodeFrame(File.OpenText(filePath), filePath);
 
-        return new CodeFrame(filePath);
+        bool useTemplate =
+            fileName switch
+            {
+                "Preface.frame" => true,
+                _ => false
+            };
+
+        if (useTemplate)
+        {
+            var template = m_ScaffoldingService.TryOpenTemplate(fileName);
+            if (template != null)
+                return new CodeFrame(template, fileName);
+        }
+
+        return null;
     }
 
     public ICodeFrame OpenFrame(string fileName) =>
@@ -44,10 +61,12 @@ sealed class CodeGenerationService : ICodeGenerationService
         return new CodeWriter(File.CreateText(filePath));
     }
 
-    public void GenerateCopyright(ICodeWriter codeWriter)
+    public void GeneratePreface(ICodeWriter codeWriter)
     {
-        using var frame = TryOpenFrame("Copyright.frame");
-        if (frame != null)
-            frame.CopyRest(codeWriter.Output);
+        using (var frame = TryOpenFrame("Preface.frame"))
+            frame?.CopyRest(codeWriter.Output);
+
+        using (var frame = TryOpenFrame("Copyright.frame"))
+            frame?.CopyRest(codeWriter.Output);
     }
 }

@@ -389,7 +389,7 @@ class ParserGen
         foreach (Symbol sym in tab.terminals)
             GenErrorMsg(tErr, sym);
 
-        cgs.GenerateCopyright(codeWriter);
+        cgs.GeneratePreface(codeWriter);
         frame.SkipPart("-->begin");
 
         if (usingPos != null) { CopySourcePart(usingPos, 0); gen.WriteLine(); }

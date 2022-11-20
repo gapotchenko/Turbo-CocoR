@@ -10,5 +10,5 @@ interface ICodeGenerationService
 
     ICodeWriter CreateWriter(string fileName);
 
-    void GenerateCopyright(ICodeWriter codeWriter);
+    void GeneratePreface(ICodeWriter codeWriter);
 }

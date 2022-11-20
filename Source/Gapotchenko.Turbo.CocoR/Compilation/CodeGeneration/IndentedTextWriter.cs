@@ -72,7 +72,6 @@ sealed class IndentedTextWriter : TextWriter
         if (value is not ('\n' or '\r'))
             WriteIndent();
         m_Output.Write(value);
-
         if (value == '\n')
             m_IndentPending = true;
     }
@@ -87,6 +86,12 @@ sealed class IndentedTextWriter : TextWriter
     {
         WriteIndent();
         m_Output.Write(buffer);
+    }
+
+    public override void Write(char[] buffer, int index, int count)
+    {
+        WriteIndent();
+        m_Output.Write(buffer, index, count);
     }
 
     public override void Write(double value)
@@ -137,12 +142,6 @@ sealed class IndentedTextWriter : TextWriter
         m_Output.Write(format, arg0, arg1);
     }
 
-    public override void Write(char[] buffer, int index, int count)
-    {
-        WriteIndent();
-        m_Output.Write(buffer, index, count);
-    }
-
     public override void WriteLine()
     {
         m_Output.WriteLine();
@@ -174,6 +173,13 @@ sealed class IndentedTextWriter : TextWriter
     {
         WriteIndent();
         m_Output.WriteLine(buffer);
+        m_IndentPending = true;
+    }
+
+    public override void WriteLine(char[] buffer, int index, int count)
+    {
+        WriteIndent();
+        m_Output.WriteLine(buffer, index, count);
         m_IndentPending = true;
     }
 
@@ -237,13 +243,6 @@ sealed class IndentedTextWriter : TextWriter
     {
         WriteIndent();
         m_Output.WriteLine(format, arg0, arg1);
-        m_IndentPending = true;
-    }
-
-    public override void WriteLine(char[] buffer, int index, int count)
-    {
-        WriteIndent();
-        m_Output.WriteLine(buffer, index, count);
         m_IndentPending = true;
     }
 }
