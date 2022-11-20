@@ -361,7 +361,7 @@ class DFA
     DfaState firstState;
     DfaState lastState;   // last allocated state
     int lastSimState;  // last non melted state
-    StreamWriter gen;  // generated scanner file
+    TextWriter gen;  // generated scanner file
     Symbol curSy;      // current token to be recognized (in FindTrans)
     bool dirtyDFA;     // DFA may become nondeterministic in MatchLiteral
 
@@ -1104,17 +1104,20 @@ class DFA
 
     public void WriteScanner()
     {
-        Generator g = new Generator(tab);
-        using var frame = g.OpenFrame("Scanner.frame");
-        gen = g.OpenGen("Scanner.cs");
-        if (dirtyDFA) MakeDeterministic();
+        var cgs = tab.CodeGenerationService;
 
-        g.GenCopyright();
+        using var frame = cgs.OpenFrame("Scanner.frame");
+        using var codeWriter = cgs.CreateWriter("Scanner.cs");
+        gen = codeWriter.Output;
+        if (dirtyDFA)
+            MakeDeterministic();
+
+        cgs.GenerateCopyright(codeWriter);
         frame.SkipPart("-->begin");
 
         frame.CopyPart("-->namespace", gen);
         if (!string.IsNullOrEmpty(tab.nsName))
-            g.BeginNamespace(tab.nsName);
+            codeWriter.BeginNamespace(tab.nsName);
         frame.CopyPart("-->declarations", gen);
         gen.WriteLine("\tconst int maxT = {0};", tab.terminals.Count - 1);
         gen.WriteLine("\tconst int noSym = {0};", tab.noSym.n);
@@ -1165,8 +1168,7 @@ class DFA
             WriteState(state);
         frame.CopyRest(gen);
         if (!string.IsNullOrEmpty(tab.nsName))
-            g.EndNamespace();
-        gen.Close();
+            codeWriter.EndNamespace();
     }
 
     public DFA(Parser parser)

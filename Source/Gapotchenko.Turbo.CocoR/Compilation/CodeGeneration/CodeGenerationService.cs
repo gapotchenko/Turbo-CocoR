@@ -16,11 +16,6 @@ sealed class CodeGenerationService : ICodeGenerationService
 
     readonly IOptionsService m_OptionsService;
 
-    public ICodeFrame OpenFrame(string fileName)
-    {
-        throw new NotImplementedException();
-    }
-
     public ICodeFrame? TryOpenFrame(string fileName)
     {
         string filePath = Path.Combine(m_OptionsService.SourceDirectoryName, fileName);
@@ -31,6 +26,10 @@ sealed class CodeGenerationService : ICodeGenerationService
 
         return new CodeFrame(filePath);
     }
+
+    public ICodeFrame OpenFrame(string fileName) =>
+        TryOpenFrame(fileName) ??
+        throw new Exception("Cannot find : " + fileName);
 
     public ICodeWriter CreateWriter(string fileName)
     {
@@ -43,5 +42,12 @@ sealed class CodeGenerationService : ICodeGenerationService
         }
 
         return new CodeWriter(File.CreateText(filePath));
+    }
+
+    public void GenerateCopyright(ICodeWriter codeWriter)
+    {
+        using var frame = TryOpenFrame("Copyright.frame");
+        if (frame != null)
+            frame.CopyRest(codeWriter.Output);
     }
 }

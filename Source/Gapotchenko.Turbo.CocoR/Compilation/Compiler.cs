@@ -1,4 +1,5 @@
 ﻿using Gapotchenko.FX;
+using Gapotchenko.Turbo.CocoR.Compilation.CodeGeneration;
 using Gapotchenko.Turbo.CocoR.Compilation.Grammar;
 using Gapotchenko.Turbo.CocoR.Options;
 using System.Composition;
@@ -11,12 +12,14 @@ namespace Gapotchenko.Turbo.CocoR.Compilation;
 sealed class Compiler
 {
     [ImportingConstructor]
-    public Compiler(IOptionsService optionsService)
+    public Compiler(IOptionsService optionsService, ICodeGenerationService codeGenerationService)
     {
         m_OptionsService = optionsService;
+        m_CodeGenerationService = codeGenerationService;
     }
 
     readonly IOptionsService m_OptionsService;
+    readonly ICodeGenerationService m_CodeGenerationService;
 
     public void Compile()
     {
@@ -48,15 +51,15 @@ sealed class Compiler
             trace = traceTextWriter
         };
 
-        parser.tab = new Tab(parser) { KeepOldFiles = m_OptionsService.KeepOldFiles };
+        parser.tab = new Tab(parser)
+        {
+            CodeGenerationService = m_CodeGenerationService
+        };
         parser.dfa = new DFA(parser);
         parser.pgen = new ParserGen(parser);
 
         parser.tab.srcName = m_OptionsService.SourceFileName;
-        parser.tab.srcDir = m_OptionsService.SourceDirectoryName;
         parser.tab.nsName = m_OptionsService.Namespace;
-        parser.tab.frameDir = m_OptionsService.FramesDirectoryName;
-        parser.tab.outDir = m_OptionsService.OutputDirectoryName;
         parser.tab.emitLines = m_OptionsService.EmitLines;
         if (m_OptionsService.Trace is not null and var trace)
             parser.tab.SetTrace(trace);

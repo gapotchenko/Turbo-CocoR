@@ -20,7 +20,7 @@ class ParserGen
 
     int errorNr;      // highest parser error number
     Symbol curSy;     // symbol whose production is currently generated
-    StreamWriter gen; // generated parser source file
+    TextWriter gen; // generated parser source file
     StringWriter err; // generated parser error messages
     ArrayList symSet = new ArrayList();
 
@@ -377,23 +377,26 @@ class ParserGen
 
     public void WriteParser()
     {
-        var g = new Generator(tab);
+        var cgs = tab.CodeGenerationService;
+
         int oldPos = buffer.Pos;  // Pos is modified by CopySourcePart
         symSet.Add(tab.allSyncSets);
 
-        using var frame = g.OpenFrame("Parser.frame");
-        gen = g.OpenGen("Parser.cs");
+        using var frame = cgs.OpenFrame("Parser.frame");
+        using var codeWriter = cgs.CreateWriter("Parser.cs");
+        gen = codeWriter.Output;
         err = new StringWriter();
-        foreach (Symbol sym in tab.terminals) GenErrorMsg(tErr, sym);
+        foreach (Symbol sym in tab.terminals)
+            GenErrorMsg(tErr, sym);
 
-        g.GenCopyright();
+        cgs.GenerateCopyright(codeWriter);
         frame.SkipPart("-->begin");
 
         if (usingPos != null) { CopySourcePart(usingPos, 0); gen.WriteLine(); }
         frame.CopyPart("-->namespace", gen);
         /* AW open namespace, if it exists */
         if (!string.IsNullOrEmpty(tab.nsName))
-            g.BeginNamespace(tab.nsName);
+            codeWriter.BeginNamespace(tab.nsName);
         frame.CopyPart("-->constants", gen);
         GenTokens(); /* ML 2002/09/07 write the token kinds */
         gen.WriteLine("\tpublic const int maxT = {0};", tab.terminals.Count - 1);
@@ -407,7 +410,7 @@ class ParserGen
         frame.CopyRest(gen);
         /* AW 2002-12-20 close namespace, if it exists */
         if (!string.IsNullOrEmpty(tab.nsName))
-            g.EndNamespace();
+            codeWriter.EndNamespace();
         gen.Close();
         buffer.Pos = oldPos;
     }

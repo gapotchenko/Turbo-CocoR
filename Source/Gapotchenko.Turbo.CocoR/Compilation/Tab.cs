@@ -4,6 +4,7 @@ using System.Text;
 using System.Collections;
 using System.Collections.Generic;
 using Gapotchenko.Turbo.CocoR.Compilation.Grammar;
+using Gapotchenko.Turbo.CocoR.Compilation.CodeGeneration;
 
 namespace Gapotchenko.Turbo.CocoR.Compilation;
 
@@ -204,10 +205,7 @@ class Tab
     public Hashtable literals;        // symbols that are used as literals
 
     public string srcName;            // name of the atg file (including path)
-    public string srcDir;             // directory path of the atg file
     public string? nsName;             // namespace for generated files
-    public string? frameDir;           // directory containing the frame files
-    public string outDir;             // directory for generated files
     public bool checkEOF = true;      // should coco generate a check for EOF at
                                       //   the end of Parser.Parse():
     public bool emitLines;            // emit #line pragmas for semantic actions
@@ -220,6 +218,8 @@ class Tab
     TextWriter trace;
     Errors errors;
 
+    public required ICodeGenerationService CodeGenerationService { get; init; }
+
     public Tab(Parser parser)
     {
         this.parser = parser;
@@ -229,8 +229,6 @@ class Tab
         dummyNode = NewNode(Node.eps, null, 0);
         literals = new Hashtable();
     }
-
-    public bool KeepOldFiles { get; init; }
 
     //---------------------------------------------------------------------
     //  Symbol list management

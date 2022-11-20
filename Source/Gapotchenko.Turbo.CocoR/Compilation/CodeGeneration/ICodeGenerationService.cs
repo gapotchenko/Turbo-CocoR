@@ -9,4 +9,6 @@ interface ICodeGenerationService
     ICodeFrame? TryOpenFrame(string fileName);
 
     ICodeWriter CreateWriter(string fileName);
+
+    void GenerateCopyright(ICodeWriter codeWriter);
 }
