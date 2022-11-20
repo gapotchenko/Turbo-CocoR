@@ -2,11 +2,11 @@
 
 #nullable enable
 
-namespace Gapotchenko.Turbo.CocoR.Compilation.Frames;
+namespace Gapotchenko.Turbo.CocoR.Compilation.CodeGeneration;
 
-sealed class Frame : IFrame
+sealed class CodeFrame : ICodeFrame
 {
-    public Frame(string filePath)
+    public CodeFrame(string filePath)
     {
         m_FilePath = filePath;
         m_TextReader = File.OpenText(m_FilePath);

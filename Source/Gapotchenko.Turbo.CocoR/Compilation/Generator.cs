@@ -1,4 +1,4 @@
-﻿using Gapotchenko.Turbo.CocoR.Compilation.Frames;
+﻿using Gapotchenko.Turbo.CocoR.Compilation.CodeGeneration;
 
 namespace Gapotchenko.Turbo.CocoR.Compilation;
 
@@ -13,7 +13,7 @@ sealed class Generator
 
     readonly Tab tab;
 
-    public Frame? TryOpenFrame(string fileName)
+    public CodeFrame? TryOpenFrame(string fileName)
     {
         string filePath = Path.Combine(tab.srcDir, fileName);
         if (!File.Exists(filePath) && tab.frameDir != null)
@@ -21,10 +21,10 @@ sealed class Generator
         if (!File.Exists(filePath))
             return null;
 
-        return new Frame(filePath);
+        return new CodeFrame(filePath);
     }
 
-    public Frame OpenFrame(string fileName) =>
+    public CodeFrame OpenFrame(string fileName) =>
         TryOpenFrame(fileName) ??
         throw new Exception("Cannot find : " + fileName);
 
