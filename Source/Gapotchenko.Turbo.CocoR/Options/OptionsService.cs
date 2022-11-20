@@ -15,19 +15,23 @@ sealed class OptionsService : IOptionsService
 
         // Keep the compatibility with prior Coco/R versions for .NET circa 2011.
 
+        bool help = false;
+
         int argc = args.Count;
         for (int i = 0; i < argc; i++)
         {
             if (args[i] is "--namespace" or "-namespace" && i < argc - 1)
                 Namespace = Empty.Nullify(args[++i].Trim());
             else if (args[i] is "--frames" or "-frames" && i < argc - 1)
-                FramesDirectoryName = Empty.Nullify(args[++i]);
+                FramesDirectoryPath = Empty.Nullify(args[++i]);
             else if (args[i] is "--trace" or "-trace" && i < argc - 1)
                 Trace = Empty.Nullify(args[++i].Trim());
             else if (args[i] is "-o" or "--output" && i < argc - 1)
                 m_OutputDirectoryName = Empty.Nullify(args[++i]);
             else if (args[i] is "--lines" or "-lines")
                 EmitLines = true;
+            else if (args[i] is "-?" or "--help" or "/?" or "?")
+                help = true;
             else
             {
                 if (m_SourceFileName != null)
@@ -35,6 +39,9 @@ sealed class OptionsService : IOptionsService
                 m_SourceFileName = args[i];
             }
         }
+
+        if (help)
+            m_SourceFileName = null;
 
         #region Calculated options
 
@@ -51,9 +58,9 @@ sealed class OptionsService : IOptionsService
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     string? m_SourceFileName;
 
-    public string SourceFileName => m_SourceFileName ?? throw new Exception("Source file name is not specified.");
+    public string SourceFilePath => m_SourceFileName ?? throw new Exception("Source file name is not specified.");
 
-    public string? FramesDirectoryName { get; }
+    public string? FramesDirectoryPath { get; }
 
     public string? Trace { get; }
 
@@ -64,16 +71,16 @@ sealed class OptionsService : IOptionsService
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     string? m_OutputDirectoryName;
 
-    public string OutputDirectoryName => m_OutputDirectoryName ?? throw new Exception("Output directory is unavailable.");
+    public string OutputDirectoryPath => m_OutputDirectoryName ?? throw new Exception("Output directory is unavailable.");
 
     #region Calculated options
 
-    public bool HasSourceFileName => m_SourceFileName != null;
+    public bool HasSourceFile => m_SourceFileName != null;
 
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     string? m_SourceDirectoryName;
 
-    public string SourceDirectoryName => m_SourceDirectoryName ?? throw new Exception("Source directory is unavailable.");
+    public string SourceDirectoryPath => m_SourceDirectoryName ?? throw new Exception("Source directory is unavailable.");
 
     public bool KeepOldFiles { get; }
 
@@ -95,6 +102,7 @@ sealed class OptionsService : IOptionsService
         textWriter.WriteLine(
             """
             Options:
+              -? [ --help ]        Display help.
               --namespace arg      Namespace name.
               --frames arg         Frame files directory.
               --trace arg          Trace string (see below).

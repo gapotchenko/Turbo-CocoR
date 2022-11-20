@@ -1,4 +1,5 @@
-﻿using Gapotchenko.Turbo.CocoR.Options;
+﻿using Gapotchenko.Turbo.CocoR.IO;
+using Gapotchenko.Turbo.CocoR.Options;
 using Gapotchenko.Turbo.CocoR.Scaffolding;
 using System.Composition;
 
@@ -10,19 +11,24 @@ namespace Gapotchenko.Turbo.CocoR.Compilation.CodeGeneration;
 sealed class CodeGenerationService : ICodeGenerationService
 {
     [ImportingConstructor]
-    public CodeGenerationService(IOptionsService optionsService, IScaffoldingService scaffoldingService)
+    public CodeGenerationService(
+        IOptionsService optionsService,
+        IIOService ioService,
+        IScaffoldingService scaffoldingService)
     {
         m_OptionsService = optionsService;
+        m_IOService = ioService;
         m_ScaffoldingService = scaffoldingService;
     }
 
     readonly IOptionsService m_OptionsService;
+    readonly IIOService m_IOService;
     readonly IScaffoldingService m_ScaffoldingService;
 
     public ICodeFrame? TryOpenFrame(string fileName)
     {
-        string filePath = Path.Combine(m_OptionsService.SourceDirectoryName, fileName);
-        if (!File.Exists(filePath) && m_OptionsService.FramesDirectoryName is not null and var frameDir)
+        string filePath = Path.Combine(m_OptionsService.SourceDirectoryPath, fileName);
+        if (!File.Exists(filePath) && m_OptionsService.FramesDirectoryPath is not null and var frameDir)
             filePath = Path.Combine(frameDir, fileName);
         if (File.Exists(filePath))
             return new CodeFrame(File.OpenText(filePath), filePath);
@@ -50,14 +56,8 @@ sealed class CodeGenerationService : ICodeGenerationService
 
     public ICodeWriter CreateWriter(string fileName)
     {
-        string filePath = Path.Combine(m_OptionsService.OutputDirectoryName, fileName);
-
-        if (m_OptionsService.KeepOldFiles)
-        {
-            if (File.Exists(filePath))
-                File.Copy(filePath, filePath + ".old", true);
-        }
-
+        string filePath = Path.Combine(m_OptionsService.OutputDirectoryPath, fileName);
+        m_IOService.CreateFileBackup(filePath);
         return new CodeWriter(File.CreateText(filePath));
     }
 

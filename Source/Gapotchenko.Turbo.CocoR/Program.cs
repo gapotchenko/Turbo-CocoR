@@ -1,8 +1,11 @@
 ﻿using Gapotchenko.FX;
+using Gapotchenko.FX.Linq;
 using Gapotchenko.Turbo.CocoR.Compilation;
 using Gapotchenko.Turbo.CocoR.Deployment;
 using Gapotchenko.Turbo.CocoR.Options;
 using System.Composition.Hosting;
+using System.Runtime.InteropServices;
+using System.Text;
 
 #nullable enable
 
@@ -32,12 +35,14 @@ static class Program
 
     static void Run(IReadOnlyList<string> args)
     {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            Console.OutputEncoding = Encoding.UTF8;
+
         var productInformationService = new ProductInformationService();
 
         Console.Write(productInformationService.Name);
         Console.Write(' ');
         Console.WriteLine(productInformationService.Version.ToString(3));
-        Console.WriteLine();
 
         var optionsService = new OptionsService(args, productInformationService);
 
@@ -48,14 +53,19 @@ static class Program
             .WithAssembly(typeof(Program).Assembly)
             .CreateContainer();
 
-        if (args.Count > 0 && optionsService.HasSourceFileName)
+        if (args.Count > 0 && optionsService.HasSourceFile)
         {
+            Console.WriteLine();
+
             using var container = CreateContainer();
             var compiler = container.GetExport<Compiler>();
             compiler.Compile();
         }
         else
         {
+            Console.WriteLine(productInformationService.Copyright);
+            Console.WriteLine();
+
             optionsService.WriteUsage(Console.Out);
             throw new ProgramExitException(1);
         }

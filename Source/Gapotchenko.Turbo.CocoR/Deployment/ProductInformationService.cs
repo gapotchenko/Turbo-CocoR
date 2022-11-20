@@ -8,9 +8,9 @@ sealed class ProductInformationService : IProductInformationService
 {
     static readonly IAppInformation m_Information = AppInformation.For(typeof(ProductInformationService));
 
-    public string Name => m_Information.ProductName ?? string.Empty;
+    public string Name => m_Information.ProductName ?? throw new InvalidOperationException();
 
-    public string Copyright => m_Information.Copyright ?? string.Empty;
+    public string Copyright => m_Information.Copyright ?? throw new InvalidOperationException();
 
     public Version Version => m_Information.ProductVersion;
 

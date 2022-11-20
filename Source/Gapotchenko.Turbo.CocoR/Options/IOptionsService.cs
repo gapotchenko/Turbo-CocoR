@@ -4,11 +4,11 @@
 
 interface IOptionsService
 {
-    string SourceFileName { get; }
+    string SourceFilePath { get; }
 
-    string? FramesDirectoryName { get; }
+    string? FramesDirectoryPath { get; }
 
-    string OutputDirectoryName { get; }
+    string OutputDirectoryPath { get; }
 
     string? Trace { get; }
 
@@ -18,9 +18,9 @@ interface IOptionsService
 
     #region Calculated options
 
-    bool HasSourceFileName { get; }
+    bool HasSourceFile { get; }
 
-    string SourceDirectoryName { get; }
+    string SourceDirectoryPath { get; }
 
     bool KeepOldFiles { get; }
 

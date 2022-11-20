@@ -26,7 +26,7 @@ sealed class Compiler
         bool keepTraceFile = false;
         int errorsCount = 0;
 
-        string traceFilePath = Path.Combine(m_OptionsService.OutputDirectoryName, "Trace.txt");
+        string traceFilePath = Path.Combine(m_OptionsService.OutputDirectoryPath, "Trace.txt");
         using (var traceFile = File.CreateText(traceFilePath))
         {
             errorsCount = CompileCore(traceFile);
@@ -45,7 +45,7 @@ sealed class Compiler
 
     int CompileCore(TextWriter traceTextWriter)
     {
-        var scanner = new Scanner(m_OptionsService.SourceFileName);
+        var scanner = new Scanner(m_OptionsService.SourceFilePath);
         var parser = new Parser(scanner)
         {
             trace = traceTextWriter
@@ -58,7 +58,7 @@ sealed class Compiler
         parser.dfa = new DFA(parser);
         parser.pgen = new ParserGen(parser);
 
-        parser.tab.srcName = m_OptionsService.SourceFileName;
+        parser.tab.srcName = m_OptionsService.SourceFilePath;
         parser.tab.nsName = m_OptionsService.Namespace;
         parser.tab.emitLines = m_OptionsService.EmitLines;
         if (m_OptionsService.Trace is not null and var trace)
