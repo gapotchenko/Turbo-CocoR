@@ -69,8 +69,12 @@ sealed class IndentedTextWriter : TextWriter
 
     public override void Write(char value)
     {
-        WriteIndent();
+        if (value is not ('\n' or '\r'))
+            WriteIndent();
         m_Output.Write(value);
+
+        if (value == '\n')
+            m_IndentPending = true;
     }
 
     public override void Write(object? value)
@@ -141,7 +145,6 @@ sealed class IndentedTextWriter : TextWriter
 
     public override void WriteLine()
     {
-        WriteIndent();
         m_Output.WriteLine();
         m_IndentPending = true;
     }
