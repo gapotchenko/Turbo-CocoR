@@ -2,6 +2,7 @@
 using Gapotchenko.Turbo.CocoR.Compilation;
 using Gapotchenko.Turbo.CocoR.Deployment;
 using Gapotchenko.Turbo.CocoR.Options;
+using Gapotchenko.Turbo.CocoR.Scaffolding;
 using System.Composition.Hosting;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -52,7 +53,20 @@ static class Program
             .WithAssembly(typeof(Program).Assembly)
             .CreateContainer();
 
-        if (args.Count > 0 && optionsService.HasSourceFile)
+        var command = optionsService.Command;
+        if (command == "new")
+        {
+            Console.WriteLine();
+
+            var commandArgs = optionsService.CommandArguments;
+            if (commandArgs.Count != 2)
+                throw new Exception($"Invalid command-line parameters for the \"{command}\" command.");
+
+            using var container = CreateContainer();
+            var scaffolder = container.GetExport<IScaffoldingService>();
+            scaffolder.CreateItem(commandArgs[0], commandArgs[1]);
+        }
+        else if (optionsService.HasSourceFile)
         {
             Console.WriteLine();
 

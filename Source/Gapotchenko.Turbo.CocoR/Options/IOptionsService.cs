@@ -16,6 +16,10 @@ interface IOptionsService
 
     bool EmitLines { get; }
 
+    string? Command { get; }
+
+    IReadOnlyList<string> CommandArguments { get; }
+
     #region Calculated options
 
     bool HasSourceFile { get; }

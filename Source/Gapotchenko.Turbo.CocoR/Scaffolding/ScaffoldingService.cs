@@ -1,4 +1,5 @@
 ﻿using Gapotchenko.Turbo.CocoR.IO;
+using Gapotchenko.Turbo.CocoR.Options;
 using System.Composition;
 
 #nullable enable
@@ -9,11 +10,13 @@ namespace Gapotchenko.Turbo.CocoR.Scaffolding;
 sealed class ScaffoldingService : IScaffoldingService
 {
     [ImportingConstructor]
-    public ScaffoldingService(IIOService ioService)
+    public ScaffoldingService(IOptionsService optionsService, IIOService ioService)
     {
+        m_OptionsService = optionsService;
         m_IOService = ioService;
     }
 
+    readonly IOptionsService m_OptionsService;
     readonly IIOService m_IOService;
 
     public TextReader? TryOpenTemplate(string templateName)
@@ -30,8 +33,10 @@ sealed class ScaffoldingService : IScaffoldingService
         TryOpenTemplate(templateName) ??
         throw new Exception($"Scaffolding template \"{templateName}\" does not exist.");
 
-    public void SaveTemplate(TextReader template, string destinationFilePath)
+    void SaveTemplate(TextReader template, string destinationFileName)
     {
+        string destinationFilePath = Path.Combine(m_OptionsService.OutputDirectoryPath, destinationFileName);
+
         m_IOService.CreateFileBackup(destinationFilePath);
 
         using var file = File.CreateText(destinationFilePath);
@@ -42,5 +47,28 @@ sealed class ScaffoldingService : IScaffoldingService
                 break;
             file.WriteLine(line);
         }
+    }
+
+    public void CreateItem(string category, string name)
+    {
+        if (category != "frame")
+            throw new Exception($"Unknown scaffolding category \"{category}\" specified.");
+
+        var templateName =
+            name switch
+            {
+                "scanner" => "Scanner.frame",
+                "parser" => "Parser.frame",
+                "preface" => "Preface.frame",
+                _ => null
+            };
+
+        if (templateName == null)
+            throw new Exception($"Unknown scaffolding item name \"{name}\" specified.");
+
+        using var template = OpenTemplate(templateName);
+        SaveTemplate(template, templateName);
+
+        Console.WriteLine($"New \"{templateName}\" file created successfully.");
     }
 }

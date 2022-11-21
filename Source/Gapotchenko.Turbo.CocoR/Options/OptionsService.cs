@@ -16,6 +16,7 @@ sealed class OptionsService : IOptionsService
         // Keep the compatibility with prior Coco/R versions for .NET circa 2011.
 
         bool help = false;
+        var positionalOptions = new List<string>();
 
         int argc = args.Count;
         for (int i = 0; i < argc; i++)
@@ -33,21 +34,33 @@ sealed class OptionsService : IOptionsService
             else if (args[i] is "-?" or "--help" or "/?" or "?")
                 help = true;
             else
-            {
-                if (m_SourceFileName != null)
-                    throw new Exception("Multiple source files cannot be specified.");
-                m_SourceFileName = args[i];
-            }
+                positionalOptions.Add(args[i]);
         }
 
         if (help)
-            m_SourceFileName = null;
+            positionalOptions.Clear();
+
+        if (positionalOptions.Count != 0)
+        {
+            string command = positionalOptions[0];
+            if (command == "new")
+            {
+                Command = command;
+                m_CommandArguments = positionalOptions.Skip(1).ToList();
+            }
+            else
+            {
+                if (positionalOptions.Count > 1)
+                    throw new Exception("Multiple source files cannot be specified.");
+                m_SourceFileName = command;
+            }
+        }
 
         #region Calculated options
 
         m_SourceDirectoryName = Path.GetDirectoryName(m_SourceFileName);
         if (KeepOldFiles = m_OutputDirectoryName == null)
-            m_OutputDirectoryName = m_SourceDirectoryName;
+            m_OutputDirectoryName = m_SourceDirectoryName ?? ".";
 
         #endregion
     }
@@ -56,7 +69,7 @@ sealed class OptionsService : IOptionsService
     readonly IProductInformationService m_ProductInformationService;
 
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    string? m_SourceFileName;
+    readonly string? m_SourceFileName;
 
     public string SourceFilePath => m_SourceFileName ?? throw new Exception("Source file name is not specified.");
 
@@ -69,16 +82,23 @@ sealed class OptionsService : IOptionsService
     public bool EmitLines { get; }
 
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    string? m_OutputDirectoryName;
+    readonly string? m_OutputDirectoryName;
 
     public string OutputDirectoryPath => m_OutputDirectoryName ?? throw new Exception("Output directory is unavailable.");
+
+    public string? Command { get; }
+
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    readonly IReadOnlyList<string>? m_CommandArguments;
+
+    public IReadOnlyList<string> CommandArguments => m_CommandArguments ?? throw new Exception("Command arguments are unavailable.");
 
     #region Calculated options
 
     public bool HasSourceFile => m_SourceFileName != null;
 
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    string? m_SourceDirectoryName;
+    readonly string? m_SourceDirectoryName;
 
     public string SourceDirectoryPath => m_SourceDirectoryName ?? throw new Exception("Source directory is unavailable.");
 

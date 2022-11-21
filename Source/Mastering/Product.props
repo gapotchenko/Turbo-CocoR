@@ -4,7 +4,10 @@
   <PropertyGroup>
     <Product>Turbo Coco/R</Product>
     <Company>Gapotchenko</Company>
-    <Copyright>Copyright © Gapotchenko and Contributors</Copyright>
+    <Copyright>
+      <![CDATA[Copyright © 2022 Gapotchenko and Contributors
+Portions © 1990, 2010 Hanspeter Mössenböck, University of Linz]]>
+    </Copyright>
   </PropertyGroup>
 
 </Project>
