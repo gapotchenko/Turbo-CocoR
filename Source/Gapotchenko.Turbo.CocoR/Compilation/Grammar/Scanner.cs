@@ -469,7 +469,7 @@ namespace Gapotchenko.Turbo.CocoR.Compilation.Grammar
 			t = new Token();
 			t.pos = pos; t.col = col; t.line = line; t.charPos = charPos;
 			int state;
-			state = start.ContainsKey(ch) ? start[ch] : 0;
+			start.TryGetValue(ch, out state);
 			tlen = 0; AddCh();
 			
 			switch (state)
