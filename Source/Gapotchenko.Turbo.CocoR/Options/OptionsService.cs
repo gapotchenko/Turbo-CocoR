@@ -17,6 +17,7 @@ sealed class OptionsService : IOptionsService
 
         bool help = false;
         var positionalOptions = new List<string>();
+        string? outputDirectoryPath = null;
 
         int argc = args.Count;
         for (int i = 0; i < argc; i++)
@@ -28,7 +29,7 @@ sealed class OptionsService : IOptionsService
             else if (args[i] is "--trace" or "-trace" && i < argc - 1)
                 Trace = Empty.Nullify(args[++i].Trim());
             else if (args[i] is "-o" or "--output" && i < argc - 1)
-                m_OutputDirectoryName = Empty.Nullify(args[++i]);
+                outputDirectoryPath = Empty.Nullify(args[++i]);
             else if (args[i] is "--lines" or "-lines")
                 EmitLines = true;
             else if (args[i] is "-?" or "--help" or "/?" or "?")
@@ -42,25 +43,30 @@ sealed class OptionsService : IOptionsService
 
         if (positionalOptions.Count != 0)
         {
-            string command = positionalOptions[0];
-            if (command == "new")
+            string option = positionalOptions[0];
+            if (option == "new")
             {
-                Command = command;
+                Command = option;
                 m_CommandArguments = positionalOptions.Skip(1).ToList();
             }
             else
             {
                 if (positionalOptions.Count > 1)
                     throw new Exception("Multiple source files cannot be specified.");
-                m_SourceFileName = command;
+                m_SourceFilePath = option;
             }
         }
 
         #region Calculated options
 
-        m_SourceDirectoryName = Path.GetDirectoryName(m_SourceFileName);
-        if (KeepOldFiles = m_OutputDirectoryName == null)
-            m_OutputDirectoryName = m_SourceDirectoryName ?? ".";
+        m_SourceDirectoryPath = Path.GetDirectoryName(m_SourceFilePath);
+
+        if (outputDirectoryPath == null)
+        {
+            KeepOldFiles = true;
+            outputDirectoryPath = m_SourceDirectoryPath ?? ".";
+        }
+        OutputDirectoryPath = outputDirectoryPath;
 
         #endregion
     }
@@ -69,9 +75,9 @@ sealed class OptionsService : IOptionsService
     readonly IProductInformationService m_ProductInformationService;
 
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    readonly string? m_SourceFileName;
+    readonly string? m_SourceFilePath;
 
-    public string SourceFilePath => m_SourceFileName ?? throw new Exception("Source file name is not specified.");
+    public string SourceFilePath => m_SourceFilePath ?? throw new Exception("Source file path is not specified.");
 
     public string? FramesDirectoryPath { get; }
 
@@ -81,10 +87,7 @@ sealed class OptionsService : IOptionsService
 
     public bool EmitLines { get; }
 
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    readonly string? m_OutputDirectoryName;
-
-    public string OutputDirectoryPath => m_OutputDirectoryName ?? throw new Exception("Output directory is unavailable.");
+    public string OutputDirectoryPath { get; }
 
     public string? Command { get; }
 
@@ -95,12 +98,12 @@ sealed class OptionsService : IOptionsService
 
     #region Calculated options
 
-    public bool HasSourceFile => m_SourceFileName != null;
+    public bool HasSourceFile => m_SourceFilePath != null;
 
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    readonly string? m_SourceDirectoryName;
+    readonly string? m_SourceDirectoryPath;
 
-    public string SourceDirectoryPath => m_SourceDirectoryName ?? throw new Exception("Source directory is unavailable.");
+    public string SourceDirectoryPath => m_SourceDirectoryPath ?? throw new Exception("Source directory is unavailable.");
 
     public bool KeepOldFiles { get; }
 
@@ -125,7 +128,7 @@ sealed class OptionsService : IOptionsService
         textWriter.WriteLine();
 
         textWriter.WriteLine(
-            """
+            $"""
             Options:
               -? [ --help ]        Display help.
               --namespace arg      Namespace name.
@@ -134,6 +137,28 @@ sealed class OptionsService : IOptionsService
               -o [ --output ] arg  Output directory.
               --lines              Emit lines.
             """);
+
+#if TODO
+        textWriter.WriteLine(
+            $"""
+            Options:
+              -? [ --help ]               Display help.
+              --namespace arg             Namespace name.
+              --frames arg                Frame files directory.
+              --trace arg                 Trace string (see below).
+              -o [ --output ] arg         Output directory.
+              --lines                     Emit lines.
+              --lang arg (=auto)          The programming language to use for code
+                                          generation. Possible values: C#, auto.
+              --lang-version arg (=auto)  The version of a programming language to use for
+                                          code generation.
+              --lang-features arg         The list of programming language features to use
+                                          for code generation (see below).
+              --compatibility arg         The compatibility string specifies the name and
+                                          version of a Coco/R tool to be compatible with.
+                                          For example: "{m_ProductInformationService.Name} {m_ProductInformationService.SignificantVersion}"
+            """);
+#endif
     }
 
     static void WriteUsageExtra(TextWriter textWriter)
@@ -156,7 +181,7 @@ sealed class OptionsService : IOptionsService
 
         textWriter.WriteLine(
             """
-            Valid characters in the trace string:
+            Valid characters in the trace string (--trace option):
               A  trace automaton
               F  list first/follow sets
               G  print syntax graph
@@ -169,5 +194,13 @@ sealed class OptionsService : IOptionsService
             Scanner.frame and Parser.frame files are needed in the ATG directory
             or in a directory specified by the --frames option.
             """);
+
+#if TODO
+            """
+            Valid programming language features to use for code generation (--lang-features
+            option):
+              C#  nullable, no-nullable
+            """
+#endif
     }
 }

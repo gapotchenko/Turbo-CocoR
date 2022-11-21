@@ -42,7 +42,7 @@ static class Program
 
         Console.Write(productInformationService.Name);
         Console.Write(' ');
-        Console.WriteLine(productInformationService.Version.ToString(2));
+        Console.WriteLine(productInformationService.SignificantVersion);
 
         var optionsService = new OptionsService(args, productInformationService);
 
@@ -64,7 +64,9 @@ static class Program
 
             using var container = CreateContainer();
             var scaffolder = container.GetExport<IScaffoldingService>();
-            scaffolder.CreateItem(commandArgs[0], commandArgs[1]);
+            var templateName = scaffolder.CreateItem(commandArgs[0], commandArgs[1]);
+
+            Console.WriteLine($"New \"{templateName}\" file created successfully.");
         }
         else if (optionsService.HasSourceFile)
         {

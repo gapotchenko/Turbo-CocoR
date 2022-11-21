@@ -1072,7 +1072,7 @@ class DFA
             gen.Write("t.kind = {0}; ", endOf.n);
             if (endOf.tokenKind == Symbol.classLitToken)
             {
-                gen.WriteLine("t.val = new String(tval, 0, tlen); CheckLiteral(t); return t;}");
+                gen.WriteLine("t.val = new String(tval, 0, tlen); CheckLiteral(); return t;}");
             }
             else
             {

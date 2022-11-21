@@ -5,7 +5,8 @@ using System.Collections;
 
 -->namespace
 
-public class Token {
+sealed class Token
+{
 	public int kind;    // token kind
 	public int pos;     // token position in bytes in the source text (starting at 0)
 	public int charPos;  // token position in characters in the source text (starting at 0)
@@ -18,7 +19,8 @@ public class Token {
 //-----------------------------------------------------------------------------------
 // Buffer
 //-----------------------------------------------------------------------------------
-public class Buffer {
+class Buffer
+{
 	// This Buffer supports the following cases:
 	// 1) seekable stream (file)
 	//    a) whole stream in buffer
@@ -118,7 +120,7 @@ public class Buffer {
 			}
 
 			if (value < 0 || value > fileLen) {
-				throw new FatalError("buffer out of bounds access, position: " + value);
+				throw new Exception("buffer out of bounds access, position: " + value);
 			}
 
 			if (value >= bufStart && value < bufStart + bufLen) { // already in buffer
@@ -162,7 +164,8 @@ public class Buffer {
 //-----------------------------------------------------------------------------------
 // UTF8Buffer
 //-----------------------------------------------------------------------------------
-public class UTF8Buffer: Buffer {
+class UTF8Buffer: Buffer
+{
 	public UTF8Buffer(Buffer b): base(b) {}
 
 	public override int Read() {
@@ -200,7 +203,8 @@ public class UTF8Buffer: Buffer {
 //-----------------------------------------------------------------------------------
 // Scanner
 //-----------------------------------------------------------------------------------
-public class Scanner {
+class Scanner
+{
 	const char EOL = '\n';
 	const int eofSym = 0; /* pdt */
 -->declarations
@@ -222,27 +226,27 @@ public class Scanner {
 	char[] tval = new char[128]; // text of current token
 	int tlen;         // length of current token
 	
-	static Scanner() {
+	static Scanner()
+	{
 		start = new Hashtable(128);
 -->initialization
 	}
 	
-	public Scanner (string fileName) {
-		try {
-			Stream stream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
-			buffer = new Buffer(stream, false);
-			Init();
-		} catch (IOException) {
-			throw new FatalError("Cannot open file " + fileName);
-		}
+	public Scanner (string fileName)
+	{
+		Stream stream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
+		buffer = new Buffer(stream, false);
+		Init();
 	}
 	
-	public Scanner (Stream s) {
+	public Scanner (Stream s)
+	{
 		buffer = new Buffer(s, true);
 		Init();
 	}
 	
-	void Init() {
+	void Init()
+	{
 		pos = -1; line = 1; col = 0; charPos = -1;
 		oldEols = 0;
 		NextCh();
@@ -250,7 +254,7 @@ public class Scanner {
 			NextCh(); int ch1 = ch;
 			NextCh(); int ch2 = ch;
 			if (ch1 != 0xBB || ch2 != 0xBF) {
-				throw new FatalError(String.Format("illegal byte order mark: EF {0,2:X} {1,2:X}", ch1, ch2));
+				throw new Exception(String.Format("illegal byte order mark: EF {0,2:X} {1,2:X}", ch1, ch2));
 			}
 			buffer = new UTF8Buffer(buffer); col = 0; charPos = -1;
 			NextCh();

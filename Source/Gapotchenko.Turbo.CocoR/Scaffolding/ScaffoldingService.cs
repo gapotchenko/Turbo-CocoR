@@ -49,7 +49,7 @@ sealed class ScaffoldingService : IScaffoldingService
         }
     }
 
-    public void CreateItem(string category, string name)
+    public string CreateItem(string category, string name)
     {
         if (category != "frame")
             throw new Exception($"Unknown scaffolding category \"{category}\" specified.");
@@ -69,6 +69,6 @@ sealed class ScaffoldingService : IScaffoldingService
         using var template = OpenTemplate(templateName);
         SaveTemplate(template, templateName);
 
-        Console.WriteLine($"New \"{templateName}\" file created successfully.");
+        return templateName;
     }
 }

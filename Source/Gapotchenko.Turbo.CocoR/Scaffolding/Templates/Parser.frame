@@ -3,7 +3,7 @@ using System;
 
 -->namespace
 
-public class Parser
+class Parser
 {
 -->constants
 	const bool _T = true;
@@ -90,7 +90,7 @@ public class Parser
 } // end Parser
 
 
-public class Errors
+class Errors
 {
 	public int count = 0;                                    // number of errors detected
 	public System.IO.TextWriter errorStream = Console.Out;   // error messages go to this stream
@@ -124,8 +124,3 @@ public class Errors
 		errorStream.WriteLine(s);
 	}
 } // Errors
-
-
-public class FatalError: Exception {
-	public FatalError(string m): base(m) {}
-}

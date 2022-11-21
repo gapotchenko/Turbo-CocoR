@@ -1404,7 +1404,9 @@ class Tab
     public void SetOption(ReadOnlySpan<char> s)
     {
         string[] option = s.ToString().Split(new char[] { '=' }, 2);
-        string name = option[0], value = option[1];
+        string name = option[0];
+        string value = option[1];
+
         if ("$namespace".Equals(name, StringComparison.Ordinal))
         {
             if (nsName == null)
@@ -1413,6 +1415,10 @@ class Tab
         else if ("$checkEOF".Equals(name, StringComparison.Ordinal))
         {
             checkEOF = "true".Equals(value, StringComparison.Ordinal);
+        }
+        else
+        {
+            parser.SynErr("unrecognized pragma option");
         }
     }
 

@@ -1,7 +1,11 @@
 // Coco.atg - Attributed Grammar
 //
-// Compile with: Coco Coco.ATG -namespace at.jku.ssw.Coco
+// Compile with: turbo-coco Coco.atg
 
+// $compatibility=Turbo Coco/R 2022.1
+// $lang=C#
+// $lang-version=11.0
+// $lang-features=nullable
 $namespace=Gapotchenko.Turbo.CocoR.Compilation.Grammar
 
 using System.IO;

@@ -14,5 +14,7 @@ sealed class ProductInformationService : IProductInformationService
 
     public Version Version => m_Information.ProductVersion;
 
+    public Version SignificantVersion => new(Version.Major, Version.Minor);
+
     public string Command => "turbo-coco";
 }

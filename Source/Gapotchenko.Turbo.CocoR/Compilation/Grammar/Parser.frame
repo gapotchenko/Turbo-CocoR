@@ -34,6 +34,13 @@ class Parser
 		errDist = 0;
 	}
 
+	public void SynErr(string msg)
+	{
+		if (errDist >= minErrDist)
+			errors.SynErr(la.line, la.col, msg);
+		errDist = 0;
+	}
+
 	public void SemErr(string msg)
 	{
 		if (errDist >= minErrDist)
@@ -130,6 +137,12 @@ public class Errors
 	public System.IO.TextWriter errorStream = Console.Out;   // error messages go to this stream
 	public string errMsgFormat = "-- line {0} col {1}: {2}"; // 0=line, 1=column, 2=text
 
+	public virtual void SynErr(int line, int col, string s)
+	{
+		errorStream.WriteLine(errMsgFormat, line, col, s);
+		count++;
+	}
+
 	public virtual void SynErr(int line, int col, int n)
 	{
 		string s;
@@ -140,8 +153,7 @@ public class Errors
 				s = "error " + n;
 				break;
 		}
-		errorStream.WriteLine(errMsgFormat, line, col, s);
-		count++;
+		SynErr(line, col, s);
 	}
 
 	public virtual void SemErr(int line, int col, string s)

@@ -8,5 +8,5 @@ public interface IScaffoldingService
 
     TextReader? TryOpenTemplate(string templateName);
 
-    void CreateItem(string category, string name);
+    string CreateItem(string category, string name);
 }
