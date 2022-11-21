@@ -96,7 +96,12 @@ sealed class OptionsService : IOptionsService
     void WriteUsageCore(TextWriter textWriter)
     {
         string command = m_ProductInformationService.Command;
-        textWriter.WriteLine($"Usage: {command} grammar.atg [options]");
+        textWriter.WriteLine(
+            $"""
+            Usage:
+              {command} grammar.atg [options]
+              {command} new frame <scanner|parser|preface> [options]
+            """);
         textWriter.WriteLine();
 
         textWriter.WriteLine(

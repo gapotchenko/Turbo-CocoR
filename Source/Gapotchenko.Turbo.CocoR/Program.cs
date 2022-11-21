@@ -1,5 +1,4 @@
 ﻿using Gapotchenko.FX;
-using Gapotchenko.FX.Linq;
 using Gapotchenko.Turbo.CocoR.Compilation;
 using Gapotchenko.Turbo.CocoR.Deployment;
 using Gapotchenko.Turbo.CocoR.Options;
@@ -42,7 +41,7 @@ static class Program
 
         Console.Write(productInformationService.Name);
         Console.Write(' ');
-        Console.WriteLine(productInformationService.Version.ToString(3));
+        Console.WriteLine(productInformationService.Version.ToString(2));
 
         var optionsService = new OptionsService(args, productInformationService);
 
