@@ -3,7 +3,8 @@ using System;
 
 -->namespace
 
-public class Parser {
+public class Parser
+{
 -->constants
 	const bool _T = true;
 	const bool _x = false;
@@ -59,7 +60,6 @@ public class Parser {
 		}
 	}
 
-
 	bool WeakSeparator(int n, int syFol, int repFol) {
 		int kind = la.kind;
 		if (kind == n) {Get(); return true;}
@@ -73,7 +73,6 @@ public class Parser {
 			return StartOf(syFol);
 		}
 	}
-
 	
 -->productions
 
@@ -84,13 +83,15 @@ public class Parser {
 -->parseRoot
 	}
 	
-	static readonly bool[,] set = {
+	static readonly bool[,] set =
+	{
 -->initialization
 	};
 } // end Parser
 
 
-public class Errors {
+public class Errors
+{
 	public int count = 0;                                    // number of errors detected
 	public System.IO.TextWriter errorStream = Console.Out;   // error messages go to this stream
 	public string errMsgFormat = "-- line {0} col {1}: {2}"; // 0=line, 1=column, 2=text
