@@ -1,5 +1,5 @@
 # Turbo Coco/R
-Turbo Coco/R is a compile-time compiler generator which takes an attributed grammar of a source language and generates a scanner and a parser for this language. It is based on the de-facto [Coco/R standard](https://ssw.jku.at/Research/Projects/Coco/) and extends it to be more useful in commercial settings.
+Turbo Coco/R is a compile-time compiler generator which takes an attributed grammar of a source language and generates a scanner and a parser for this language. It is based on the de-facto Coco/R standard and extends it to be more useful in commercial settings.
 
 ## Features
 
@@ -42,6 +42,8 @@ Now you can generate the actual scanner and parser source files for your grammar
 
 Once generated, the files are ready to be compiled as a part of your project.
 Whenever you want to change and refine the grammar, you just edit the corresponding `.atg` and `.frame` files and regenerate the scanner and parser source files again.
+
+For further guidance, see the [examples](Examples).
 
 ## Requirements
 
