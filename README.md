@@ -1,11 +1,52 @@
-# Turbo Coco/R for .NET
-Turbo Coco/R is a compile-time compiler generator for .NET which takes an attributed grammar of a source language and generates a scanner and a parser for this language. It is based on the de-facto [Coco/R standard](https://ssw.jku.at/Research/Projects/Coco/) and extends it to be more useful in commercial settings.
+# Turbo Coco/R
+Turbo Coco/R is a compile-time compiler generator which takes an attributed grammar of a source language and generates a scanner and a parser for this language. It is based on the de-facto [Coco/R standard](https://ssw.jku.at/Research/Projects/Coco/) and extends it to be more useful in commercial settings.
 
-The produced scanners and parsers do not have external dependendencies and thus can be embedded into any project at the source level.
+## Features
+
+- Follows the baseline [Coco/R standard](https://ssw.jku.at/Research/Projects/Coco/) with some extensions
+- Multilingual support: C#, other languages are coming
+- Ready for consumption: available in a handy regularly-updated prebuilt package
+
+## Basics
+
+Turbo Coco/R is very similar to once popular `lex` and `yacc` tools and their open-source `flex` and `bison` counterparts.
+The main distinction of Turbo Coco/R is that it provides the support for multiple programming languages and generates both scanner and parser files from the provided attributed grammar file.
+
+The produced scanners and parsers are tiny, do not have external dependendencies and thus can be embedded into any project at the source level.
 
 ## Getting Started
 
-TODO
+1. Install Turbo Coco/R tool using .NET package manager:
+
+   ``` sh
+   > dotnet tool install Gapotchenko.Turbo.CocoR -g
+   ```
+
+2. Create your first attributed grammar file:
+
+   ``` sh
+   > turbo-coco new grammar MyLang.atg
+   ```
+
+3. Create the customizable frame files for scanner and parser:
+
+   ``` sh
+   > turbo-coco new frame scanner parser
+   ```
+
+Now you can generate the actual scanner and parser source files for your grammar:
+
+``` sh
+> turbo-coco MyLang.atg
+```
+
+Once generated, the files are ready to be compiled as a part of your project.
+Whenever you want to change and refine the grammar, you just edit the corresponding `.atg` and `.frame` files and regenerate the scanner and parser source files again.
+
+## Requirements
+
+- Turbo Coco/R tool itself requires .NET SDK 7.0+
+- The produced source files are not the subjects of any requirements and can work anywhere
 
 ## Licensing
 

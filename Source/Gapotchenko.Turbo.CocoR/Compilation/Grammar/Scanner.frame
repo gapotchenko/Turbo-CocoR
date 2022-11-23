@@ -1,4 +1,5 @@
 -->begin
+#pragma warning disable IDE0005 // Using directive is unnecessary.
 #pragma warning disable IDE0161 // Convert to file-scoped namespace
 
 -->namespace
@@ -171,7 +172,7 @@ class Buffer
 	// Read the next chunk of bytes from the stream, increases the buffer
 	// if needed and updates the fields fileLen and bufLen.
 	// Returns the number of bytes read.
-	private int ReadNextStreamChunk()
+	int ReadNextStreamChunk()
 	{
 		int free = buf.Length - bufLen;
 		if (free == 0)
