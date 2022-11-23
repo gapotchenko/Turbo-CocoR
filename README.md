@@ -28,7 +28,7 @@ The produced scanners and parsers are tiny, do not have external dependendencies
    > turbo-coco new grammar MyLang.atg
    ```
 
-3. Create the customizable frame files for scanner and parser:
+3. Create the customizable frame files for a scanner and a parser:
 
    ``` sh
    > turbo-coco new frame scanner parser
