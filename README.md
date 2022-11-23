@@ -10,7 +10,7 @@ Turbo Coco/R is a compile-time compiler generator which takes an attributed gram
 ## Basics
 
 Turbo Coco/R is very similar to once popular `lex` and `yacc` tools and their open-source `flex` and `bison` counterparts.
-The main distinction of Turbo Coco/R is that it provides the support for multiple programming languages and generates both scanner and parser files from the provided attributed grammar file.
+The main distinction of Turbo Coco/R is that it provides the support for multiple programming languages and generates both a scanner and a parser from a provided grammar file.
 
 The produced scanners and parsers are tiny, do not have external dependendencies and thus can be embedded into any project at the source level.
 
