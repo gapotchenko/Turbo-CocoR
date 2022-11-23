@@ -14,6 +14,10 @@ The main distinction of Turbo Coco/R is that it provides the support for multipl
 
 The produced scanners and parsers are tiny, do not have external dependendencies and thus can be embedded into any project at the source level.
 
+The scanner works as a deterministic finite automaton.
+The parser uses recursive descent.
+A multi-symbol lookahead or semantic checks can resolve LL(1) conflicts. Thus the class of accepted grammars is LL(k) for an arbitrary k.
+
 ## Getting Started
 
 1. Install Turbo Coco/R tool using .NET package manager:
@@ -48,7 +52,7 @@ For further guidance, see the [examples](Examples).
 ## Requirements
 
 - Turbo Coco/R tool itself requires .NET SDK 7.0+
-- The produced source files are not the subjects of any requirements and can work anywhere
+- The produced source files are not subject to any requirements and can work anywhere
 
 ## Licensing
 
