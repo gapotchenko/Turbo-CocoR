@@ -32,11 +32,13 @@ A multi-symbol lookahead or semantic checks can resolve LL(1) conflicts. Thus th
    > turbo-coco new grammar MyLang.atg
    ```
 
-3. Create the customizable frame files for a scanner and parser (a frame file defines the basic code structure of a generated file):
+3. Create the customizable frame files for a scanner and parser:
 
    ``` sh
    > turbo-coco new frame scanner parser
    ```
+
+   A frame file defines the basic code structure of a generated file.
 
 Now you can generate the actual scanner and parser source files from your grammar:
 
@@ -50,6 +52,7 @@ For further guidance, see the [examples](Examples).
 
 ## Requirements
 
+- Turbo Coco/R tool requires .NET SDK 7.0+
 - The produced source files are not subject to any requirements and can work anywhere
 
 ## Licensing
