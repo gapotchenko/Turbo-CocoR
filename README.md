@@ -38,7 +38,7 @@ A multi-symbol lookahead or semantic checks can resolve LL(1) conflicts. Thus th
    > turbo-coco new frame scanner parser
    ```
 
-Now you can generate the actual scanner and parser source files for your grammar:
+Now you can generate the actual scanner and parser source files from your grammar:
 
 ``` sh
 > turbo-coco MyLang.atg
