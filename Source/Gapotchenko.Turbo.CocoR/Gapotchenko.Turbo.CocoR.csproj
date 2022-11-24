@@ -9,12 +9,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Scaffolding\Templates\Grammar.atg" />
     <None Remove="Scaffolding\Templates\Parser.frame" />
     <None Remove="Scaffolding\Templates\Preface.frame" />
     <None Remove="Scaffolding\Templates\Scanner.frame" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Scaffolding\Templates\Grammar.atg" />
     <EmbeddedResource Include="Scaffolding\Templates\Parser.frame" />
     <EmbeddedResource Include="Scaffolding\Templates\Preface.frame" />
     <EmbeddedResource Include="Scaffolding\Templates\Scanner.frame" />
