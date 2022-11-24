@@ -20,7 +20,7 @@ A multi-symbol lookahead or semantic checks can resolve LL(1) conflicts. Thus th
 
 ## Getting Started
 
-1. Install Turbo Coco/R tool using .NET package manager (.NET SDK 7.0+ is required):
+1. Install Turbo Coco/R tool using .NET package manager:
 
    ``` sh
    > dotnet tool install Gapotchenko.Turbo.CocoR --global
@@ -32,7 +32,7 @@ A multi-symbol lookahead or semantic checks can resolve LL(1) conflicts. Thus th
    > turbo-coco new grammar MyLang.atg
    ```
 
-3. Create the customizable frame files for a scanner and parser:
+3. Create the customizable [frame files](README.md# "A frame file defines the basic code structure of a generated file") for a scanner and parser:
 
    ``` sh
    > turbo-coco new frame scanner parser
@@ -45,7 +45,6 @@ Now you can generate the actual scanner and parser source files from your gramma
 ```
 
 Once generated, the files are ready to be compiled as a part of your project.
-Whenever you change the grammar or frame files, you should regenerate the scanner and parser source files.
 
 For further guidance, see the [examples](Examples).
 
