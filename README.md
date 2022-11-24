@@ -20,7 +20,7 @@ A multi-symbol lookahead or semantic checks can resolve LL(1) conflicts. Thus th
 
 ## Getting Started
 
-1. Install Turbo Coco/R tool using .NET package manager:
+1. Install Turbo Coco/R tool using .NET package manager (.NET SDK 7.0+ is required):
 
    ``` sh
    > dotnet tool install Gapotchenko.Turbo.CocoR --global
@@ -51,7 +51,6 @@ For further guidance, see the [examples](Examples).
 
 ## Requirements
 
-- Turbo Coco/R tool itself requires .NET SDK 7.0+
 - The produced source files are not subject to any requirements and can work anywhere
 
 ## Licensing
