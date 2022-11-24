@@ -32,7 +32,7 @@ A multi-symbol lookahead or semantic checks can resolve LL(1) conflicts. Thus th
    > turbo-coco new grammar MyLang.atg
    ```
 
-3. Create the customizable [frame files](README.md# "A frame file defines the basic code structure of a generated file") for a scanner and parser:
+3. Create the customizable frame files for a scanner and parser (a frame file defines the basic code structure of a generated file):
 
    ``` sh
    > turbo-coco new frame scanner parser
