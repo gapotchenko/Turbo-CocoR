@@ -45,7 +45,7 @@ Now you can generate the actual scanner and parser source files from your gramma
 ```
 
 Once generated, the files are ready to be compiled as a part of your project.
-Whenever you change the grammar, you should regenerate the scanner and parser source files.
+Whenever you change the grammar or frame files, you should regenerate the scanner and parser source files.
 
 For further guidance, see the [examples](Examples).
 
