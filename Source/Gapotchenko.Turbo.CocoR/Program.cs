@@ -59,14 +59,16 @@ static class Program
             Console.WriteLine();
 
             var commandArgs = optionsService.CommandArguments;
-            if (commandArgs.Count != 2)
+            if (commandArgs.Count < 2)
                 throw new Exception($"Invalid command-line parameters for the \"{command}\" command.");
 
             using var container = CreateContainer();
             var scaffolder = container.GetExport<IScaffoldingService>();
-            var templateName = scaffolder.CreateItem(commandArgs[0], commandArgs[1]);
-
-            Console.WriteLine($"New \"{templateName}\" file created successfully.");
+            foreach (var itemName in commandArgs.Skip(1).Distinct())
+            {
+                var templateName = scaffolder.CreateItem(commandArgs[0], itemName);
+                Console.WriteLine($"New \"{templateName}\" file created successfully.");
+            }
         }
         else if (optionsService.HasSourceFile)
         {
