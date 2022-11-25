@@ -1,0 +1,42 @@
+﻿// Compile with: turbo-coco Calc.atg
+
+// $compatibility=Turbo Coco/R 2022.1
+$namespace=Calc.Grammar
+
+COMPILER Calc
+
+public int Result;
+
+IGNORECASE
+
+CHARACTERS
+	letter = 'A'..'Z' + 'a'..'z' + '_'.
+	digit = "0123456789".
+
+	ws = ' ' + '\u0009'.
+
+TOKENS
+	identifier = letter {letter | digit}.
+	integer = digit {digit}.
+	float = digit {digit} '.' ['e' ('+'|'-') digit {digit}].
+	plus = '+'.
+	minus = '-'.
+
+COMMENTS FROM "/*" TO "*/"
+
+IGNORE ws
+
+PRODUCTIONS
+    Calc						
+	  = Expression <out var e>	(. Result = e; .) .
+
+	Number <out int n>
+      = integer	(. n = int.Parse(t.val); .) .
+
+	Literal <out int l>
+      = Number <out l> .
+
+	Expression <out int e>      
+      = Literal <out var l>		(. e = l; .) .
+
+END Calc.
