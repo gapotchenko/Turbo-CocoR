@@ -31,7 +31,8 @@ PRODUCTIONS
 	  = Expression <out var e>	(. Result = e; .) .
 
 	Number <out int n>
-      = integer	(. n = int.Parse(t.val); .) .
+      = integer	(. if (!int.TryParse(t.val, out n))
+	                  SemErr("invalid integer format"); .) .
 
 	Literal <out int l>
       = Number <out l> .

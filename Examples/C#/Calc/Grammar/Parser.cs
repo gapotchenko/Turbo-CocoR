@@ -102,7 +102,8 @@ namespace Calc.Grammar
 
 		void Number(out int n) {
 			Expect(2);
-			n = int.Parse(t.val); 
+			if (!int.TryParse(t.val, out n))
+			SemErr("invalid integer format"); 
 		}
 
 		void Literal(out int l) {
