@@ -323,7 +323,7 @@ class Scanner
 		return t;
 	}
 	
-	private void SetScannerBehindT() {
+	void SetScannerBehindT() {
 		buffer.Pos = t.pos;
 		NextCh();
 		line = t.line; col = t.col; charPos = t.charPos;
