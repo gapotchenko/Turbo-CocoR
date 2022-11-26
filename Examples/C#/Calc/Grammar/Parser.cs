@@ -13,12 +13,8 @@ namespace Calc.Grammar
 	class Parser
 	{
 		public const int _EOF = 0;
-		public const int _identifier = 1;
-		public const int _integer = 2;
-		public const int _float = 3;
-		public const int _plus = 4;
-		public const int _minus = 5;
-		public const int maxT = 6;
+		public const int _integer = 1;
+		public const int maxT = 8;
 
 		const bool _T = true;
 		const bool _x = false;
@@ -91,23 +87,78 @@ namespace Calc.Grammar
 		}
 		
 		void Calc() {
-			Expression(out var e);
-			Result = e; 
+			Expression(out var value);
+			Result = value; 
 		}
 
-		void Expression(out int e) {
-			Literal(out var l);
-			e = l; 
+		void Expression(out int r) {
+			SimpleExpression(out r);
 		}
 
-		void Number(out int n) {
-			Expect(2);
-			if (!int.TryParse(t.val, out n))
+		void Number(out int r) {
+			Expect(1);
+			if (!int.TryParse(t.val, out r))
 			SemErr("invalid integer format"); 
 		}
 
-		void Literal(out int l) {
-			Number(out l);
+		void Literal(out int r) {
+			Number(out r);
+		}
+
+		void Primary(out int r) {
+			r = default; 
+			if (la.kind == 1) {
+				Literal(out r);
+			} else if (la.kind == 2) {
+				Get();
+				Expression(out r);
+				Expect(3);
+			} else SynErr(9);
+		}
+
+		void Factor(out int r) {
+			Primary(out r);
+		}
+
+		void Term(out int r) {
+			Factor(out r);
+			while (la.kind == 4 || la.kind == 5) {
+				if (la.kind == 4) {
+					Get();
+					Factor(out var factor);
+					r = r * factor; 
+				} else {
+					Get();
+					Factor(out var factor);
+					r = r / factor; 
+				}
+			}
+		}
+
+		void SimpleExpression(out int r) {
+			r = default; 
+			if (la.kind == 6) {
+				Get();
+				Term(out var value);
+				r = value; 
+			} else if (la.kind == 7) {
+				Get();
+				Term(out var value);
+				r = -value; 
+			} else if (la.kind == 1 || la.kind == 2) {
+				Term(out r);
+			} else SynErr(10);
+			while (la.kind == 6 || la.kind == 7) {
+				if (la.kind == 6) {
+					Get();
+					Term(out var term);
+					r += term; 
+				} else {
+					Get();
+					Term(out var term);
+					r -= term; 
+				}
+			}
 		}
 
 
@@ -123,7 +174,7 @@ namespace Calc.Grammar
 		
 		static readonly bool[,] set =
 		{
-			{_T,_x,_x,_x, _x,_x,_x,_x}
+			{_T,_x,_x,_x, _x,_x,_x,_x, _x,_x}
 
 		};
 	} // end Parser
@@ -139,12 +190,16 @@ namespace Calc.Grammar
 			string s;
 			switch (n) {
 				case 0: s = "EOF expected"; break;
-			case 1: s = "identifier expected"; break;
-			case 2: s = "integer expected"; break;
-			case 3: s = "float expected"; break;
-			case 4: s = "plus expected"; break;
-			case 5: s = "minus expected"; break;
-			case 6: s = "??? expected"; break;
+			case 1: s = "integer expected"; break;
+			case 2: s = "\"(\" expected"; break;
+			case 3: s = "\")\" expected"; break;
+			case 4: s = "\"*\" expected"; break;
+			case 5: s = "\"/\" expected"; break;
+			case 6: s = "\"+\" expected"; break;
+			case 7: s = "\"-\" expected"; break;
+			case 8: s = "??? expected"; break;
+			case 9: s = "invalid Primary"; break;
+			case 10: s = "invalid SimpleExpression"; break;
 
 				default: s = "error " + n; break;
 			}

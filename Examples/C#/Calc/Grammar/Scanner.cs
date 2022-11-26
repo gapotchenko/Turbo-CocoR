@@ -214,9 +214,9 @@ namespace Calc.Grammar
 	{
 		const char EOL = '\n';
 		const int eofSym = 0; /* pdt */
-		const int maxT = 6;
-		const int noSym = 6;
-		char valCh;       // current input character (for token.val)
+		const int maxT = 8;
+		const int noSym = 8;
+
 
 		public Buffer buffer; // scanner buffer
 		
@@ -238,9 +238,11 @@ namespace Calc.Grammar
 		static Scanner()
 		{
 			start = new Dictionary<int, int>(128);
-			for (int i = 95; i <= 95; ++i) start[i] = 1;
-			for (int i = 97; i <= 122; ++i) start[i] = 1;
-			for (int i = 48; i <= 57; ++i) start[i] = 8;
+			for (int i = 48; i <= 57; ++i) start[i] = 1;
+			start[40] = 2; 
+			start[41] = 3; 
+			start[42] = 4; 
+			start[47] = 5; 
 			start[43] = 6; 
 			start[45] = 7; 
 			start[Buffer.EOF] = -1;
@@ -288,10 +290,6 @@ namespace Calc.Grammar
 				if (ch == '\r' && buffer.Peek() != '\n') ch = EOL;
 				if (ch == EOL) { line++; col = 0; }
 			}
-			if (ch != Buffer.EOF) {
-				valCh = (char) ch;
-				ch = char.ToLower((char) ch);
-			}
 
 		}
 
@@ -302,47 +300,25 @@ namespace Calc.Grammar
 				tval = newBuf;
 			}
 			if (ch != Buffer.EOF) {
-				tval[tlen++] = valCh;
+				tval[tlen++] = (char) ch;
 				NextCh();
 			}
 		}
 
 
-
-		bool Comment0() {
-			int level = 1, pos0 = pos, line0 = line, col0 = col, charPos0 = charPos;
-			NextCh();
-			if (ch == '*') {
-				NextCh();
-				for(;;) {
-					if (ch == '*') {
-						NextCh();
-						if (ch == '/') {
-							level--;
-							if (level == 0) { oldEols = line - line0; NextCh(); return true; }
-							NextCh();
-						}
-					} else if (ch == Buffer.EOF) return false;
-					else NextCh();
-				}
-			} else {
-				buffer.Pos = pos0; NextCh(); line = line0; col = col0; charPos = charPos0;
-			}
-			return false;
-		}
 
 
 		void CheckLiteral() {
-			switch (t.val.ToLower()) {
+			switch (t.val) {
 				default: break;
 			}
 		}
 
 		Token NextToken() {
 			while (ch == ' ' ||
-				ch == 9 || ch == ' '
+				ch == 9
 			) NextCh();
-			if (ch == '/' && Comment0()) return NextToken();
+
 			int recKind = noSym;
 			int recEnd = pos;
 			t = new Token();
@@ -362,38 +338,27 @@ namespace Calc.Grammar
 				} // NextCh already done
 				case 1:
 					recEnd = pos; recKind = 1;
-					if (ch >= '0' && ch <= '9' || ch == '_' || ch >= 'a' && ch <= 'z') {AddCh(); goto case 1;}
+					if (ch >= '0' && ch <= '9') {AddCh(); goto case 1;}
 					else {t.kind = 1; break;}
 				case 2:
-					recEnd = pos; recKind = 3;
-					if (ch == 'e') {AddCh(); goto case 3;}
-					else {t.kind = 3; break;}
+					{t.kind = 2; break;}
 				case 3:
-					if (ch == '+' || ch == '-') {AddCh(); goto case 4;}
-					else {goto case 0;}
+					{t.kind = 3; break;}
 				case 4:
-					if (ch >= '0' && ch <= '9') {AddCh(); goto case 5;}
-					else {goto case 0;}
-				case 5:
-					recEnd = pos; recKind = 3;
-					if (ch >= '0' && ch <= '9') {AddCh(); goto case 5;}
-					else {t.kind = 3; break;}
-				case 6:
 					{t.kind = 4; break;}
-				case 7:
+				case 5:
 					{t.kind = 5; break;}
-				case 8:
-					recEnd = pos; recKind = 2;
-					if (ch >= '0' && ch <= '9') {AddCh(); goto case 8;}
-					else if (ch == '.') {AddCh(); goto case 2;}
-					else {t.kind = 2; break;}
+				case 6:
+					{t.kind = 6; break;}
+				case 7:
+					{t.kind = 7; break;}
 
 			}
 			t.val = new String(tval, 0, tlen);
 			return t;
 		}
 		
-		private void SetScannerBehindT() {
+		void SetScannerBehindT() {
 			buffer.Pos = t.pos;
 			NextCh();
 			line = t.line; col = t.col; charPos = t.charPos;

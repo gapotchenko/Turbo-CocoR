@@ -7,37 +7,49 @@ COMPILER Calc
 
 public int Result;
 
-IGNORECASE
-
 CHARACTERS
-	letter = 'A'..'Z' + 'a'..'z' + '_'.
-	digit = "0123456789".
-
-	ws = ' ' + '\u0009'.
+	digit = "0123456789" .
 
 TOKENS
-	identifier = letter {letter | digit}.
-	integer = digit {digit}.
-	float = digit {digit} '.' ['e' ('+'|'-') digit {digit}].
-	plus = '+'.
-	minus = '-'.
+	integer = digit {digit} .
 
-COMMENTS FROM "/*" TO "*/"
-
-IGNORE ws
+IGNORE '\u0009'
 
 PRODUCTIONS
     Calc						
-	  = Expression <out var e>	(. Result = e; .) .
+		= Expression <out var value>			(. Result = value; .) .
 
-	Number <out int n>
-      = integer	(. if (!int.TryParse(t.val, out n))
-	                  SemErr("invalid integer format"); .) .
+	Number <out int r>
+		= integer								(. if (!int.TryParse(t.val, out r))
+													SemErr("invalid integer format"); .) .
 
-	Literal <out int l>
-      = Number <out l> .
+	Literal <out int r>
+		= Number <out r> .
 
-	Expression <out int e>      
-      = Literal <out var l>		(. e = l; .) .
+	Primary <out int r>							(. r = default; .)
+		= Literal <out r>
+		| "(" Expression <out r> ")" .
+
+	Factor <out int r>
+		= Primary <out r>.
+
+	Term <out int r>
+		=
+		Factor <out r>
+		{ "*" Factor <out var factor>			(. r = r * factor; .)
+		| "/" Factor <out var factor>			(. r = r / factor; .)
+		} .
+
+	SimpleExpression <out int r>				(. r = default; .)
+		=
+		( "+" Term <out var value>				(. r = value; .)
+		| "-" Term <out var value>				(. r = -value; .)
+		| Term <out r> )
+		{ "+" Term <out var term>				(. r += term; .)
+		| "-" Term <out var term>				(. r -= term; .)
+		} .
+
+	Expression <out int r>      
+		= SimpleExpression <out r> .
 
 END Calc.
