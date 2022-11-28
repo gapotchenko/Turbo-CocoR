@@ -1,7 +1,7 @@
 ﻿// Compile with: turbo-coco Calc.atg
 
 $namespace=Calc.Grammar
-//$compatibility=Turbo Coco/R 2022.1
+$compatibility=Turbo Coco/R 2022.1
 
 COMPILER Calc
 
