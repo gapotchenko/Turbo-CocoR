@@ -1,7 +1,7 @@
 ﻿// Compile with: turbo-coco Calc.atg
 
-// $compatibility=Turbo Coco/R 2022.1
 $namespace=Calc.Grammar
+//$compatibility=Turbo Coco/R 2022.1
 
 COMPILER Calc
 
@@ -11,9 +11,7 @@ CHARACTERS
 	digit = "0123456789" .
 
 TOKENS
-	integer = digit {digit} .
-
-IGNORE '\u0009'
+	integer = digit { digit } .
 
 PRODUCTIONS
     Calc						

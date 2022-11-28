@@ -316,7 +316,7 @@ namespace Calc.Grammar
 
 		Token NextToken() {
 			while (ch == ' ' ||
-				ch == 9
+				false
 			) NextCh();
 
 			int recKind = noSym;
