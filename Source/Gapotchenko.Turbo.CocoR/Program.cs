@@ -42,7 +42,7 @@ static class Program
 
         Console.Write(productInformationService.Name);
         Console.Write(' ');
-        Console.WriteLine(productInformationService.SignificantVersion);
+        Console.WriteLine(productInformationService.FormalVersion);
 
         var optionsService = new OptionsService(args, productInformationService);
 

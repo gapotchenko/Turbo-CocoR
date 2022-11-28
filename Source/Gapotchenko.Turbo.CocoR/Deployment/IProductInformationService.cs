@@ -20,9 +20,9 @@ interface IProductInformationService
     Version Version { get; }
 
     /// <summary>
-    /// Gets the product significant version.
+    /// Gets the formal product version.
     /// </summary>
-    Version SignificantVersion { get; }
+    Version FormalVersion { get; }
 
     /// <summary>
     /// Gets the product command name.

@@ -25,6 +25,7 @@
   <ItemGroup>
     <PackageReference Include="Gapotchenko.FX" Version="2022.2.7" />
     <PackageReference Include="Gapotchenko.FX.AppModel.Information" Version="2022.2.7" />
+    <PackageReference Include="StringTemplate4" Version="4.0.8" />
     <PackageReference Include="System.Composition" Version="7.0.0" />
     <PackageReference Include="System.Composition.AttributedModel" Version="7.0.0" />
     <PackageReference Include="System.Composition.Hosting" Version="7.0.0" />

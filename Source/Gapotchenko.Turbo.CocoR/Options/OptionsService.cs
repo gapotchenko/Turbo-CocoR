@@ -123,6 +123,7 @@ sealed class OptionsService : IOptionsService
             $"""
             Usage:
               {command} grammar.atg [options]
+              {command} new grammar grammar.atg [options]
               {command} new frame <scanner|parser|preface> [options]
             """);
         textWriter.WriteLine();

@@ -1,1 +1,20 @@
-﻿// TODO
+﻿// Compile with: %command% %output_file_name%
+
+// $namespace=Your.Namespace
+$compatibility=%compatibility%
+
+COMPILER YourLanguage
+
+CHARACTERS
+	digit = "0123456789" .
+
+TOKENS
+	integer = digit { digit } .
+	float = digit { digit } "." digit { digit } .
+
+PRODUCTIONS
+	Number = integer | float .
+	SignedNumber = [ "+" | "-" ] Number .
+    YourLanguage = SignedNumber { "," SignedNumber } .
+
+END YourLanguage.

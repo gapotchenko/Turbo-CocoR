@@ -1415,6 +1415,10 @@ class Tab
         {
             checkEOF = "true".Equals(value, StringComparison.Ordinal);
         }
+        else if ("$compatibility".Equals(name, StringComparison.Ordinal))
+        {
+            // TODO
+        }
         else
         {
             parser.SynErr("unrecognized pragma option");
