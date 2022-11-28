@@ -69,7 +69,7 @@ sealed class ScaffoldingService : IScaffoldingService
     public string CreateItem(string category, string name)
     {
         string? templateName;
-        string outputFileName;
+        string outputFilePath;
 
         if (category == "frame")
         {
@@ -85,12 +85,12 @@ sealed class ScaffoldingService : IScaffoldingService
             if (templateName == null)
                 throw new Exception($"Unknown scaffolding item name \"{name}\" specified.");
 
-            outputFileName = templateName;
+            outputFilePath = templateName;
         }
         else if (category == "grammar")
         {
             templateName = "Grammar.atg";
-            outputFileName = name;
+            outputFilePath = name;
         }
         else
         {
@@ -99,15 +99,21 @@ sealed class ScaffoldingService : IScaffoldingService
 
         using var template = OpenTemplate(templateName);
 
+        string outputFileNameWithoutExtension = Path.GetFileNameWithoutExtension(outputFilePath);
         var variables = new Dictionary<string, object?>(StringComparer.Ordinal)
         {
             ["command"] = m_ProductInformationService.Command,
             ["compatibility"] = $"{m_ProductInformationService.Name} {m_ProductInformationService.FormalVersion}",
-            ["output_file_name"] = Path.GetFileName(outputFileName)
+            ["output_file_name"] = Path.GetFileName(outputFilePath),
+            ["coco_lang"] = outputFileNameWithoutExtension.Replace(' ', '_').Replace('.', '_'),
+            ["lang"] = "C#",
+            ["lang_version"] = "7.0",
+            ["lang_namespace"] = m_OptionsService.Namespace,
+            ["has_lang_namespace"] = m_OptionsService.Namespace != null
         };
 
-        ExtractTemplate(template, outputFileName, variables);
+        ExtractTemplate(template, outputFilePath, variables);
 
-        return outputFileName;
+        return outputFilePath;
     }
 }

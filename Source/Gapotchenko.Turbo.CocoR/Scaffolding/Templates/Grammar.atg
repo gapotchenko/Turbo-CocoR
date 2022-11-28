@@ -1,9 +1,15 @@
 ﻿// Compile with: %command% %output_file_name%
 
-// $namespace=Your.Namespace
+$lang=%lang%
+$lang_version=%lang_version%
 $compatibility=%compatibility%
 
-COMPILER YourLanguage
+%if(has_lang_namespace)%$namespace=%lang_namespace%
+
+%else%// $namespace=Your.Namespace
+%endif%
+
+COMPILER %coco_lang%
 
 CHARACTERS
 	digit = "0123456789" .
@@ -15,6 +21,6 @@ TOKENS
 PRODUCTIONS
 	Number = integer | float .
 	SignedNumber = [ "+" | "-" ] Number .
-    YourLanguage = SignedNumber { "," SignedNumber } .
+    %coco_lang% = SignedNumber { "," SignedNumber } .
 
-END YourLanguage.
+END %coco_lang%.
