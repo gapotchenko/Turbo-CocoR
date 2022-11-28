@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <PackageLicenseExpression>GPL-2.0-only</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/gapotchenko/TurboCocoR</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/gapotchenko/Turbo-CocoR</PackageProjectUrl>
     <PackageIcon>docs\assets\package-icon.png</PackageIcon>
 
     <IsPackable>false</IsPackable>
