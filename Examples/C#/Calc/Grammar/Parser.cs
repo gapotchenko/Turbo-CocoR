@@ -27,7 +27,7 @@ namespace Calc.Grammar
 		public Token la;   // lookahead token
 		int errDist = minErrDist;
 
-	public int Result;
+	public int Result { get; private set; }
 
 
 

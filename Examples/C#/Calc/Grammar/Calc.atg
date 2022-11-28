@@ -5,7 +5,7 @@ $compatibility=Turbo Coco/R 2022.1
 
 COMPILER Calc
 
-public int Result;
+public int Result { get; private set; }
 
 CHARACTERS
 	digit = "0123456789" .
