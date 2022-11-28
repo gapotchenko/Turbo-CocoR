@@ -1,9 +1,9 @@
 ﻿// Compile with: %command% %output_file_name%
 
+$lang=%lang%
 %if(has_lang_namespace)%$namespace=%lang_namespace%
 %else%// $namespace=Your.Namespace
 %endif%
-$lang=%lang%
 $compatibility=%compatibility%
 
 COMPILER %coco_lang%

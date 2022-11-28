@@ -1404,7 +1404,7 @@ class Tab
     {
         string[] option = s.ToString().Split(new char[] { '=' }, 2);
         string name = option[0];
-        string value = option[1];
+        string value = option[1].Trim();
 
         if ("$namespace".Equals(name, StringComparison.Ordinal))
         {
@@ -1418,6 +1418,18 @@ class Tab
         else if ("$compatibility".Equals(name, StringComparison.Ordinal))
         {
             // TODO
+
+            // This is just a future implementation stub.
+            if (!value.Equals("Turbo Coco/R 2022.1", StringComparison.OrdinalIgnoreCase))
+                parser.SynErr("unsupported compatibility version");
+        }
+        else if ("$lang".Equals(name, StringComparison.Ordinal))
+        {
+            // TODO
+
+            // This is just a future implementation stub.
+            if (!value.Equals("C#", StringComparison.OrdinalIgnoreCase))
+                parser.SynErr("unsupported language");
         }
         else
         {

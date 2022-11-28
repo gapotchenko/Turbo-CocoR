@@ -36,6 +36,7 @@ CHARACTERS
 	charCh    = ANY - '\'' - '\\' - cr - lf.
 	printable = '\u0020' .. '\u007e'.
 	hex       = "0123456789abcdef".
+    optionCh  = ANY - cr - lf.
 
 TOKENS
 	ident     = letter { letter | digit }.
@@ -48,8 +49,7 @@ PRAGMAS
 	ddtSym    = '$' { digit | letter }.  (. tab.SetTrace(la.val); .)
 
 	optionSym = '$' letter { letter } '='
-	            { digit | letter
-	            | '-' | '.' | ':'
+	            { optionCh 
 	            }.                       (. tab.SetOption(la.val); .)
 
 

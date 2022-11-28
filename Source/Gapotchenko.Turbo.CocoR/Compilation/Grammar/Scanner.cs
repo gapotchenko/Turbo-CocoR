@@ -2,6 +2,7 @@
 // Changes to this file will be lost if the code is regenerated.
 
 
+#pragma warning disable IDE0005 // Using directive is unnecessary.
 #pragma warning disable IDE0161 // Convert to file-scoped namespace
 
 namespace Gapotchenko.Turbo.CocoR.Compilation.Grammar
@@ -176,7 +177,7 @@ namespace Gapotchenko.Turbo.CocoR.Compilation.Grammar
 		// Read the next chunk of bytes from the stream, increases the buffer
 		// if needed and updates the fields fileLen and bufLen.
 		// Returns the number of bytes read.
-		private int ReadNextStreamChunk()
+		int ReadNextStreamChunk()
 		{
 			int free = buf.Length - bufLen;
 			if (free == 0)
@@ -522,7 +523,7 @@ namespace Gapotchenko.Turbo.CocoR.Compilation.Grammar
 					else {t.kind = 42; break;}
 				case 11:
 					recEnd = pos; recKind = 43;
-					if (ch >= '-' && ch <= '.' || ch >= '0' && ch <= ':' || ch >= 'A' && ch <= 'Z' || ch == '_' || ch >= 'a' && ch <= 'z') {AddCh(); goto case 11;}
+					if (ch <= 9 || ch >= 11 && ch <= 12 || ch >= 14 && ch <= 65535) {AddCh(); goto case 11;}
 					else {t.kind = 43; break;}
 				case 12:
 					if (ch <= 9 || ch >= 11 && ch <= 12 || ch >= 14 && ch <= '!' || ch >= '#' && ch <= '[' || ch >= ']' && ch <= 65535) {AddCh(); goto case 12;}
