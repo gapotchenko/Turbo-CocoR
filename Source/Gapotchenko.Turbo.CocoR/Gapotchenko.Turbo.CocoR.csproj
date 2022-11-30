@@ -3,6 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <Nullable>annotations</Nullable>
+    <RollForward>LatestMajor</RollForward>
   </PropertyGroup>
 
   <!-- #region NuGet -->
