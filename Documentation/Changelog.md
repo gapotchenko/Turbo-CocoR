@@ -2,6 +2,12 @@
 
 ## 2022
 
+### Turbo Coco/R 2022.2
+
+Release date: not released yet
+
+- Fixed trace file deletion issue that occurred on an error
+
 ### Turbo Coco/R 2022.1
 
 Release date: November 24, 2022
