@@ -226,30 +226,43 @@ sealed class CharSet
     {
         get
         {
-            for (Range p = head; p != null; p = p.next)
-                if (i < p.from) return false;
-                else if (i <= p.to) return true; // p.from <= i <= p.to
+            for (var p = head; p != null; p = p.next)
+            {
+                if (i < p.from)
+                    return false;
+                else if (i <= p.to)
+                    return true; // p.from <= i <= p.to
+            }
             return false;
         }
     }
 
     public void Add(int i)
     {
-        Range cur = head, prev = null;
+        Range? cur = head, prev = null;
         while (cur != null && i >= cur.from - 1)
         {
             if (i <= cur.to + 1)
-            { // (cur.from-1) <= i <= (cur.to+1)
-                if (i == cur.from - 1) cur.from--;
+            {
+                // (cur.from-1) <= i <= (cur.to+1)
+                if (i == cur.from - 1)
+                {
+                    cur.from--;
+                }
                 else if (i == cur.to + 1)
                 {
                     cur.to++;
-                    Range next = cur.next;
-                    if (next != null && cur.to == next.from - 1) { cur.to = next.to; cur.next = next.next; };
+                    var next = cur.next;
+                    if (next != null && cur.to == next.from - 1)
+                    {
+                        cur.to = next.to;
+                        cur.next = next.next;
+                    };
                 }
                 return;
             }
-            prev = cur; cur = cur.next;
+            prev = cur;
+            cur = cur.next;
         }
         var n = new Range(i, i)
         {
@@ -265,7 +278,7 @@ sealed class CharSet
     {
         var s = new CharSet();
         Range prev = null;
-        for (Range cur = head; cur != null; cur = cur.next)
+        for (var cur = head; cur != null; cur = cur.next)
         {
             var r = new Range(cur.from, cur.to);
             if (prev == null)
