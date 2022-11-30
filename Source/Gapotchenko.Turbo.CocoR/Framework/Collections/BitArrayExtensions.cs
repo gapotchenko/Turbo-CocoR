@@ -36,7 +36,7 @@ static class BitArrayExtensions
     public static bool Overlaps(this BitArray a, BitArray b)
     {
         // a * b != {}
-        int n = a.Count;
+        int n = Math.Min(a.Count, b.Count);
         for (int i = 0; i < n; i++)
         {
             if (a[i] && b[i])
