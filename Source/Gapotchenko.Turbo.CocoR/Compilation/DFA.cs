@@ -127,7 +127,7 @@ class DfaAction
         else
         {
             s = new CharSet();
-            s.Set(sym);
+            s.Add(sym);
         }
         return s;
     }
@@ -233,7 +233,7 @@ sealed class CharSet
         }
     }
 
-    public void Set(int i)
+    public void Add(int i)
     {
         Range cur = head, prev = null;
         while (cur != null && i >= cur.from - 1)
@@ -277,7 +277,7 @@ sealed class CharSet
         return s;
     }
 
-    public bool Equals(CharSet s)
+    public bool SetEquals(CharSet s)
     {
         var p = head;
         var q = s.head;
@@ -301,31 +301,35 @@ sealed class CharSet
 
     public int First()
     {
-        if (head != null) return head.from;
+        if (head != null)
+            return head.from;
         return -1;
     }
 
-    public void Or(CharSet s)
+    public void UnionWith(CharSet s)
     {
         for (var p = s.head; p != null; p = p.next)
-            for (int i = p.from; i <= p.to; i++) Set(i);
+            for (int i = p.from; i <= p.to; i++)
+                Add(i);
     }
 
-    public void And(CharSet s)
+    public void IntersectWith(CharSet s)
     {
         var x = new CharSet();
         for (var p = head; p != null; p = p.next)
             for (int i = p.from; i <= p.to; i++)
-                if (s[i]) x.Set(i);
+                if (s[i])
+                    x.Add(i);
         head = x.head;
     }
 
-    public void Subtract(CharSet s)
+    public void ExceptWith(CharSet s)
     {
         var x = new CharSet();
         for (var p = head; p != null; p = p.next)
             for (int i = p.from; i <= p.to; i++)
-                if (!s[i]) x.Set(i);
+                if (!s[i])
+                    x.Add(i);
         head = x.head;
     }
 
@@ -333,15 +337,17 @@ sealed class CharSet
     {
         for (var p = s.head; p != null; p = p.next)
             for (int i = p.from; i <= p.to; i++)
-                if (!this[i]) return false;
+                if (!this[i])
+                    return false;
         return true;
     }
 
-    public bool Intersects(CharSet s)
+    public bool Overlaps(CharSet s)
     {
         for (var p = s.head; p != null; p = p.next)
             for (int i = p.from; i <= p.to; i++)
-                if (this[i]) return true;
+                if (this[i])
+                    return true;
         return false;
     }
 
@@ -430,7 +436,7 @@ class DFA
                     if (a.target.state == b.target.state && a.tc == b.tc)
                     {
                         seta = a.Symbols(tab); setb = b.Symbols(tab);
-                        seta.Or(setb);
+                        seta.UnionWith(setb);
                         a.ShiftWith(seta, tab);
                         c = b; b = b.next; state.DetachAction(c);
                     }
@@ -658,28 +664,28 @@ class DFA
     {
         DfaAction c; CharSet seta, setb, setc;
         seta = a.Symbols(tab); setb = b.Symbols(tab);
-        if (seta.Equals(setb))
+        if (seta.SetEquals(setb))
         {
             a.AddTargets(b);
             state.DetachAction(b);
         }
         else if (seta.Includes(setb))
         {
-            setc = seta.Clone(); setc.Subtract(setb);
+            setc = seta.Clone(); setc.ExceptWith(setb);
             b.AddTargets(a);
             a.ShiftWith(setc, tab);
         }
         else if (setb.Includes(seta))
         {
-            setc = setb.Clone(); setc.Subtract(seta);
+            setc = setb.Clone(); setc.ExceptWith(seta);
             a.AddTargets(b);
             b.ShiftWith(setc, tab);
         }
         else
         {
-            setc = seta.Clone(); setc.And(setb);
-            seta.Subtract(setc);
-            setb.Subtract(setc);
+            setc = seta.Clone(); setc.IntersectWith(setb);
+            seta.ExceptWith(setc);
+            setb.ExceptWith(setc);
             a.ShiftWith(seta, tab);
             b.ShiftWith(setb, tab);
             c = new DfaAction(0, 0, Node.normalTrans);  // typ and sym are set in ShiftWith
@@ -700,7 +706,7 @@ class DFA
         {
             seta = tab.CharClassSet(a.sym);
             if (b.typ == Node.chr) return seta[b.sym];
-            else { setb = tab.CharClassSet(b.sym); return seta.Intersects(setb); }
+            else { setb = tab.CharClassSet(b.sym); return seta.Overlaps(setb); }
         }
     }
 

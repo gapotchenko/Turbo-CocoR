@@ -85,7 +85,7 @@ Coco                            (. Symbol sym; Graph g, g1, g2; string gramName;
     [ "NESTED"                  (. nested = true; .)
     ]                           (. dfa.NewComment(g1.l, g2.l, nested); .)
   }
-  { "IGNORE" Set<out s>         (. tab.ignored.Or(s); .)
+  { "IGNORE" Set<out s>         (. tab.ignored.UnionWith(s); .)
   }
 
   SYNC 
@@ -172,8 +172,8 @@ SetDecl                         (. CharSet s; .)
 Set<out CharSet s>              (. CharSet s2; .)
 =
   SimSet<out s>
-  { '+' SimSet<out s2>          (. s.Or(s2); .)
-  | '-' SimSet<out s2>          (. s.Subtract(s2); .)
+  { '+' SimSet<out s2>          (. s.UnionWith(s2); .)
+  | '-' SimSet<out s2>          (. s.ExceptWith(s2); .)
   }
 .
 
@@ -182,15 +182,15 @@ Set<out CharSet s>              (. CharSet s2; .)
 SimSet<out CharSet s>           (. int n1, n2; .)
 =                               (. s = new CharSet(); .)
 ( ident                         (. CharClass c = tab.FindCharClass(t.val);
-                                   if (c == null) SemErr("undefined name"); else s.Or(c.set);
+                                   if (c == null) SemErr("undefined name"); else s.UnionWith(c.set);
                                  .)
 | string                        (. string name = t.val;
                                    name = tab.Unescape(name.Substring(1, name.Length-2));
                                    foreach (char ch in name)
-                                     if (dfa.ignoreCase) s.Set(char.ToLower(ch));
-                                     else s.Set(ch); .)
-| Char<out n1>                  (. s.Set(n1); .)
-  [ ".." Char<out n2>           (. for (int i = n1; i <= n2; i++) s.Set(i); .)
+                                     if (dfa.ignoreCase) s.Add(char.ToLower(ch));
+                                     else s.Add(ch); .)
+| Char<out n1>                  (. s.Add(n1); .)
+  [ ".." Char<out n2>           (. for (int i = n1; i <= n2; i++) s.Add(i); .)
   ]
 | "ANY"                         (. s = new CharSet(); s.Fill(); .)
 )

@@ -213,7 +213,7 @@ namespace Gapotchenko.Turbo.CocoR.Compilation.Grammar
 			while (la.kind == 15) {
 				Get();
 				Set(out s);
-				tab.ignored.Or(s); 
+				tab.ignored.UnionWith(s); 
 			}
 			while (!(la.kind == 0 || la.kind == 16)) {SynErr(42); Get();}
 			Expect(16);
@@ -362,11 +362,11 @@ namespace Gapotchenko.Turbo.CocoR.Compilation.Grammar
 				if (la.kind == 20) {
 					Get();
 					SimSet(out s2);
-					s.Or(s2); 
+					s.UnionWith(s2); 
 				} else {
 					Get();
 					SimSet(out s2);
-					s.Subtract(s2); 
+					s.ExceptWith(s2); 
 				}
 			}
 		}
@@ -439,22 +439,22 @@ namespace Gapotchenko.Turbo.CocoR.Compilation.Grammar
 			if (la.kind == 1) {
 				Get();
 				CharClass c = tab.FindCharClass(t.val);
-				if (c == null) SemErr("undefined name"); else s.Or(c.set);
+				if (c == null) SemErr("undefined name"); else s.UnionWith(c.set);
 				
 			} else if (la.kind == 3) {
 				Get();
 				string name = t.val;
 				name = tab.Unescape(name.Substring(1, name.Length-2));
 				foreach (char ch in name)
-				 if (dfa.ignoreCase) s.Set(char.ToLower(ch));
-				 else s.Set(ch); 
+				 if (dfa.ignoreCase) s.Add(char.ToLower(ch));
+				 else s.Add(ch); 
 			} else if (la.kind == 5) {
 				Char(out n1);
-				s.Set(n1); 
+				s.Add(n1); 
 				if (la.kind == 22) {
 					Get();
 					Char(out n2);
-					for (int i = n1; i <= n2; i++) s.Set(i); 
+					for (int i = n1; i <= n2; i++) s.Add(i); 
 				}
 			} else if (la.kind == 23) {
 				Get();

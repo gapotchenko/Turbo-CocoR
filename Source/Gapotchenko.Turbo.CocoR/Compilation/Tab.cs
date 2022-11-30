@@ -527,7 +527,7 @@ class Tab
     public CharClass FindCharClass(CharSet s)
     {
         foreach (var c in classes)
-            if (s.Equals(c.set))
+            if (s.SetEquals(c.set))
                 return c;
 
         return null;
