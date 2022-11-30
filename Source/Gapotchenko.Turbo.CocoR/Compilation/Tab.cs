@@ -139,6 +139,9 @@ class Sets
     public static bool SetEquals(BitArray a, BitArray b)
     {
         int n = a.Count;
+        if (b.Count != n)
+            return false;
+
         for (int i = 0; i < n; i++)
         {
             if (a[i] != b[i])
