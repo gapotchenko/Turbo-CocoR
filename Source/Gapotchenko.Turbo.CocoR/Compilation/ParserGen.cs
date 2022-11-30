@@ -75,26 +75,26 @@ class ParserGen
         int ch, i;
         if (pos != null)
         {
-            buffer.Pos = pos.beg; ch = buffer.Read();
+            buffer.Pos = pos.Begin; ch = buffer.Read();
             if (tab.emitLines)
             {
                 gen.WriteLine();
-                gen.WriteLine("#line {0} \"{1}\"", pos.line, tab.srcName);
+                gen.WriteLine("#line {0} \"{1}\"", pos.Line, tab.srcName);
             }
             Indent(indent);
-            while (buffer.Pos <= pos.end)
+            while (buffer.Pos <= pos.End)
             {
                 while (ch == CR || ch == LF)
                 {  // eol is either CR or CRLF or LF
                     gen.WriteLine(); Indent(indent);
                     if (ch == CR) ch = buffer.Read(); // skip CR
                     if (ch == LF) ch = buffer.Read(); // skip LF
-                    for (i = 1; i <= pos.col && (ch == ' ' || ch == '\t'); i++)
+                    for (i = 1; i <= pos.Column && (ch == ' ' || ch == '\t'); i++)
                     {
                         // skip blanks at beginning of line
                         ch = buffer.Read();
                     }
-                    if (buffer.Pos > pos.end) goto done;
+                    if (buffer.Pos > pos.End) goto done;
                 }
                 gen.Write((char)ch);
                 ch = buffer.Read();
@@ -123,7 +123,7 @@ class ParserGen
     int NewCondSet(BitArray s)
     {
         for (int i = 1; i < symSet.Count; i++) // skip symSet[0] (reserved for union of SYNC sets)
-            if (Sets.Equals(s, (BitArray)symSet[i])) return i;
+            if (Sets.SetEquals(s, (BitArray)symSet[i])) return i;
         symSet.Add(s.Clone());
         return symSet.Count - 1;
     }
@@ -133,7 +133,7 @@ class ParserGen
         if (p.typ == Node.rslv) CopySourcePart(p.pos, 0);
         else
         {
-            int n = Sets.Elements(s);
+            int n = Sets.GetCountOfSetBits(s);
             if (n == 0) gen.Write("false"); // happens if an ANY set matches no symbol
             else if (n <= maxTerm)
                 foreach (Symbol sym in tab.terminals)
@@ -191,8 +191,8 @@ class ParserGen
                 case Node.any:
                     {
                         Indent(indent);
-                        int acc = Sets.Elements(p.set);
-                        if (tab.terminals.Count == acc + 1 || acc > 0 && Sets.Equals(p.set, isChecked))
+                        int acc = Sets.GetCountOfSetBits(p.set);
+                        if (tab.terminals.Count == acc + 1 || acc > 0 && Sets.SetEquals(p.set, isChecked))
                         {
                             // either this ANY accepts any terminal (the + 1 = end of file), or exactly what's allowed here
                             gen.WriteLine("Get();");
@@ -227,7 +227,7 @@ class ParserGen
                 case Node.alt:
                     {
                         s1 = tab.First(p);
-                        bool equal = Sets.Equals(s1, isChecked);
+                        bool equal = Sets.SetEquals(s1, isChecked);
                         bool useSwitch = UseSwitch(p);
                         if (useSwitch) { Indent(indent); gen.WriteLine("switch (la.kind) {"); }
                         p2 = p;

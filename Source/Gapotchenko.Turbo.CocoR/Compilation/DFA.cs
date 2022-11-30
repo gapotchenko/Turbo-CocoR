@@ -883,7 +883,7 @@ class DFA
     DfaMelted StateWithSet(BitArray s)
     {
         for (DfaMelted m = firstMelted; m != null; m = m.next)
-            if (Sets.Equals(s, m.set)) return m;
+            if (Sets.SetEquals(s, m.set)) return m;
         return null;
     }
 

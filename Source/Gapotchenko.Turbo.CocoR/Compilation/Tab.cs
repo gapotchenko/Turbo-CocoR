@@ -7,21 +7,6 @@ using Gapotchenko.Turbo.CocoR.Compilation.CodeGeneration;
 
 namespace Gapotchenko.Turbo.CocoR.Compilation;
 
-
-class Position
-{  // position of source code stretch (e.g. semantic action, resolver expressions)
-    public readonly int beg;      // start relative to the beginning of the file
-    public readonly int end;      // end of stretch
-    public readonly int col;      // column number of start position
-    public readonly int line;     // line number of start position
-
-    public Position(int beg, int end, int col, int line)
-    {
-        this.beg = beg; this.end = end; this.col = col; this.line = line;
-    }
-}
-
-
 //=====================================================================
 // Symbol
 //=====================================================================
@@ -137,36 +122,46 @@ class Graph
 
 class Sets
 {
-
-    public static int Elements(BitArray s)
+    public static int GetCountOfSetBits(BitArray s)
     {
-        int max = s.Count;
-        int n = 0;
-        for (int i = 0; i < max; i++)
-            if (s[i]) n++;
-        return n;
+        int count = 0;
+
+        int n = s.Count;
+        for (int i = 0; i < n; ++i)
+        {
+            if (s[i])
+                ++count;
+        }
+
+        return count;
     }
 
-    public static bool Equals(BitArray a, BitArray b)
+    public static bool SetEquals(BitArray a, BitArray b)
     {
-        int max = a.Count;
-        for (int i = 0; i < max; i++)
-            if (a[i] != b[i]) return false;
+        int n = a.Count;
+        for (int i = 0; i < n; i++)
+        {
+            if (a[i] != b[i])
+                return false;
+        }
+
         return true;
     }
 
-    public static bool Intersect(BitArray a, BitArray b)
-    { // a * b != {}
+    public static bool Overlaps(BitArray a, BitArray b)
+    {
+        // a * b != {}
         int max = a.Count;
         for (int i = 0; i < max; i++)
             if (a[i] && b[i]) return true;
         return false;
     }
 
-    public static void Subtract(BitArray a, BitArray b)
-    { // a = a - b
-        BitArray c = (BitArray)b.Clone();
-        a.And(c.Not());
+    public static void Except(BitArray a, BitArray b)
+    {
+        // a = a - b
+        var _b = (BitArray)b.Clone();
+        a.And(_b.Not());
     }
 
 }
@@ -494,7 +489,7 @@ class Tab
 
     string Pos(Position pos)
     {
-        if (pos == null) return "     "; else return string.Format("{0,5}", pos.beg);
+        if (pos == null) return "     "; else return string.Format("{0,5}", pos.Begin);
     }
 
     public string Name(string name)
@@ -777,7 +772,7 @@ class Tab
             {
                 FindAS(p.sub);
                 a = LeadingAny(p.sub);
-                if (a != null) Sets.Subtract(a.set, First(p.next));
+                if (a != null) Sets.Except(a.set, First(p.next));
             }
             else if (p.typ == Node.alt)
             {
@@ -788,7 +783,7 @@ class Tab
                     FindAS(q.sub);
                     a = LeadingAny(q.sub);
                     if (a != null)
-                        Sets.Subtract(a.set, First(q.down).Or(s1));
+                        Sets.Except(a.set, First(q.down).Or(s1));
                     else
                         s1.Or(First(q.sub));
                     q = q.down;
@@ -805,7 +800,7 @@ class Tab
                 if (a != null)
                 {
                     Node q = p.typ == Node.nt ? p.sym.graph : p.sub;
-                    Sets.Subtract(a.set, First(q));
+                    Sets.Except(a.set, First(q));
                 }
             }
 
@@ -1159,7 +1154,7 @@ class Tab
             }
             else if (p.typ == Node.any)
             {
-                if (Sets.Elements(p.set) == 0) LL1Error(3, null);
+                if (Sets.GetCountOfSetBits(p.set) == 0) LL1Error(3, null);
                 // e.g. {ANY} ANY or [ANY] ANY or ( ANY | ANY )
             }
             if (p.up) break;
@@ -1180,7 +1175,7 @@ class Tab
 
     void ResErr(Node p, string msg)
     {
-        errors.Warning(p.line, p.pos.col, msg);
+        errors.Warning(p.line, p.pos.Column, msg);
     }
 
     void CheckRes(Node p, bool rslvAllowed)
@@ -1199,10 +1194,10 @@ class Tab
                         if (q.sub.typ == Node.rslv)
                         {
                             BitArray fs = Expected(q.sub.next, curSy);
-                            if (Sets.Intersect(fs, soFar))
+                            if (Sets.Overlaps(fs, soFar))
                                 ResErr(q.sub, "Warning: Resolver will never be evaluated. " +
                                 "Place it at previous conflicting alternative.");
-                            if (!Sets.Intersect(fs, expected))
+                            if (!Sets.Overlaps(fs, expected))
                                 ResErr(q.sub, "Warning: Misplaced resolver: no LL(1) conflict.");
                         }
                         else soFar.Or(Expected(q.sub, curSy));
@@ -1215,7 +1210,7 @@ class Tab
                     {
                         BitArray fs = First(p.sub.next);
                         BitArray fsNext = Expected(p.next, curSy);
-                        if (!Sets.Intersect(fs, fsNext))
+                        if (!Sets.Overlaps(fs, fsNext))
                             ResErr(p.sub, "Warning: Misplaced resolver: no LL(1) conflict.");
                     }
                     CheckRes(p.sub, true);
