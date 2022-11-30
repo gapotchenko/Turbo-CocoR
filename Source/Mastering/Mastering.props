@@ -20,5 +20,6 @@
   <Import Project="AssemblySignature.props" />
   <Import Project="NuGet.props" />
   <Import Project="Polyfills.props" />
+  <Import Project="Publish.props" />
 
 </Project>

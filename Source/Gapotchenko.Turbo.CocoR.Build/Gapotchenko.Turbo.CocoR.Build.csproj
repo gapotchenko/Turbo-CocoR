@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <NoBuild>true</NoBuild>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <IsPackable>true</IsPackable>
+    <Description>Turbo Coco/R build integration provides the automatic compile-time generation of scanner and parser files for attributed grammars in a project.</Description>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <NuspecFile>Package.nuspec</NuspecFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Package\" />
+  </ItemGroup>
+
+  <Target Name="PrepareNuGetSpec" BeforeTargets="_GetPackageFiles">
+    
+    <PropertyGroup>
+      <NuspecProperties>id=$(PackageId);version=$(PackageVersion);authors=$(Authors);requireLicenseAcceptance=$(PackageRequireLicenseAcceptance);licenseExpression=$(PackageLicenseExpression);projectUrl=$(PackageProjectUrl);description=$(Description);copyright=$(Copyright);tags=$(PackageTags)</NuspecProperties>
+      <!--<NuspecBasePath>Contents</NuspecBasePath>-->
+    </PropertyGroup>
+  </Target>
+
+</Project>

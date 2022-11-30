@@ -15,6 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mastering", "Mastering", "{
 		Mastering\Language.props = Mastering\Language.props
 		Mastering\NuGet.props = Mastering\NuGet.props
 		Mastering\Product.props = Mastering\Product.props
+		Mastering\Publish.props = Mastering\Publish.props
 		Mastering\Targeting.props = Mastering\Targeting.props
 		Mastering\Version.props = Mastering\Version.props
 	EndProjectSection
@@ -26,6 +27,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 		..\Documentation\Changelog.md = ..\Documentation\Changelog.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gapotchenko.Turbo.CocoR.Build", "Gapotchenko.Turbo.CocoR.Build\Gapotchenko.Turbo.CocoR.Build.csproj", "{6E9EF33B-ECCD-42D1-A690-E1F352C90898}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{E3FA69FD-73DF-4A9D-B02F-F76C5A66C2DA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +41,8 @@ Global
 		{61CC1A73-FB30-4D48-9A37-05ADD1A4A2E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{61CC1A73-FB30-4D48-9A37-05ADD1A4A2E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{61CC1A73-FB30-4D48-9A37-05ADD1A4A2E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E9EF33B-ECCD-42D1-A690-E1F352C90898}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E9EF33B-ECCD-42D1-A690-E1F352C90898}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -44,6 +51,8 @@ Global
 		{61CC1A73-FB30-4D48-9A37-05ADD1A4A2E3} = {AF715B93-5752-4B50-BB40-8909BD731B53}
 		{9FFFBD72-CEF8-401E-83E6-F653C3DC71FE} = {29497675-5E90-4B88-B6A4-40BEFFCE3283}
 		{8BA0B816-BF22-4763-87A3-EBF1E7D752A9} = {29497675-5E90-4B88-B6A4-40BEFFCE3283}
+		{6E9EF33B-ECCD-42D1-A690-E1F352C90898} = {E3FA69FD-73DF-4A9D-B02F-F76C5A66C2DA}
+		{E3FA69FD-73DF-4A9D-B02F-F76C5A66C2DA} = {AF715B93-5752-4B50-BB40-8909BD731B53}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3D35907F-C952-4174-A94D-D36D83652256}

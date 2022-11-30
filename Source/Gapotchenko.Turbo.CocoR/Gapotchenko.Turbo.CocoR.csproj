@@ -4,6 +4,7 @@
     <OutputType>Exe</OutputType>
     <Nullable>annotations</Nullable>
     <RollForward>LatestMajor</RollForward>
+    <IsPublishable>true</IsPublishable>
   </PropertyGroup>
 
   <!-- #region NuGet -->
