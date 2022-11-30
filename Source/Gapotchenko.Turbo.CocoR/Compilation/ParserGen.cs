@@ -2,6 +2,7 @@
 
 using System.Collections;
 using Gapotchenko.Turbo.CocoR.Compilation.Grammar;
+using Gapotchenko.Turbo.CocoR.Framework.Collections;
 
 namespace Gapotchenko.Turbo.CocoR.Compilation;
 
@@ -123,7 +124,8 @@ class ParserGen
     int NewCondSet(BitArray s)
     {
         for (int i = 1; i < symSet.Count; i++) // skip symSet[0] (reserved for union of SYNC sets)
-            if (Sets.SetEquals(s, (BitArray)symSet[i])) return i;
+            if (s.SetEquals((BitArray)symSet[i]))
+                return i;
         symSet.Add(s.Clone());
         return symSet.Count - 1;
     }
@@ -133,7 +135,7 @@ class ParserGen
         if (p.typ == Node.rslv) CopySourcePart(p.pos, 0);
         else
         {
-            int n = Sets.GetCountOfSetBits(s);
+            int n = s.GetCountOfSetBits();
             if (n == 0) gen.Write("false"); // happens if an ANY set matches no symbol
             else if (n <= maxTerm)
                 foreach (Symbol sym in tab.terminals)
@@ -191,8 +193,8 @@ class ParserGen
                 case Node.any:
                     {
                         Indent(indent);
-                        int acc = Sets.GetCountOfSetBits(p.set);
-                        if (tab.terminals.Count == acc + 1 || acc > 0 && Sets.SetEquals(p.set, isChecked))
+                        int acc = p.set.GetCountOfSetBits();
+                        if (tab.terminals.Count == acc + 1 || acc > 0 && p.set.SetEquals(isChecked))
                         {
                             // either this ANY accepts any terminal (the + 1 = end of file), or exactly what's allowed here
                             gen.WriteLine("Get();");
@@ -227,7 +229,7 @@ class ParserGen
                 case Node.alt:
                     {
                         s1 = tab.First(p);
-                        bool equal = Sets.SetEquals(s1, isChecked);
+                        bool equal = s1.SetEquals(isChecked);
                         bool useSwitch = UseSwitch(p);
                         if (useSwitch) { Indent(indent); gen.WriteLine("switch (la.kind) {"); }
                         p2 = p;

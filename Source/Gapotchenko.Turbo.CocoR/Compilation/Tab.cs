@@ -4,6 +4,7 @@ using System.Text;
 using System.Collections;
 using Gapotchenko.Turbo.CocoR.Compilation.Grammar;
 using Gapotchenko.Turbo.CocoR.Compilation.CodeGeneration;
+using Gapotchenko.Turbo.CocoR.Framework.Collections;
 
 namespace Gapotchenko.Turbo.CocoR.Compilation;
 
@@ -114,59 +115,6 @@ class Graph
     {
         l = p; r = p;
     }
-}
-
-//=====================================================================
-// Sets 
-//=====================================================================
-
-class Sets
-{
-    public static int GetCountOfSetBits(BitArray s)
-    {
-        int count = 0;
-
-        int n = s.Count;
-        for (int i = 0; i < n; ++i)
-        {
-            if (s[i])
-                ++count;
-        }
-
-        return count;
-    }
-
-    public static bool SetEquals(BitArray a, BitArray b)
-    {
-        int n = a.Count;
-        if (b.Count != n)
-            return false;
-
-        for (int i = 0; i < n; i++)
-        {
-            if (a[i] != b[i])
-                return false;
-        }
-
-        return true;
-    }
-
-    public static bool Overlaps(BitArray a, BitArray b)
-    {
-        // a * b != {}
-        int max = a.Count;
-        for (int i = 0; i < max; i++)
-            if (a[i] && b[i]) return true;
-        return false;
-    }
-
-    public static void Except(BitArray a, BitArray b)
-    {
-        // a = a - b
-        var _b = (BitArray)b.Clone();
-        a.And(_b.Not());
-    }
-
 }
 
 //=====================================================================
@@ -775,18 +723,19 @@ class Tab
             {
                 FindAS(p.sub);
                 a = LeadingAny(p.sub);
-                if (a != null) Sets.Except(a.set, First(p.next));
+                if (a != null)
+                    a.set.ExceptWith(First(p.next));
             }
             else if (p.typ == Node.alt)
             {
-                BitArray s1 = new BitArray(terminals.Count);
-                Node q = p;
+                var s1 = new BitArray(terminals.Count);
+                var q = p;
                 while (q != null)
                 {
                     FindAS(q.sub);
                     a = LeadingAny(q.sub);
                     if (a != null)
-                        Sets.Except(a.set, First(q.down).Or(s1));
+                        a.set.ExceptWith(First(q.down).Or(s1));
                     else
                         s1.Or(First(q.sub));
                     q = q.down;
@@ -803,7 +752,7 @@ class Tab
                 if (a != null)
                 {
                     Node q = p.typ == Node.nt ? p.sym.graph : p.sub;
-                    Sets.Except(a.set, First(q));
+                    a.set.ExceptWith(First(q));
                 }
             }
 
@@ -1157,7 +1106,7 @@ class Tab
             }
             else if (p.typ == Node.any)
             {
-                if (Sets.GetCountOfSetBits(p.set) == 0) LL1Error(3, null);
+                if (p.set.GetCountOfSetBits() == 0) LL1Error(3, null);
                 // e.g. {ANY} ANY or [ANY] ANY or ( ANY | ANY )
             }
             if (p.up) break;
@@ -1188,19 +1137,19 @@ class Tab
             switch (p.typ)
             {
                 case Node.alt:
-                    BitArray expected = new BitArray(terminals.Count);
-                    for (Node q = p; q != null; q = q.down)
+                    var expected = new BitArray(terminals.Count);
+                    for (var q = p; q != null; q = q.down)
                         expected.Or(Expected0(q.sub, curSy));
-                    BitArray soFar = new BitArray(terminals.Count);
-                    for (Node q = p; q != null; q = q.down)
+                    var soFar = new BitArray(terminals.Count);
+                    for (var q = p; q != null; q = q.down)
                     {
                         if (q.sub.typ == Node.rslv)
                         {
-                            BitArray fs = Expected(q.sub.next, curSy);
-                            if (Sets.Overlaps(fs, soFar))
+                            var fs = Expected(q.sub.next, curSy);
+                            if (fs.Overlaps(soFar))
                                 ResErr(q.sub, "Warning: Resolver will never be evaluated. " +
                                 "Place it at previous conflicting alternative.");
-                            if (!Sets.Overlaps(fs, expected))
+                            if (!fs.Overlaps(expected))
                                 ResErr(q.sub, "Warning: Misplaced resolver: no LL(1) conflict.");
                         }
                         else soFar.Or(Expected(q.sub, curSy));
@@ -1211,9 +1160,9 @@ class Tab
                 case Node.opt:
                     if (p.sub.typ == Node.rslv)
                     {
-                        BitArray fs = First(p.sub.next);
-                        BitArray fsNext = Expected(p.next, curSy);
-                        if (!Sets.Overlaps(fs, fsNext))
+                        var fs = First(p.sub.next);
+                        var fsNext = Expected(p.next, curSy);
+                        if (!fs.Overlaps(fsNext))
                             ResErr(p.sub, "Warning: Misplaced resolver: no LL(1) conflict.");
                     }
                     CheckRes(p.sub, true);

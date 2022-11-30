@@ -3,6 +3,7 @@
 using System.Text;
 using System.Collections;
 using Gapotchenko.Turbo.CocoR.Compilation.Grammar;
+using Gapotchenko.Turbo.CocoR.Framework.Collections;
 
 namespace Gapotchenko.Turbo.CocoR.Compilation;
 
@@ -883,7 +884,8 @@ class DFA
     DfaMelted StateWithSet(BitArray s)
     {
         for (DfaMelted m = firstMelted; m != null; m = m.next)
-            if (Sets.SetEquals(s, m.set)) return m;
+            if (s.SetEquals(m.set))
+                return m;
         return null;
     }
 
