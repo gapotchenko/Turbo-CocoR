@@ -23,20 +23,29 @@ sealed class Compiler
 
     public void Compile()
     {
-        bool keepTraceFile = false;
         int errorsCount = 0;
 
         string traceFilePath = Path.Combine(m_OptionsService.OutputDirectoryPath, "Trace.txt");
-        using (var traceFile = File.CreateText(traceFilePath))
+        bool keepTraceFile = false;
+        try
         {
-            errorsCount = CompileCore(traceFile);
-            keepTraceFile = traceFile.BaseStream.Length != 0;
+            using var traceFile = File.CreateText(traceFilePath);
+            try
+            {
+                errorsCount = CompileCore(traceFile);
+            }
+            finally
+            {
+                keepTraceFile = traceFile.BaseStream.Length != 0;
+            }
         }
-
-        if (keepTraceFile)
-            Console.WriteLine("Trace output has been written to \"{0}\" file.", traceFilePath);
-        else
-            File.Delete(traceFilePath);
+        finally
+        {
+            if (keepTraceFile)
+                Console.WriteLine("Trace output has been written to \"{0}\" file.", traceFilePath);
+            else
+                File.Delete(traceFilePath);
+        }
 
         Console.WriteLine("{0} errors detected.", errorsCount);
         if (errorsCount != 0)
