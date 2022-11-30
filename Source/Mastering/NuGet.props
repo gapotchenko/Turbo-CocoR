@@ -6,7 +6,7 @@
     <PackageLicenseExpression>GPL-2.0-only</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/gapotchenko/Turbo-CocoR</PackageProjectUrl>
     <PackageIcon>docs\assets\package-icon.png</PackageIcon>
-    <PackageTags>coco/r parsing</PackageTags>
+    <PackageTags>coco/r grammar parsing</PackageTags>
 
     <PackageOutputPath>bin\$(Configuration)\nuget</PackageOutputPath>
   </PropertyGroup>
