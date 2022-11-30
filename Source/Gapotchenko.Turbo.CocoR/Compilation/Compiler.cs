@@ -23,7 +23,7 @@ sealed class Compiler
 
     public void Compile()
     {
-        int errorsCount = 0;
+        int errorsCount;
 
         string traceFilePath = Path.Combine(m_OptionsService.OutputDirectoryPath, "Trace.txt");
         bool keepTraceFile = false;
