@@ -5,9 +5,10 @@ using System.IO;
 
 
 
-#nullable disable
-
+#pragma warning disable IDE0005 // Using directive is unnecessary.
 #pragma warning disable IDE0161 // Convert to file-scoped namespace
+
+#nullable disable
 
 namespace Gapotchenko.Turbo.CocoR.Compilation.Grammar
 {
