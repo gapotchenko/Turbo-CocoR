@@ -1,7 +1,11 @@
 -->begin
+#pragma warning disable IDE0005 // Using directive is unnecessary.
+
 using System;
 using System.IO;
 using System.Collections.Generic;
+
+#pragma warning disable IDE0161 // Convert to file-scoped namespace
 
 -->namespace
 

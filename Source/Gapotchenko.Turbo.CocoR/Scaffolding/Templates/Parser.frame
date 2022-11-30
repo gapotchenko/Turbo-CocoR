@@ -1,5 +1,9 @@
 -->begin
+#pragma warning disable IDE0005 // Using directive is unnecessary.
+
 using System;
+
+#pragma warning disable IDE0161 // Convert to file-scoped namespace
 
 -->namespace
 
