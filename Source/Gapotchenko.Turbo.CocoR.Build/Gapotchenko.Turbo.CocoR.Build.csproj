@@ -12,6 +12,10 @@
     <NuspecFile>Package.nuspec</NuspecFile>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Package\" />
+  </ItemGroup>
+
   <Target Name="PrepareNuGetSpec" BeforeTargets="_GetPackageFiles">
 
     <PropertyGroup>
