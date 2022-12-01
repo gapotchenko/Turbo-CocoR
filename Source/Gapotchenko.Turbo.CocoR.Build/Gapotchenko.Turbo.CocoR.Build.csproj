@@ -34,6 +34,7 @@
     <Copy SourceFiles="@(_CopyItems)" DestinationFolder="$(_PackageContentDirectory)\%(RecursiveDir)" />
 
     <Copy SourceFiles="$(MasteringDir)Assets\NuGet\Package Icon.png" DestinationFiles="$(_PackageContentDirectory)\docs\assets\package-icon.png" />
+    <Copy SourceFiles="README.md" DestinationFolder="$(_PackageContentDirectory)\docs" />
 
     <PropertyGroup>
       <NuspecProperties>id=$(PackageId);version=$(PackageVersion);authors=$(Authors);requireLicenseAcceptance=$(PackageRequireLicenseAcceptance);licenseExpression=$(PackageLicenseExpression);projectUrl=$(PackageProjectUrl);description=$(Description);copyright=$(Copyright);tags=$(PackageTags)</NuspecProperties>
