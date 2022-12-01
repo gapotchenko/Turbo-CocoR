@@ -2,10 +2,10 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
 
   <metadata>
-    <!-- Properties passed from the project -->
     <id>$id$</id>
     <version>$version$</version>
     <authors>$authors$</authors>
+    <developmentDependency>true</developmentDependency>
     <requireLicenseAcceptance>$requireLicenseAcceptance$</requireLicenseAcceptance>
     <license type="expression">$licenseExpression$</license>
     <projectUrl>$projectUrl$</projectUrl>
@@ -14,7 +14,6 @@
     <tags>$tags$</tags>
 
     <!--<icon>docs\assets\package-icon.png</icon>-->
-    <developmentDependency>true</developmentDependency>
   </metadata>
 
 </package>

@@ -12,16 +12,32 @@
     <NuspecFile>Package.nuspec</NuspecFile>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Package\" />
-  </ItemGroup>
-
   <Target Name="PrepareNuGetSpec" BeforeTargets="_GetPackageFiles">
-    
+
+    <PropertyGroup>
+      <_PackageContentDirectory>$(IntermediateOutputPath)nuget\</_PackageContentDirectory>
+    </PropertyGroup>
+
+    <RemoveDir Directories="$(_PackageContentDirectory)" />
+
+    <ItemGroup>
+      <_ProjectToPublish Include="$(MSBuildThisFileDirectory)..\Gapotchenko.Turbo.CocoR\Gapotchenko.Turbo.CocoR.csproj">
+        <AdditionalProperties>TargetFramework=net7.0;UseAppHost=false;Configuration=$(Configuration);PublishDir=$(MSBuildThisFileDirectory)$(_PackageContentDirectory)tools\turbo-coco\</AdditionalProperties>
+      </_ProjectToPublish>
+    </ItemGroup>
+
+    <MSBuild Projects="@(_ProjectToPublish)" Targets="Publish" BuildInParallel="$(BuildInParallel)" />
+
+    <ItemGroup>
+      <_CopyItems Include="Package\**\*.*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(_CopyItems)" DestinationFolder="$(_PackageContentDirectory)\%(RecursiveDir)" />
+   
     <PropertyGroup>
       <NuspecProperties>id=$(PackageId);version=$(PackageVersion);authors=$(Authors);requireLicenseAcceptance=$(PackageRequireLicenseAcceptance);licenseExpression=$(PackageLicenseExpression);projectUrl=$(PackageProjectUrl);description=$(Description);copyright=$(Copyright);tags=$(PackageTags)</NuspecProperties>
-      <!--<NuspecBasePath>Contents</NuspecBasePath>-->
+      <NuspecBasePath>$(_PackageContentDirectory)</NuspecBasePath>
     </PropertyGroup>
+
   </Target>
 
 </Project>
