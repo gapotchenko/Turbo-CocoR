@@ -8,12 +8,11 @@
     <developmentDependency>true</developmentDependency>
     <requireLicenseAcceptance>$requireLicenseAcceptance$</requireLicenseAcceptance>
     <license type="expression">$licenseExpression$</license>
+    <icon>docs\assets\package-icon.png</icon>
     <projectUrl>$projectUrl$</projectUrl>
     <description>$description$</description>
     <copyright>$copyright$</copyright>
     <tags>$tags$</tags>
-
-    <!--<icon>docs\assets\package-icon.png</icon>-->
   </metadata>
 
 </package>

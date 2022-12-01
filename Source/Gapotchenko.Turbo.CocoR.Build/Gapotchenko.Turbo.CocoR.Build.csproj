@@ -12,10 +12,6 @@
     <NuspecFile>Package.nuspec</NuspecFile>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Package\" />
-  </ItemGroup>
-
   <Target Name="PrepareNuGetSpec" BeforeTargets="_GetPackageFiles">
 
     <PropertyGroup>
@@ -36,7 +32,9 @@
       <_CopyItems Include="Package\**\*.*" />
     </ItemGroup>
     <Copy SourceFiles="@(_CopyItems)" DestinationFolder="$(_PackageContentDirectory)\%(RecursiveDir)" />
-   
+
+    <Copy SourceFiles="$(MasteringDir)Assets\NuGet\Package Icon.png" DestinationFiles="$(_PackageContentDirectory)\docs\assets\package-icon.png" />
+
     <PropertyGroup>
       <NuspecProperties>id=$(PackageId);version=$(PackageVersion);authors=$(Authors);requireLicenseAcceptance=$(PackageRequireLicenseAcceptance);licenseExpression=$(PackageLicenseExpression);projectUrl=$(PackageProjectUrl);description=$(Description);copyright=$(Copyright);tags=$(PackageTags)</NuspecProperties>
       <NuspecBasePath>$(_PackageContentDirectory)</NuspecBasePath>
