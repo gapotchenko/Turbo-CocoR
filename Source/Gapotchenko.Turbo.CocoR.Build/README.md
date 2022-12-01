@@ -11,7 +11,7 @@ Tools like [dotnet-migrate-2019](https://github.com/hvanbakel/CsprojToVs2017) ma
 
 ## Getting Started
 
-1. Add [`Gapotchenko.Turbo.CocoR.Build`](https://www.nuget.org/packages/Gapotchenko.Turbo.CocoR.Build) NuGet package to you project
+1. Add [`Gapotchenko.Turbo.CocoR.Build`](https://www.nuget.org/packages/Gapotchenko.Turbo.CocoR.Build) NuGet package to your MSBuild project
 2. Every attributed grammar file with `.atg` extension will be automatically processed with `turbo-coco` tool during the project build using the following rules:
     - If the `.atg` file is empty then it will be automatically filled with a starter Turbo Coco/R grammar for your convenience
     - Frame files will be automatically created if they do not exist yet
