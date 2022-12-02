@@ -18,13 +18,14 @@ Project integration significantly improves the development round-trip times comp
 ## Requirements
 
 - Turbo Coco/R requires .NET 7.0+ to run
-- `Gapotchenko.Turbo.CocoR.Build` NuGet package can be used in a project targeting any framework without restrictions
-- The produced source files are not subject to any requirements and can work anywhere
 - The MSBuild project MUST be in a new [SDK-style format](https://learn.microsoft.com/en-us/dotnet/core/project-sdk/overview).
   While that project format is mainly associated with newer target frameworks such as .NET Core and .NET, it is also perfectly usable for .NET Framework.
   (**Tip:** The new MSBuild project format is a good thing, and if you are not converted yet then you should strongly consider it.
   Tools like [dotnet migrate-2019](https://github.com/hvanbakel/CsprojToVs2017) may help you with that)
 
-`Gapotchenko.Turbo.CocoR.Build` NuGet package does not rely on the installed `turbo-coco` command-line tool.
-Instead, the package comes with the tool bundled inside.
-This allows you to use the specific version of Turbo Coco/R just by selecting the corresponding version of `Gapotchenko.Turbo.CocoR.Build` NuGet package in your project.
+Please note that:
+- The produced source files are not subject to any requirements and can work anywhere
+- `Gapotchenko.Turbo.CocoR.Build` NuGet package can be used in a project targeting any framework without restrictions
+- `Gapotchenko.Turbo.CocoR.Build` NuGet package does not rely on the installed `turbo-coco` command-line tool.
+  Instead, the package comes with the tool bundled inside.
+  This allows you to use the specific version of Turbo Coco/R just by selecting the corresponding version of `Gapotchenko.Turbo.CocoR.Build` NuGet package in your project
