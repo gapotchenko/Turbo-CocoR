@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
     <NoBuild>true</NoBuild>
   </PropertyGroup>
 
@@ -12,33 +11,53 @@
     <NuspecFile>Package.nuspec</NuspecFile>
   </PropertyGroup>
 
-  <Target Name="PreparePackageContent" BeforeTargets="_GetPackageFiles">
+  <Target Name="BuildPackageContent" BeforeTargets="_GetPackageFiles">
 
     <PropertyGroup>
-      <_PackageContentDirectory>$(IntermediateOutputPath)nuget\</_PackageContentDirectory>
+      <_PackageContentDir>$(IntermediateOutputPath)nuget\</_PackageContentDir>
     </PropertyGroup>
 
-    <RemoveDir Directories="$(_PackageContentDirectory)" />
+    <RemoveDir Directories="$(_PackageContentDir)" />
 
     <ItemGroup>
-      <_ProjectsToPublish Include="$(MSBuildThisFileDirectory)..\..\..\Gapotchenko.Turbo.CocoR\Gapotchenko.Turbo.CocoR.csproj">
-        <AdditionalProperties>TargetFramework=net7.0;UseAppHost=false;Configuration=$(Configuration);PublishDir=$(MSBuildThisFileDirectory)$(_PackageContentDirectory)tools\turbo-coco\</AdditionalProperties>
+      <_ProjectsToPublish Include="..\..\..\Gapotchenko.Turbo.CocoR\Gapotchenko.Turbo.CocoR.csproj">
+        <AdditionalProperties>TargetFramework=net7.0;UseAppHost=false;Configuration=$(Configuration);PublishDir=$(MSBuildThisFileDirectory)$(_PackageContentDir)tools\</AdditionalProperties>
       </_ProjectsToPublish>
     </ItemGroup>
 
     <MSBuild Projects="@(_ProjectsToPublish)" Targets="Publish" BuildInParallel="$(BuildInParallel)" />
 
     <ItemGroup>
+      <_ProjectsToBuild Include="..\MSBuild\Gapotchenko.Turbo.CocoR.Build.MSBuild\Gapotchenko.Turbo.CocoR.Build.MSBuild.csproj">
+        <AdditionalProperties>Configuration=$(Configuration)</AdditionalProperties>
+      </_ProjectsToBuild>
+    </ItemGroup>
+
+    <MSBuild Projects="@(_ProjectsToBuild)" Targets="Build" BuildInParallel="$(BuildInParallel)" />
+
+    <ItemGroup>
       <_CopyItems Include="Package\**\*.*" />
     </ItemGroup>
-    <Copy SourceFiles="@(_CopyItems)" DestinationFolder="$(_PackageContentDirectory)\%(RecursiveDir)" />
+    <Copy SourceFiles="@(_CopyItems)" DestinationFolder="$(_PackageContentDir)\%(RecursiveDir)" />
 
-    <Copy SourceFiles="$(MasteringDir)Assets\NuGet\Package Icon.png" DestinationFiles="$(_PackageContentDirectory)\docs\assets\package-icon.png" />
-    <Copy SourceFiles="..\README.md" DestinationFolder="$(_PackageContentDirectory)\docs" />
+    <Copy SourceFiles="$(MasteringDir)Assets\NuGet\Package Icon.png" DestinationFiles="$(_PackageContentDir)\docs\assets\package-icon.png" />
+    <Copy SourceFiles="..\README.md" DestinationFolder="$(_PackageContentDir)\docs" />
 
     <PropertyGroup>
-      <NuspecProperties>id=$(PackageId);version=$(PackageVersion);authors=$(Authors);requireLicenseAcceptance=$(PackageRequireLicenseAcceptance);licenseExpression=$(PackageLicenseExpression);projectUrl=$(PackageProjectUrl);description=$(Description);copyright=$(Copyright);tags=$(PackageTags);repositoryType=$(RepositoryType);repositoryUrl=$(RepositoryUrl)</NuspecProperties>
-      <NuspecBasePath>$(_PackageContentDirectory)</NuspecBasePath>
+      <NuspecProperties>
+        id=$(PackageId);
+        version=$(PackageVersion);
+        authors=$(Authors);
+        requireLicenseAcceptance=$(PackageRequireLicenseAcceptance);
+        licenseExpression=$(PackageLicenseExpression);
+        projectUrl=$(PackageProjectUrl);
+        description=$(Description);
+        copyright=$(Copyright);
+        tags=$(PackageTags);
+        repositoryType=$(RepositoryType);
+        repositoryUrl=$(RepositoryUrl)
+      </NuspecProperties>
+      <NuspecBasePath>$(_PackageContentDir)</NuspecBasePath>
     </PropertyGroup>
 
   </Target>

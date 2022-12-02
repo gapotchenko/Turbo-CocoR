@@ -1,2 +1,5 @@
 <Project>
+
+  <Import Project="Workarounds.targets" />
+
 </Project>

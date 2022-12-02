@@ -13,7 +13,7 @@
     <Using Include="System.ComponentModel" />
     <Using Include="System.Diagnostics" />
     <Using Include="System.Diagnostics.CodeAnalysis" />
-    <Using Include="System.FormattableString" Static="true" />
+    <Using Include="System.FormattableString" Static="true" Condition=" '$(TargetFrameworkIdentifier)' != '.NETFramework' " />
   </ItemGroup>
   
 </Project>
