@@ -23,7 +23,7 @@ A multi-symbol lookahead or semantic checks can resolve LL(1) conflicts. Thus th
 1. Install Turbo Coco/R tool using .NET package manager:
 
    ``` sh
-   > dotnet tool install Gapotchenko.Turbo.CocoR --global
+   > dotnet tool install --global Gapotchenko.Turbo.CocoR
    ```
 
 2. Create your first attributed grammar file:
@@ -56,7 +56,10 @@ In addition to the traditional command-line approach, Turbo Coco/R offers the au
 
 ## Requirements
 
-- Turbo Coco/R tool requires .NET SDK 7.0+
+- Turbo Coco/R tool requires .NET 7.0+ to run
+
+Please note that:
+
 - The produced source files are not subject to any requirements and can work anywhere
 
 ## Licensing
