@@ -18,7 +18,7 @@ Project integration significantly improves the development round-trip times comp
 
 - Turbo Coco/R requires .NET 7.0+ to run
 - The MSBuild project MUST be in a new [SDK-style format](https://learn.microsoft.com/en-us/dotnet/core/project-sdk/overview).
-  While that project format is mainly associated with newer target frameworks such as .NET Core and .NET, it is also perfectly usable for .NET Framework.
+  While that project format is mainly associated with newer target frameworks such as .NET Core and .NET, it is also perfectly usable for .NET Framework
   
   (**Tip:** The new MSBuild project format is a good thing, and if you are not converted yet then you should strongly consider it.
   Tools like [dotnet migrate-2019](https://github.com/hvanbakel/CsprojToVs2017) may help you with that)
