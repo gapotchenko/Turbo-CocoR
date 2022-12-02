@@ -25,7 +25,7 @@ Project integration significantly improves the development round-trip times comp
 
 Please note that:
 - The produced source files are not subject to any requirements and can work anywhere
-- `Gapotchenko.Turbo.CocoR.Build` NuGet package can be used in a project targeting any framework without restrictions
+- `Gapotchenko.Turbo.CocoR.Build` NuGet package can be used in a project targeting not only .NET 7.0+ but any framework without restrictions
 - `Gapotchenko.Turbo.CocoR.Build` NuGet package does not rely on the installed `turbo-coco` command-line tool.
   Instead, the package comes with the tool bundled inside.
   This allows you to use the specific version of Turbo Coco/R just by selecting the corresponding version of `Gapotchenko.Turbo.CocoR.Build` NuGet package in your project
