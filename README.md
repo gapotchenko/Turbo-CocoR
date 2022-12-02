@@ -23,7 +23,7 @@ A multi-symbol lookahead or semantic checks can resolve LL(1) conflicts. Thus th
 1. Install Turbo Coco/R tool using .NET package manager:
 
    ``` sh
-   > dotnet tool install Gapotchenko.Turbo.CocoR --global
+   > dotnet tool install --global Gapotchenko.Turbo.CocoR
    ```
 
 2. Create your first attributed grammar file:
