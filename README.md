@@ -50,6 +50,10 @@ Once generated, the files are ready to be compiled as a part of your project.
 
 For further guidance, see the [examples](https://github.com/gapotchenko/Turbo-CocoR/tree/main/Examples).
 
+## Build Integration
+
+In addition to the traditional command-line approach, Turbo Coco/R provides the automatic [build integration](https://github.com/gapotchenko/Turbo-CocoR/tree/main/Source/Integration/Build) to streamline the development experience.
+
 ## Requirements
 
 - Turbo Coco/R tool requires .NET SDK 7.0+
