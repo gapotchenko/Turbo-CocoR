@@ -1,4 +1,4 @@
-﻿# Build Integration
+﻿# Turbo Coco/R Build Integration
 
 `Gapotchenko.Turbo.CocoR.Build` NuGet package allows you to integrate [Turbo Coco/R](https://github.com/gapotchenko/Turbo-CocoR) at the project level.
 The integration currently supports MSBuild projects that are used by languages like C#, VB.NET and F#.
