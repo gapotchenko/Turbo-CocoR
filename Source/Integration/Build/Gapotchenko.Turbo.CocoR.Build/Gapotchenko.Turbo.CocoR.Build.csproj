@@ -37,7 +37,7 @@
     <Copy SourceFiles="..\README.md" DestinationFolder="$(_PackageContentDirectory)\docs" />
 
     <PropertyGroup>
-      <NuspecProperties>id=$(PackageId);version=$(PackageVersion);authors=$(Authors);requireLicenseAcceptance=$(PackageRequireLicenseAcceptance);licenseExpression=$(PackageLicenseExpression);projectUrl=$(PackageProjectUrl);description=$(Description);copyright=$(Copyright);tags=$(PackageTags)</NuspecProperties>
+      <NuspecProperties>id=$(PackageId);version=$(PackageVersion);authors=$(Authors);requireLicenseAcceptance=$(PackageRequireLicenseAcceptance);licenseExpression=$(PackageLicenseExpression);projectUrl=$(PackageProjectUrl);description=$(Description);copyright=$(Copyright);tags=$(PackageTags);repositoryType=$(RepositoryType);repositoryUrl=$(RepositoryUrl)</NuspecProperties>
       <NuspecBasePath>$(_PackageContentDirectory)</NuspecBasePath>
     </PropertyGroup>
 

@@ -4,9 +4,11 @@
     <IsPackable>false</IsPackable>
 
     <PackageLicenseExpression>GPL-2.0-only</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/gapotchenko/Turbo-CocoR</PackageProjectUrl>
     <PackageIcon>docs\assets\package-icon.png</PackageIcon>
+    <PackageProjectUrl>https://github.com/gapotchenko/Turbo-CocoR</PackageProjectUrl>
     <PackageTags>coco/r grammar parsing</PackageTags>
+    <RepositoryUrl>https://github.com/gapotchenko/Turbo-CocoR.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
 
     <PackageOutputPath>bin\$(Configuration)\nuget</PackageOutputPath>
   </PropertyGroup>

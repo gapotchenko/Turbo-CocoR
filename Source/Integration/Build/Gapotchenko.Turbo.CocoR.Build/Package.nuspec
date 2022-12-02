@@ -14,6 +14,7 @@
     <description>$description$</description>
     <copyright>$copyright$</copyright>
     <tags>$tags$</tags>
+    <repository type="$repositoryType$" url="$repositoryUrl$" />
   </metadata>
 
 </package>
