@@ -12,7 +12,7 @@
     <NuspecFile>Package.nuspec</NuspecFile>
   </PropertyGroup>
 
-  <Target Name="PrepareNuGetSpec" BeforeTargets="_GetPackageFiles">
+  <Target Name="PreparePackageContent" BeforeTargets="_GetPackageFiles">
 
     <PropertyGroup>
       <_PackageContentDirectory>$(IntermediateOutputPath)nuget\</_PackageContentDirectory>
@@ -21,7 +21,7 @@
     <RemoveDir Directories="$(_PackageContentDirectory)" />
 
     <ItemGroup>
-      <_ProjectsToPublish Include="$(MSBuildThisFileDirectory)..\Gapotchenko.Turbo.CocoR\Gapotchenko.Turbo.CocoR.csproj">
+      <_ProjectsToPublish Include="$(MSBuildThisFileDirectory)..\..\..\Gapotchenko.Turbo.CocoR\Gapotchenko.Turbo.CocoR.csproj">
         <AdditionalProperties>TargetFramework=net7.0;UseAppHost=false;Configuration=$(Configuration);PublishDir=$(MSBuildThisFileDirectory)$(_PackageContentDirectory)tools\turbo-coco\</AdditionalProperties>
       </_ProjectsToPublish>
     </ItemGroup>
@@ -34,7 +34,7 @@
     <Copy SourceFiles="@(_CopyItems)" DestinationFolder="$(_PackageContentDirectory)\%(RecursiveDir)" />
 
     <Copy SourceFiles="$(MasteringDir)Assets\NuGet\Package Icon.png" DestinationFiles="$(_PackageContentDirectory)\docs\assets\package-icon.png" />
-    <Copy SourceFiles="README.md" DestinationFolder="$(_PackageContentDirectory)\docs" />
+    <Copy SourceFiles="..\README.md" DestinationFolder="$(_PackageContentDirectory)\docs" />
 
     <PropertyGroup>
       <NuspecProperties>id=$(PackageId);version=$(PackageVersion);authors=$(Authors);requireLicenseAcceptance=$(PackageRequireLicenseAcceptance);licenseExpression=$(PackageLicenseExpression);projectUrl=$(PackageProjectUrl);description=$(Description);copyright=$(Copyright);tags=$(PackageTags)</NuspecProperties>
