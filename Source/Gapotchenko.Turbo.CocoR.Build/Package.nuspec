@@ -9,6 +9,7 @@
     <requireLicenseAcceptance>$requireLicenseAcceptance$</requireLicenseAcceptance>
     <license type="expression">$licenseExpression$</license>
     <icon>docs\assets\package-icon.png</icon>
+    <readme>docs\README.md</readme>
     <projectUrl>$projectUrl$</projectUrl>
     <description>$description$</description>
     <copyright>$copyright$</copyright>
