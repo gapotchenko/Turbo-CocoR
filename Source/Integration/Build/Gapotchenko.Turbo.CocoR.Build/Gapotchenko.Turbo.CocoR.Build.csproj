@@ -36,6 +36,20 @@
     <MSBuild Projects="@(_ProjectsToBuild)" Targets="Build" BuildInParallel="$(BuildInParallel)" />
 
     <ItemGroup>
+      <_CopyItems Remove="@(_CopyItems)" />
+      <_CopyItems Include="..\MSBuild\Gapotchenko.Turbo.CocoR.Build.MSBuild\bin\$(Configuration)\**\*.*" />
+      <_CopyItems Remove="..\MSBuild\Gapotchenko.Turbo.CocoR.Build.MSBuild\bin\$(Configuration)\**\*.deps.json" />
+    </ItemGroup>
+    <Copy SourceFiles="@(_CopyItems)" DestinationFolder="$(_PackageContentDir)\tools\Integration\MSBuild\%(RecursiveDir)" />
+
+    <ItemGroup>
+      <_CopyItems Remove="@(_CopyItems)" />
+      <_CopyItems Include="..\MSBuild\Scripts\**\*.*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(_CopyItems)" DestinationFolder="$(_PackageContentDir)\tools\Integration\MSBuild\%(RecursiveDir)" />
+
+    <ItemGroup>
+      <_CopyItems Remove="@(_CopyItems)" />
       <_CopyItems Include="Package\**\*.*" />
     </ItemGroup>
     <Copy SourceFiles="@(_CopyItems)" DestinationFolder="$(_PackageContentDir)\%(RecursiveDir)" />

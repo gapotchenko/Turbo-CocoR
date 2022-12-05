@@ -1,0 +1,12 @@
+#!/bin/sh
+
+set -eu
+
+SCRIPT_DIR=${0%/*}
+
+DOTNET=dotnet
+if [ -n "${DOTNET_ROOT-}" ]; then
+  DOTNET=$DOTNET_ROOT/$DOTNET
+fi
+
+"$DOTNET" "$SCRIPT_DIR/Gapotchenko.Turbo.CocoR.dll" $*
