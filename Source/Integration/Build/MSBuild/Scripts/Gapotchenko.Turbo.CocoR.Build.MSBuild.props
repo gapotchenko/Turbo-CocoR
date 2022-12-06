@@ -1,3 +1,21 @@
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project>
+
+  <PropertyGroup>
+    <TcrLangFileExt></TcrLangFileExt>
+  </PropertyGroup>
   
+  <ItemGroup>
+    <!-- Gather project grammar files. -->
+    <TcrAtgFile Include="**\*.atg" Exclude="$(DefaultItemExcludes)">
+      <Scanner>%(RelativeDir)Scanner.cs</Scanner>
+      <Parser>%(RelativeDir)Parser.cs</Parser>
+    </TcrAtgFile>
+    
+    <!-- Changes in grammar files should trigger the build. -->
+    <UpToDateCheckInput Include="@(TcrAtgFile)" Kind="ImplicitBuild" />
+    
+    <!-- Changes in grammar files lead to changes in generated code which should be recompiled. -->
+    <CustomAdditionalCompileInputs Include="@(TcrAtgFile)" />
+  </ItemGroup>
+
 </Project>
