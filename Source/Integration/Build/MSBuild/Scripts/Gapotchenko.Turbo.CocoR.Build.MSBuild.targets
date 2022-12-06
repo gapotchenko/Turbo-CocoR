@@ -1,3 +1,26 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
+  <ItemGroup>
+    <TcrAtgFile Include="**\*.atg" Exclude="$(DefaultItemExcludes)">
+      <Scanner>%(RelativeDir)Scanner.cs</Scanner>
+      <Parser>%(RelativeDir)Parser.cs</Parser>
+    </TcrAtgFile>
+  </ItemGroup>
+  
+  <Target
+    Name="GenerateTcrGrammar"
+    BeforeTargets="CoreCompile"
+    Inputs="%(TcrAtgFile.Identity)"
+    Outputs="%(TcrAtgFile.Scanner);%(TcrAtgFile.Parser);$(NonExistentFile)">
+    
+    <Message Importance="High" Text="+++ Justin Dearing +++ %(TcrAtgFile.Identity) %(TcrAtgFile.Scanner)" />
+
+    <Copy SourceFiles="%(TcrAtgFile.Identity)" DestinationFiles="%(TcrAtgFile.Scanner)" />
+    <Copy SourceFiles="%(TcrAtgFile.Identity)" DestinationFiles="%(TcrAtgFile.Parser)" />
+
+    <ItemGroup>
+      <Compile Include="%(TcrAtgFile.Scanner);%(TcrAtgFile.Parser)" />
+    </ItemGroup>
+  </Target>
+
 </Project>
