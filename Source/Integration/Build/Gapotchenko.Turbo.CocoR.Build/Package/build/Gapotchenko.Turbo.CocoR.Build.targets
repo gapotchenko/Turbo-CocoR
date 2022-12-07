@@ -1,5 +1,12 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-  <Import Project="..\tools\Integration\MSBuild\Gapotchenko.Turbo.CocoR.Build.MSBuild.targets"/>
+  <Import Project="..\tools\Integration\MSBuild\Gapotchenko.Turbo.CocoR.Build.MSBuild.targets" Condition=" '$(TcrMSBuildVersionIsOK)' == 'true' " />
+
+  <Target Name="TcrValidateMSBuild" BeforeTargets="CoreCompile">
+    <Error
+      Condition=" '$(TcrMSBuildVersionIsOK)' != 'true' "
+      Code="TCR1201"
+      Text="Turbo Coco/R requires MSBuild version $(TcrMSBuildMinVersion) or newer." />
+  </Target>
   
 </Project>

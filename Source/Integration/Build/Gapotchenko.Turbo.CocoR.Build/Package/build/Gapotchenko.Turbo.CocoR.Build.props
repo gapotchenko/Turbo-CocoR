@@ -1,5 +1,11 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-  <Import Project="..\tools\Integration\MSBuild\Gapotchenko.Turbo.CocoR.Build.MSBuild.props"/>
+  <PropertyGroup>
+    <TcrMSBuildMinVersion>16.5</TcrMSBuildMinVersion>
+    <TcrMSBuildVersionIsOK>false</TcrMSBuildVersionIsOK>
+    <TcrMSBuildVersionIsOK Condition=" '$(MSBuildVersion)' &gt;= '$(TcrMSBuildMinVersion)' " >true</TcrMSBuildVersionIsOK>
+  </PropertyGroup>
+  
+  <Import Project="..\tools\Integration\MSBuild\Gapotchenko.Turbo.CocoR.Build.MSBuild.props" Condition=" '$(TcrMSBuildVersionIsOK)' == 'true' " />
 
 </Project>
