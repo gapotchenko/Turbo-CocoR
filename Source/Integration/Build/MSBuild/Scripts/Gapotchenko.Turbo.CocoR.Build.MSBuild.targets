@@ -33,6 +33,8 @@
 
     <Message Importance="High" Text="+++ Justin Dearing +++ %(TcrAtgFile.Identity) %(TcrAtgFile.Scanner) %(TcrAtgFile.Frames)" />
 
+    <TcrCompileGrammar Grammar="%(TcrAtgFile.Identity)" />
+    
     <Copy SourceFiles="%(TcrAtgFile.Identity)" DestinationFiles="%(TcrAtgFile.Scanner)" />
     <Copy SourceFiles="%(TcrAtgFile.Identity)" DestinationFiles="%(TcrAtgFile.Parser)" />
 
