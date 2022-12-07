@@ -10,14 +10,14 @@ namespace Gapotchenko.Turbo.CocoR.Build.MSBuild.Tasks;
 /// </summary>
 public sealed class TcrCompileGrammar : ToolTask
 {
-    protected override string ToolName => "turbo-coco";
+    public TcrCompileGrammar()
+    {
+        UseCommandProcessor = true;
+    }
 
-    protected override string GenerateFullPathToTool() =>
-        Path.GetFullPath(
-            Path.Combine(
-                typeof(TcrCompileGrammar).Assembly.Location,
-                @"..\..\..\..",
-                ToolName));
+    protected override MessageImportance StandardErrorLoggingImportance => MessageImportance.High;
+
+    protected override MessageImportance StandardOutputLoggingImportance => MessageImportance.High;
 
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     string? m_Grammar;
@@ -29,39 +29,21 @@ public sealed class TcrCompileGrammar : ToolTask
         set => m_Grammar = value ?? throw new ArgumentNullException(nameof(value));
     }
 
-    public override bool Execute()
+    protected override string ToolName => "turbo-coco";
+
+    protected override string GenerateFullPathToTool()
     {
-        try
-        {
-            var grammarFilePath = Grammar;
-            var grammarFile = new FileInfo(grammarFilePath);
+        string s = Path.GetFullPath(
+            Path.Combine(
+                typeof(TcrCompileGrammar).Assembly.Location,
+                @"..\..\..\..",
+                ToolName));
 
-            if (!grammarFile.Exists)
-            {
-                Log.LogError(null, "TCR0002", null, null, 0, 0, 0, 0, "Grammar file \"{0}\" does not exist.", grammarFilePath);
-                return false;
-            }
+        s += ".cmd";
 
-            bool grammarIsEmpty = grammarFile.Length == 0;
-            if (!grammarIsEmpty)
-            {
-                // Use a text reader because the file can have a BOM but still be empty.
-                using var tr = grammarFile.OpenText();
-                grammarIsEmpty = tr.Read() == -1;
-            }
-
-            if (grammarIsEmpty)
-            {
-            }
-
-            Log.LogMessage(MessageImportance.High, "Hello from MSBuild task");
-
-            return true;
-        }
-        catch (Exception e)
-        {
-            Log.LogErrorFromException(e);
-            return false;
-        }
+        Log.LogWarning(s);
+        return s;
     }
+
+    protected override string GenerateCommandLineCommands() => $"\"{GenerateFullPathToTool()}\" --int-call project compile-grammar \"{Grammar}\"";
 }
