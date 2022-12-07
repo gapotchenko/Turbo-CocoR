@@ -1,19 +1,19 @@
 <Project>
 
   <PropertyGroup>
-    <TcrLangFileExt></TcrLangFileExt>
+    <TcrLangExtension Condition=" '$(MSBuildProjectExtension)' == '.csproj' " >.cs</TcrLangExtension>
   </PropertyGroup>
-  
-  <ItemGroup>
+
+  <ItemGroup Condition=" '$(TcrLangExtension)' != '' ">
     <!-- Gather project grammar files. -->
     <TcrAtgFile Include="**\*.atg" Exclude="$(DefaultItemExcludes)">
-      <Scanner>%(RelativeDir)Scanner.cs</Scanner>
-      <Parser>%(RelativeDir)Parser.cs</Parser>
+      <Scanner>%(RelativeDir)Scanner$(TcrLangExtension)</Scanner>
+      <Parser>%(RelativeDir)Parser$(TcrLangExtension)</Parser>
     </TcrAtgFile>
-    
+
     <!-- Changes in grammar files should trigger the build. -->
     <UpToDateCheckInput Include="@(TcrAtgFile)" Kind="ImplicitBuild" />
-    
+
     <!-- Changes in grammar files lead to changes in generated code which should be recompiled. -->
     <CustomAdditionalCompileInputs Include="@(TcrAtgFile)" />
   </ItemGroup>
