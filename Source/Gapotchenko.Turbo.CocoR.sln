@@ -46,6 +46,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{61D3
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gapotchenko.Turbo.CocoR.Build.MSBuild", "Integration\Build\MSBuild\Gapotchenko.Turbo.CocoR.Build.MSBuild\Gapotchenko.Turbo.CocoR.Build.MSBuild.csproj", "{E667190A-54B7-4C5A-AE99-3B8E0A33F409}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Notes", "Notes", "{8521D030-CD2D-41C3-86FC-D19B74F974BB}"
+	ProjectSection(SolutionItems) = preProject
+		..\Documentation\Notes\Errors.md = ..\Documentation\Notes\Errors.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -76,6 +81,7 @@ Global
 		{301122A7-8447-4557-B59D-2A82631FC2AD} = {E3FA69FD-73DF-4A9D-B02F-F76C5A66C2DA}
 		{61D343F8-C742-4091-8BCA-306FFD91498C} = {301122A7-8447-4557-B59D-2A82631FC2AD}
 		{E667190A-54B7-4C5A-AE99-3B8E0A33F409} = {301122A7-8447-4557-B59D-2A82631FC2AD}
+		{8521D030-CD2D-41C3-86FC-D19B74F974BB} = {8BA0B816-BF22-4763-87A3-EBF1E7D752A9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3D35907F-C952-4174-A94D-D36D83652256}
