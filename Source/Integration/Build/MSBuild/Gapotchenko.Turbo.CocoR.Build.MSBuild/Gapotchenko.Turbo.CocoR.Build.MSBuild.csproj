@@ -1,26 +1,25 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <!-- This set of TFMs allows the module to be consumed by MSBuild version
-         16.0 (Visual Studio 2019) and newer. -->
+    <!-- This set of TFMs allows the module to be consumed by MSBuild 16.0+ (Visual Studio 2019+). -->
     <TargetFrameworks>net472;net5.0</TargetFrameworks>
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
+    <ImplicitUsings>false</ImplicitUsings>
     <Nullable Condition=" '$(TargetFrameworkIdentifier)' == 'NETFramework' ">annotations</Nullable>
   </PropertyGroup>
 
-  <ItemGroup Condition=" '$(TargetFrameworkIdentifier)' == 'NETFramework' ">
+  <ItemGroup Condition=" '$(MasteringFrameworkIdentifier)' == '.NETFramework' ">
     <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="Microsoft.Build.Utilities.v4.0" />
-    <!-- 'Nullable' package allows to keep a single code base even for .NET
-         Framework targets which do not support nullable checks out of
-         the box. -->
+    <!-- 'Nullable' package allows to keep a single code base including .NET Framework targets
+         which do not support nullable checks out of the box. -->
     <PackageReference Include="Nullable" Version="1.3.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net5.0' ">
+  <ItemGroup Condition=" '$(MasteringFrameworkIdentifier)' == '.NETCoreApp' ">
     <PackageReference Include="Microsoft.Build.Framework" Version="[16.3.0]" />
     <PackageReference Include="Microsoft.Build.Utilities.Core" Version="[16.3.0]" />
   </ItemGroup>

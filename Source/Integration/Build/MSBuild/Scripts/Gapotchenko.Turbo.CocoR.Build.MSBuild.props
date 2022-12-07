@@ -9,13 +9,23 @@
     <TcrAtgFile Include="**\*.atg" Exclude="$(DefaultItemExcludes)">
       <Scanner>%(RelativeDir)Scanner$(TcrLangExtension)</Scanner>
       <Parser>%(RelativeDir)Parser$(TcrLangExtension)</Parser>
+      <ScannerFrame Condition=" Exists('%(RelativeDir)Scanner.frame') ">%(RelativeDir)Scanner.frame</ScannerFrame>
+      <ParserFrame Condition=" Exists('%(RelativeDir)Parser.frame') ">%(RelativeDir)Parser.frame</ParserFrame>
+      <PrefaceFrame Condition=" Exists('%(RelativeDir)Preface.frame') ">%(RelativeDir)Preface.frame</PrefaceFrame>
+      <CopyrightFrame Condition=" Exists('%(RelativeDir)Copyright.frame') ">%(RelativeDir)Copyright.frame</CopyrightFrame>
     </TcrAtgFile>
 
+    <TcrCompile Include="@(TcrAtgFile->'%(Identity)')" />
+    <TcrCompile Include="@(TcrAtgFile->'%(ScannerFrame)')" />
+    <TcrCompile Include="@(TcrAtgFile->'%(ParserFrame)')" />
+    <TcrCompile Include="@(TcrAtgFile->'%(PrefaceFrame)')" />
+    <TcrCompile Include="@(TcrAtgFile->'%(CopyrightFrame)')" />
+
     <!-- Changes in grammar files should trigger the build. -->
-    <UpToDateCheckInput Include="@(TcrAtgFile)" Kind="ImplicitBuild" />
+    <UpToDateCheckInput Include="@(TcrCompile)" Kind="ImplicitBuild" />
 
     <!-- Changes in grammar files lead to changes in generated code which should be recompiled. -->
-    <CustomAdditionalCompileInputs Include="@(TcrAtgFile)" />
+    <CustomAdditionalCompileInputs Include="@(TcrCompile)" />
   </ItemGroup>
 
 </Project>

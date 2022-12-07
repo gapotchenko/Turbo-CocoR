@@ -1,23 +1,28 @@
 <Project>
 
-  <Target Name="TcrValidatePrerequisites" BeforeTargets="TcrCompileGrammar">
+  <Target
+    Name="TcrValidatePrerequisites"
+    BeforeTargets="TcrCompileGrammar"
+    Condition=" '$(DesignTimeBuild)' != 'true' ">
     <Error
       Condition=" '$(TcrLangExtension)' == '' "
       Code="TCR0001"
       Text="Turbo Coco/R does not support $(Language) programming language." />
   </Target>
-  
+
   <Target
     Name="TcrCompileGrammar"
     BeforeTargets="CoreCompile"
     Condition=" '$(DesignTimeBuild)' != 'true' "
-    Inputs="%(TcrAtgFile.Identity)"
+    Inputs="%(TcrAtgFile.Identity);%(TcrAtgFile.ScannerFrame);%(TcrAtgFile.ParserFrame);%(TcrAtgFile.PrefaceFrame);%(TcrAtgFile.CopyrightFrame)"
     Outputs="%(TcrAtgFile.Scanner);%(TcrAtgFile.Parser)">
-    
-    <Message Importance="High" Text="+++ Justin Dearing +++ %(TcrAtgFile.Identity) %(TcrAtgFile.Scanner)" />
+
+    <Message Importance="High" Text="+++ Justin Dearing +++ %(TcrAtgFile.Identity) %(TcrAtgFile.Scanner) %(TcrAtgFile.Frames)" />
 
     <Copy SourceFiles="%(TcrAtgFile.Identity)" DestinationFiles="%(TcrAtgFile.Scanner)" />
     <Copy SourceFiles="%(TcrAtgFile.Identity)" DestinationFiles="%(TcrAtgFile.Parser)" />
+
+    <Touch Files="%(TcrAtgFile.Scanner);%(TcrAtgFile.Parser)" />
 
     <ItemGroup>
       <Compile Include="%(TcrAtgFile.Scanner);%(TcrAtgFile.Parser)" KeepDuplicates="false" />
