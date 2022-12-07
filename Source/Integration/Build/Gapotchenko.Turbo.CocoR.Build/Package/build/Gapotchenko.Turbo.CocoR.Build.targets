@@ -6,7 +6,7 @@
     <Error
       Condition=" '$(TcrMSBuildVersionIsOK)' != 'true' "
       Code="TCR1201"
-      Text="Turbo Coco/R requires MSBuild version $(TcrMSBuildMinVersion) or newer." />
+      Text="Turbo Coco/R project integration requires MSBuild version $(TcrMSBuildMinVersion) or newer." />
   </Target>
   
 </Project>

@@ -1,15 +1,29 @@
 <Project>
 
+  <PropertyGroup>
+    <TcrTasksAssemblyFile>$(MSBuildThisFileDirectory)net472\Gapotchenko.Turbo.CocoR.Build.MSBuild.Tasks.dll</TcrTasksAssemblyFile>
+    <TcrTasksAssemblyFile Condition=" '$(MSBuildRuntimeType)' == 'Core' ">$(MSBuildThisFileDirectory)net5.0\Gapotchenko.Turbo.CocoR.Build.MSBuild.Tasks.dll</TcrTasksAssemblyFile>
+  </PropertyGroup>
+
+  <UsingTask TaskName="Gapotchenko.Turbo.CocoR.Build.MSBuild.Tasks.TcrCompileGrammar" AssemblyFile="$(TcrTasksAssemblyFile)" />
+
   <Target
     Name="TcrValidatePrerequisites"
     BeforeTargets="TcrCompileGrammar"
     Condition=" '$(DesignTimeBuild)' != 'true' ">
+    
+    <Error
+      Condition=" '$(UsingMicrosoftNETSdk)' != 'true' "
+      Code="TCR1202"
+      Text="Turbo Coco/R project integration can only be used with SDK-style projects." />
+
     <Error
       Condition=" '$(TcrLangExtension)' == '' "
       Code="TCR0001"
       Text="Turbo Coco/R does not support $(Language) programming language." />
+ 
   </Target>
-
+  
   <Target
     Name="TcrCompileGrammar"
     BeforeTargets="CoreCompile"
