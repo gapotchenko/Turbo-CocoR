@@ -1,6 +1,6 @@
 ﻿using Microsoft.Build.Utilities;
 
-namespace Gapotchenko.Turbo.CocoR.Build.MSBuild;
+namespace Gapotchenko.Turbo.CocoR.Build.MSBuild.Tasks;
 
 /// <summary>
 /// Turbo Coco/R grammar compilation task for MSBuild.

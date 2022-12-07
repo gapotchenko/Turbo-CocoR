@@ -28,7 +28,7 @@
     <MSBuild Projects="@(_ProjectsToPublish)" Targets="Publish" BuildInParallel="$(BuildInParallel)" />
 
     <ItemGroup>
-      <_ProjectsToBuild Include="..\MSBuild\Gapotchenko.Turbo.CocoR.Build.MSBuild\Gapotchenko.Turbo.CocoR.Build.MSBuild.csproj">
+      <_ProjectsToBuild Include="..\MSBuild\Gapotchenko.Turbo.CocoR.Build.MSBuild.Tasks\Gapotchenko.Turbo.CocoR.Build.MSBuild.Tasks.csproj">
         <AdditionalProperties>Configuration=$(Configuration)</AdditionalProperties>
       </_ProjectsToBuild>
     </ItemGroup>
@@ -37,8 +37,8 @@
 
     <ItemGroup>
       <_CopyItems Remove="@(_CopyItems)" />
-      <_CopyItems Include="..\MSBuild\Gapotchenko.Turbo.CocoR.Build.MSBuild\bin\$(Configuration)\**\*.*" />
-      <_CopyItems Remove="..\MSBuild\Gapotchenko.Turbo.CocoR.Build.MSBuild\bin\$(Configuration)\**\*.deps.json" />
+      <_CopyItems Include="..\MSBuild\Gapotchenko.Turbo.CocoR.Build.MSBuild.Tasks\bin\$(Configuration)\**\*.*" />
+      <_CopyItems Remove="..\MSBuild\Gapotchenko.Turbo.CocoR.Build.MSBuild.Tasks\bin\$(Configuration)\**\*.deps.json" />
     </ItemGroup>
     <Copy SourceFiles="@(_CopyItems)" DestinationFolder="$(_PackageContentDir)\tools\Integration\MSBuild\%(RecursiveDir)" />
 
