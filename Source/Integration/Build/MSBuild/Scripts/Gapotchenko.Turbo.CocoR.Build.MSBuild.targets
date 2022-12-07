@@ -10,6 +10,7 @@
   <Target
     Name="TcrCompileGrammar"
     BeforeTargets="CoreCompile"
+    Condition=" '$(DesignTimeBuild)' != 'true' "
     Inputs="%(TcrAtgFile.Identity)"
     Outputs="%(TcrAtgFile.Scanner);%(TcrAtgFile.Parser)">
     
