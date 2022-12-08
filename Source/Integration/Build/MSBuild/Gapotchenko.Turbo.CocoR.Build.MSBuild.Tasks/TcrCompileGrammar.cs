@@ -17,7 +17,7 @@ public sealed class TcrCompileGrammar : ToolTask
 
     protected override MessageImportance StandardErrorLoggingImportance => MessageImportance.High;
 
-    protected override MessageImportance StandardOutputLoggingImportance => MessageImportance.High;
+    //protected override MessageImportance StandardOutputLoggingImportance => MessageImportance.High;
 
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     string? m_Grammar;
@@ -31,19 +31,12 @@ public sealed class TcrCompileGrammar : ToolTask
 
     protected override string ToolName => "turbo-coco";
 
-    protected override string GenerateFullPathToTool()
-    {
-        string s = Path.GetFullPath(
+    protected override string GenerateFullPathToTool() =>
+        Path.GetFullPath(
             Path.Combine(
                 typeof(TcrCompileGrammar).Assembly.Location,
                 @"..\..\..\..",
                 ToolName));
-
-        s += ".cmd";
-
-        Log.LogWarning(s);
-        return s;
-    }
 
     protected override string GenerateCommandLineCommands() => $"\"{GenerateFullPathToTool()}\" --int-call project compile-grammar \"{Grammar}\"";
 }

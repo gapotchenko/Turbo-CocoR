@@ -1,5 +1,6 @@
 ﻿using Gapotchenko.FX;
 using Gapotchenko.Turbo.CocoR.Deployment;
+using Gapotchenko.Turbo.CocoR.Framework.Diagnostics;
 
 #nullable enable
 
@@ -7,17 +8,16 @@ namespace Gapotchenko.Turbo.CocoR.Options;
 
 sealed class OptionsService : IOptionsService
 {
-    public OptionsService(
-        IReadOnlyList<string> args,
-        IProductInformationService productInformationService)
+    public OptionsService(IReadOnlyList<string> args)
     {
-        m_ProductInformationService = productInformationService;
+        m_ProductInformationService = ProductInformationService.Default;
 
         // Keep the compatibility with prior Coco/R versions for .NET circa 2011.
 
         bool help = false;
         var positionalOptions = new List<string>();
         string? outputDirectoryPath = null;
+        bool force = false;
 
         int argc = args.Count;
         for (int i = 0; i < argc; i++)
@@ -32,6 +32,8 @@ sealed class OptionsService : IOptionsService
                 outputDirectoryPath = Empty.Nullify(args[++i]);
             else if (args[i] is "--lines" or "-lines")
                 EmitLines = true;
+            else if (args[i] is "-f" or "--force")
+                force = true;
             else if (args[i] is "-?" or "--help" or "/?" or "?")
                 help = true;
             else
@@ -52,7 +54,7 @@ sealed class OptionsService : IOptionsService
             else
             {
                 if (positionalOptions.Count > 1)
-                    throw new Exception("Multiple source files cannot be specified.");
+                    throw new Exception("Multiple source files cannot be specified.").Categorize("TCR0002");
                 m_SourceFilePath = option;
             }
         }
@@ -63,7 +65,7 @@ sealed class OptionsService : IOptionsService
 
         if (outputDirectoryPath == null)
         {
-            KeepOldFiles = true;
+            KeepOldFiles = !force;
             outputDirectoryPath = m_SourceDirectoryPath ?? ".";
         }
         OutputDirectoryPath = outputDirectoryPath;
