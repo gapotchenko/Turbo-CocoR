@@ -22,6 +22,10 @@ interface IOptionsService
 
     IReadOnlyDictionary<string, string> Properties { get; }
 
+    bool NoLogo { get; }
+
+    bool IntCall { get; }
+
     #region Calculated options
 
     bool HasSourceFile { get; }

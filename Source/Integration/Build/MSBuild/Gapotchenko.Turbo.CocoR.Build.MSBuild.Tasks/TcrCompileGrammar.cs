@@ -1,4 +1,5 @@
-﻿using Microsoft.Build.Framework;
+﻿using Gapotchenko.Turbo.CocoR.Build.MSBuild.Tasks.Properties;
+using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 using System;
 using System.IO;
@@ -22,12 +23,35 @@ public sealed class TcrCompileGrammar : ToolTask
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     string? m_Grammar;
 
+    /// <summary>
+    /// Gets or sets the grammar file path.
+    /// </summary>
     [Required]
     public string Grammar
     {
-        get => m_Grammar ?? throw new InvalidOperationException("Grammar is not set.");
+        get => m_Grammar ?? throw new InvalidOperationException(string.Format(Resources.XNotSet, nameof(Grammar)));
         set => m_Grammar = value ?? throw new ArgumentNullException(nameof(value));
     }
+
+    /// <summary>
+    /// Gets or sets the programming language.
+    /// </summary>
+    public string? Language { get; set; }
+
+    /// <summary>
+    /// Gets or sets the programming language version.
+    /// </summary>
+    public string? LanguageVersion { get; set; }
+
+    /// <summary>
+    /// Gets or sets the root namespace of a project.
+    /// </summary>
+    public string? RootNamespace { get; set; }
+
+    /// <summary>
+    /// Gets or sets the project directory path.
+    /// </summary>
+    public string? ProjectDir { get; set; }
 
     protected override string ToolName => "turbo-coco";
 
@@ -38,5 +62,15 @@ public sealed class TcrCompileGrammar : ToolTask
                 @"..\..\..\..",
                 ToolName));
 
-    protected override string GenerateCommandLineCommands() => $"\"{GenerateFullPathToTool()}\" --int-call project compile-grammar \"{Grammar}\" -f";
+    protected override string GenerateCommandLineCommands()
+    {
+        var clb = new CommandLineBuilder();
+        clb.AppendFileNameIfNotNull(GenerateFullPathToTool());
+        clb.AppendSwitch("--int-call");
+        clb.AppendSwitch("compile-project-grammar");
+        clb.AppendFileNameIfNotNull(Grammar);
+        clb.AppendSwitch("-f");
+
+        return clb.ToString();
+    }
 }

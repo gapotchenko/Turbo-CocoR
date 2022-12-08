@@ -1,4 +1,5 @@
 ﻿using Gapotchenko.FX;
+using Gapotchenko.FX.Linq;
 using Gapotchenko.Turbo.CocoR.Compilation;
 using Gapotchenko.Turbo.CocoR.Deployment;
 using Gapotchenko.Turbo.CocoR.Diagnostics;
@@ -38,28 +39,30 @@ static class Program
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             Console.OutputEncoding = Encoding.UTF8;
 
-        ShowLogo();
-        Execute(args);
+        var optionsService = new OptionsService(args);
+
+        if (!optionsService.NoLogo)
+            ShowLogo();
+        Execute(optionsService);
     }
 
-    static void Execute(IReadOnlyList<string> args)
+    static void Execute(IOptionsService optionsService)
     {
-        if (HandleIntCall(args))
+        if (HandleIntCall(optionsService))
             return;
-
-        var optionsService = new OptionsService(args);
 
         CompositionHost CreateContainer() =>
             new ContainerConfiguration()
             .WithExport(ProductInformationService.Default)
-            .WithExport<IOptionsService>(optionsService)
+            .WithExport(optionsService)
             .WithAssembly(typeof(Program).Assembly)
             .CreateContainer();
 
         var command = optionsService.Command;
         if (command == "new")
         {
-            Console.WriteLine();
+            if (!optionsService.NoLogo)
+                Console.WriteLine();
 
             var commandArgs = optionsService.CommandArguments;
             if (commandArgs.Count < 2)
@@ -75,7 +78,8 @@ static class Program
         }
         else if (optionsService.HasSourceFile)
         {
-            Console.WriteLine();
+            if (!optionsService.NoLogo)
+                Console.WriteLine();
 
             using var container = CreateContainer();
             var compiler = container.GetExport<Compiler>();
@@ -88,6 +92,8 @@ static class Program
             throw new ProgramExitException(1);
         }
     }
+
+    static void Execute(IEnumerable<string> args) => Execute(new OptionsService(args.AsReadOnlyList()));
 
     static void ShowLogo()
     {
@@ -104,29 +110,19 @@ static class Program
         Console.WriteLine();
     }
 
-    static bool HandleIntCall(IReadOnlyList<string> args)
+    static bool HandleIntCall(IOptionsService optionsService)
     {
-        if (!(args.Count >= 2 && args[0] == "--int-call"))
+        if (!optionsService.IntCall)
             return false;
 
-        switch (args[1])
-        {
-            case "project":
-                {
-                    if (args.Count < 3)
-                        throw new Exception("Verb not specified.");
-                    switch (args[2])
-                    {
-                        case "compile-grammar":
-                            if (args.Count < 4)
-                                throw new Exception("Too few command-line parameters.");
-                            CompileProject(args[3], new[] { "--property", "Mode", "Integrated" }.Concat(args.Skip(4)).ToArray());
-                            break;
+        var args = optionsService.CommandArguments;
 
-                        default:
-                            throw new Exception("Invalid command of an internal call verb.");
-                    }
-                }
+        switch (optionsService.Command)
+        {
+            case "compile-project-grammar":
+                if (args.Count < 1)
+                    throw new Exception("Too few command-line parameters.");
+                CompileProject(args[0], new[] { "--property", "Mode", "Integrated" }.Concat(args.Skip(1)).ToArray());
                 break;
 
             default:
@@ -152,7 +148,7 @@ static class Program
         }
 
         if (grammarIsEmpty)
-            Execute(new[] { "new", "grammar", grammarFilePath }.Concat(args).ToArray());
+            Execute(new[] { "new", "grammar", grammarFilePath }.Concat(args));
 
         // TODO
     }

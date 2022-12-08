@@ -36,8 +36,17 @@ sealed class OptionsService : IOptionsService
                 force = true;
             else if (args[i] is "--property" && i < argc - 2)
                 m_Properties[args[++i]] = args[++i];
+            else if (args[i] is "--no-logo")
+                NoLogo = true;
             else if (args[i] is "-?" or "--help" or "/?" or "?")
                 help = true;
+            else if (args[i] is "--int-call" && i < argc - 1)
+            {
+                IntCall = true;
+                Command = args[i + 1];
+                m_CommandArguments = args.Skip(i + 2).ToArray();
+                return;
+            }
             else
                 positionalOptions.Add(args[i]);
         }
@@ -70,7 +79,7 @@ sealed class OptionsService : IOptionsService
             KeepOldFiles = !force;
             outputDirectoryPath = m_SourceDirectoryPath ?? ".";
         }
-        OutputDirectoryPath = outputDirectoryPath;
+        m_OutputDirectoryPath = outputDirectoryPath;
 
         #endregion
     }
@@ -91,19 +100,25 @@ sealed class OptionsService : IOptionsService
 
     public bool EmitLines { get; }
 
-    public string OutputDirectoryPath { get; }
+    string? m_OutputDirectoryPath;
+
+    public string OutputDirectoryPath => m_OutputDirectoryPath ?? throw new Exception("Output directory path is not defined.");
 
     public string? Command { get; }
 
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     readonly IReadOnlyList<string>? m_CommandArguments;
 
-    public IReadOnlyList<string> CommandArguments => m_CommandArguments ?? throw new Exception("Command arguments are unavailable.");
+    public IReadOnlyList<string> CommandArguments => m_CommandArguments ?? throw new Exception("Command arguments are not available.");
 
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     readonly Dictionary<string, string> m_Properties = new(StringComparer.OrdinalIgnoreCase);
 
     public IReadOnlyDictionary<string, string> Properties => m_Properties;
+
+    public bool NoLogo { get; }
+
+    public bool IntCall { get; }
 
     #region Calculated options
 
