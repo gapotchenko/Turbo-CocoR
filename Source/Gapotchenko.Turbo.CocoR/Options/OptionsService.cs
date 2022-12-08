@@ -34,6 +34,8 @@ sealed class OptionsService : IOptionsService
                 EmitLines = true;
             else if (args[i] is "-f" or "--force")
                 force = true;
+            else if (args[i] is "--property" && i < argc - 2)
+                m_Properties[args[++i]] = args[++i];
             else if (args[i] is "-?" or "--help" or "/?" or "?")
                 help = true;
             else
@@ -97,6 +99,11 @@ sealed class OptionsService : IOptionsService
     readonly IReadOnlyList<string>? m_CommandArguments;
 
     public IReadOnlyList<string> CommandArguments => m_CommandArguments ?? throw new Exception("Command arguments are unavailable.");
+
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    readonly Dictionary<string, string> m_Properties = new(StringComparer.OrdinalIgnoreCase);
+
+    public IReadOnlyDictionary<string, string> Properties => m_Properties;
 
     #region Calculated options
 

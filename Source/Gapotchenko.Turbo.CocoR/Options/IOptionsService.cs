@@ -20,6 +20,8 @@ interface IOptionsService
 
     IReadOnlyList<string> CommandArguments { get; }
 
+    IReadOnlyDictionary<string, string> Properties { get; }
+
     #region Calculated options
 
     bool HasSourceFile { get; }

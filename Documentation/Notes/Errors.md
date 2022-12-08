@@ -6,5 +6,6 @@ Code    | Description
 --------|---------------------------------------------------------------------
 TCR0001 | Turbo Coco/R does not support {0} programming language.
 TCR0002 | Multiple source files cannot be specified.
+TCR0003 | Grammar file "{0}" does not exist.
 TCR1201 | Turbo Coco/R project integration requires MSBuild version {0} or newer.
 TCR1202 | Turbo Coco/R project integration can only be used with SDK-style projects.

@@ -51,6 +51,7 @@ static class Program
 
         CompositionHost CreateContainer() =>
             new ContainerConfiguration()
+            .WithExport(ProductInformationService.Default)
             .WithExport<IOptionsService>(optionsService)
             .WithAssembly(typeof(Program).Assembly)
             .CreateContainer();
@@ -116,14 +117,14 @@ static class Program
                         throw new Exception("Verb not specified.");
                     switch (args[2])
                     {
-                        case "compile":
-                            if (args.Count != 4)
-                                throw new Exception("Invalid command-line parameters.");
-                            CompileProject(args[3]);
+                        case "compile-grammar":
+                            if (args.Count < 4)
+                                throw new Exception("Too few command-line parameters.");
+                            CompileProject(args[3], new[] { "--property", "Mode", "Integrated" }.Concat(args.Skip(4)).ToArray());
                             break;
 
                         default:
-                            throw new Exception("Invalid internal call verb command.");
+                            throw new Exception("Invalid command of an internal call verb.");
                     }
                 }
                 break;
@@ -135,8 +136,24 @@ static class Program
         return true;
     }
 
-    static void CompileProject(string grammarFilePath)
+    static void CompileProject(string grammarFilePath, IReadOnlyList<string> args)
     {
-        throw new NotImplementedException();
+        var grammarFile = new FileInfo(grammarFilePath);
+
+        if (!grammarFile.Exists)
+            throw new Exception(string.Format("Grammar file \"{0}\" does not exist.", grammarFilePath)).Categorize("TCR0003");
+
+        bool grammarIsEmpty = grammarFile.Length == 0;
+        if (!grammarIsEmpty)
+        {
+            // Use a text reader because the file can have a BOM but still be empty.
+            using var tr = grammarFile.OpenText();
+            grammarIsEmpty = tr.Read() == -1;
+        }
+
+        if (grammarIsEmpty)
+            Execute(new[] { "new", "grammar", grammarFilePath }.Concat(args).ToArray());
+
+        // TODO
     }
 }

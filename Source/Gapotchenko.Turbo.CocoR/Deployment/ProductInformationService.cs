@@ -11,7 +11,6 @@ sealed class ProductInformationService : IProductInformationService
     {
     }
 
-    [Export]
     public static IProductInformationService Default { get; } = new ProductInformationService();
 
     static readonly IAppInformation m_Information = AppInformation.For(typeof(ProductInformationService));

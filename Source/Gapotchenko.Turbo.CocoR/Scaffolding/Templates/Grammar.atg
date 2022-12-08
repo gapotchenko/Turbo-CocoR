@@ -1,6 +1,7 @@
-﻿// Compile with: %command% %output_file_name%
+﻿%if(standalone)%// Compile with: %command% %output_file_name%
 
 $lang=%lang%
+%endif%
 %if(has_lang_namespace)%$namespace=%lang_namespace%
 %else%// $namespace=Your.Namespace
 %endif%

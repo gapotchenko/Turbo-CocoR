@@ -100,6 +100,10 @@ sealed class ScaffoldingService : IScaffoldingService
         using var template = OpenTemplate(templateName);
 
         string outputFileNameWithoutExtension = Path.GetFileNameWithoutExtension(outputFilePath);
+        var properties = m_OptionsService.Properties;
+        var mode = properties.GetValueOrDefault("Mode", "Standalone");
+        string? @namespace = m_OptionsService.Namespace ?? properties.GetValueOrDefault("NamespaceHint");
+
         var variables = new Dictionary<string, object?>(StringComparer.Ordinal)
         {
             ["command"] = m_ProductInformationService.Command,
@@ -108,8 +112,9 @@ sealed class ScaffoldingService : IScaffoldingService
             ["coco_lang"] = outputFileNameWithoutExtension.Replace(' ', '_').Replace('.', '_'),
             ["lang"] = "C#",
             ["lang_version"] = "7.0",
-            ["lang_namespace"] = m_OptionsService.Namespace,
-            ["has_lang_namespace"] = m_OptionsService.Namespace != null
+            ["lang_namespace"] = @namespace,
+            ["has_lang_namespace"] = @namespace != null,
+            ["standalone"] = mode.Equals("Standalone", StringComparison.OrdinalIgnoreCase) 
         };
 
         ExtractTemplate(template, outputFilePath, variables);

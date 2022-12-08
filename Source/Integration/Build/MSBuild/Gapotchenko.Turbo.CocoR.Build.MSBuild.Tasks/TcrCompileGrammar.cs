@@ -38,5 +38,5 @@ public sealed class TcrCompileGrammar : ToolTask
                 @"..\..\..\..",
                 ToolName));
 
-    protected override string GenerateCommandLineCommands() => $"\"{GenerateFullPathToTool()}\" --int-call project compile-grammar \"{Grammar}\"";
+    protected override string GenerateCommandLineCommands() => $"\"{GenerateFullPathToTool()}\" --int-call project compile-grammar \"{Grammar}\" -f";
 }
