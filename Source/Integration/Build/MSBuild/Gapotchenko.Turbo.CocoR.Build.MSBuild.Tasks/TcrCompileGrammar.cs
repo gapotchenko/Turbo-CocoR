@@ -14,11 +14,12 @@ public sealed class TcrCompileGrammar : ToolTask
     public TcrCompileGrammar()
     {
         UseCommandProcessor = true;
+        EchoOff = true;
     }
 
     protected override MessageImportance StandardErrorLoggingImportance => MessageImportance.High;
 
-    //protected override MessageImportance StandardOutputLoggingImportance => MessageImportance.High;
+    protected override MessageImportance StandardOutputLoggingImportance => MessageImportance.High;
 
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     string? m_Grammar;
@@ -66,9 +67,11 @@ public sealed class TcrCompileGrammar : ToolTask
     {
         var clb = new CommandLineBuilder();
         clb.AppendFileNameIfNotNull(GenerateFullPathToTool());
+        clb.AppendSwitch("--no-logo");
         clb.AppendSwitch("--int-call");
         clb.AppendSwitch("compile-project-grammar");
         clb.AppendFileNameIfNotNull(Grammar);
+        clb.AppendSwitch("-q");
         clb.AppendSwitch("-f");
 
         return clb.ToString();

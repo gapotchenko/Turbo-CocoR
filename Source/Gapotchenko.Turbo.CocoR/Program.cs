@@ -73,7 +73,8 @@ static class Program
             foreach (var itemName in commandArgs.Skip(1).Distinct())
             {
                 var templateName = scaffolder.CreateItem(commandArgs[0], itemName);
-                Console.WriteLine($"New \"{templateName}\" file created successfully.");
+                if (!optionsService.Quiet)
+                    Console.WriteLine($"New \"{templateName}\" file created successfully.");
             }
         }
         else if (optionsService.HasSourceFile)
@@ -93,7 +94,7 @@ static class Program
         }
     }
 
-    static void Execute(IEnumerable<string> args) => Execute(new OptionsService(args.AsReadOnlyList()));
+    static void Execute(IEnumerable<string> args) => Execute(new OptionsService(args.AsReadOnlyList()) { NoLogo = true });
 
     static void ShowLogo()
     {

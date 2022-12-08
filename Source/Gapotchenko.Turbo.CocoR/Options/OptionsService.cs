@@ -38,6 +38,8 @@ sealed class OptionsService : IOptionsService
                 m_Properties[args[++i]] = args[++i];
             else if (args[i] is "--no-logo")
                 NoLogo = true;
+            else if (args[i] is "-q" or "--quiet")
+                Quiet = true;
             else if (args[i] is "-?" or "--help" or "/?" or "?")
                 help = true;
             else if (args[i] is "--int-call" && i < argc - 1)
@@ -116,7 +118,9 @@ sealed class OptionsService : IOptionsService
 
     public IReadOnlyDictionary<string, string> Properties => m_Properties;
 
-    public bool NoLogo { get; }
+    public bool NoLogo { get; init; }
+
+    public bool Quiet { get; }
 
     public bool IntCall { get; }
 
@@ -161,6 +165,7 @@ sealed class OptionsService : IOptionsService
               --trace arg          Trace string (see below).
               -o [ --output ] arg  Output directory.
               --lines              Emit lines.
+              -q [ --quiet ]       Do not print informational messages.
             """);
 
 #if TODO

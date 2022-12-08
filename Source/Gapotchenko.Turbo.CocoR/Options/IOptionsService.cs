@@ -24,6 +24,8 @@ interface IOptionsService
 
     bool NoLogo { get; }
 
+    bool Quiet { get; }
+
     bool IntCall { get; }
 
     #region Calculated options

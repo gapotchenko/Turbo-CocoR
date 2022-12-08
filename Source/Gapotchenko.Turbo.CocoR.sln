@@ -28,6 +28,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gapotchenko.Turbo.CocoR.Build", "Integration\Build\Gapotchenko.Turbo.CocoR.Build\Gapotchenko.Turbo.CocoR.Build.csproj", "{6E9EF33B-ECCD-42D1-A690-E1F352C90898}"
+	ProjectSection(ProjectDependencies) = postProject
+		{61CC1A73-FB30-4D48-9A37-05ADD1A4A2E3} = {61CC1A73-FB30-4D48-9A37-05ADD1A4A2E3}
+		{E667190A-54B7-4C5A-AE99-3B8E0A33F409} = {E667190A-54B7-4C5A-AE99-3B8E0A33F409}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{E3FA69FD-73DF-4A9D-B02F-F76C5A66C2DA}"
 	ProjectSection(SolutionItems) = preProject
