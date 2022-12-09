@@ -10,7 +10,7 @@
   <ItemGroup Condition=" '$(BuildingInsideVisualStudio)' == 'true' ">
     <!-- Add item names to AvailableItemName item, so that they can show up
          in a drop-down menu for Build Action field of the properties window in VisualStudio. -->
-    <AvailableItemName Include="TcrGrammar" Name="TEst 1" DisplayName="Test 2" Description="Test 3" />
+    <AvailableItemName Include="TcrGrammar" />
   </ItemGroup>
 
   <ItemGroup>
