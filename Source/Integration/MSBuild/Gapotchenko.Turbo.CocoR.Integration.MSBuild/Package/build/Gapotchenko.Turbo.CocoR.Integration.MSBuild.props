@@ -6,6 +6,6 @@
     <TcrMSBuildVersionIsOK Condition=" '$(MSBuildVersion)' &gt;= '$(TcrMSBuildMinVersion)' " >true</TcrMSBuildVersionIsOK>
   </PropertyGroup>
   
-  <Import Project="..\tools\Integration\MSBuild\Gapotchenko.Turbo.CocoR.Build.MSBuild.props" Condition=" '$(TcrMSBuildVersionIsOK)' == 'true' " />
+  <Import Project="..\tools\Integration\MSBuild\Gapotchenko.Turbo.CocoR.Integration.MSBuild.props" Condition=" '$(TcrMSBuildVersionIsOK)' == 'true' " />
 
 </Project>

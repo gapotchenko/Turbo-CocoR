@@ -6,7 +6,7 @@
 
   <PropertyGroup>
     <IsPackable>true</IsPackable>
-    <Description>Turbo Coco/R build integration provides the automatic compile-time generation of scanner and parser files for attributed grammars in a project.</Description>
+    <Description>Turbo Coco/R MSBuild integration provides the automatic compile-time generation of scanner and parser files for attributed grammars in your project.</Description>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <NuspecFile>Package.nuspec</NuspecFile>
   </PropertyGroup>
@@ -28,7 +28,7 @@
     <MSBuild Projects="@(_ProjectsToPublish)" Targets="Publish" BuildInParallel="$(BuildInParallel)" />
 
     <ItemGroup>
-      <_ProjectsToBuild Include="..\MSBuild\Gapotchenko.Turbo.CocoR.Build.MSBuild.Tasks\Gapotchenko.Turbo.CocoR.Build.MSBuild.Tasks.csproj">
+      <_ProjectsToBuild Include="..\Gapotchenko.Turbo.CocoR.Integration.MSBuild.Tasks\Gapotchenko.Turbo.CocoR.Integration.MSBuild.Tasks.csproj">
         <AdditionalProperties>Configuration=$(Configuration)</AdditionalProperties>
       </_ProjectsToBuild>
     </ItemGroup>
@@ -37,13 +37,7 @@
 
     <ItemGroup>
       <_CopyItems Remove="@(_CopyItems)" />
-      <_CopyItems Include="..\MSBuild\Gapotchenko.Turbo.CocoR.Build.MSBuild.Tasks\bin\$(Configuration)\**\*.*" />
-    </ItemGroup>
-    <Copy SourceFiles="@(_CopyItems)" DestinationFolder="$(_PackageContentDir)\tools\Integration\MSBuild\%(RecursiveDir)" />
-
-    <ItemGroup>
-      <_CopyItems Remove="@(_CopyItems)" />
-      <_CopyItems Include="..\MSBuild\Scripts\**\*.*" />
+      <_CopyItems Include="..\Gapotchenko.Turbo.CocoR.Integration.MSBuild.Tasks\bin\$(Configuration)\**\*.*" />
     </ItemGroup>
     <Copy SourceFiles="@(_CopyItems)" DestinationFolder="$(_PackageContentDir)\tools\Integration\MSBuild\%(RecursiveDir)" />
 

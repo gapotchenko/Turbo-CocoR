@@ -52,7 +52,7 @@ For further guidance, see the [examples](https://github.com/gapotchenko/Turbo-Co
 
 ## Build Integration
 
-In addition to the traditional command-line approach, Turbo Coco/R offers the automatic [build integration](https://github.com/gapotchenko/Turbo-CocoR/tree/main/Source/Integration/Build) to streamline the development experience.
+In addition to the traditional command-line approach, Turbo Coco/R offers the automatic [build integration](https://github.com/gapotchenko/Turbo-CocoR/tree/main/Source/Integration/MSBuild) to streamline the development experience.
 
 ## Requirements
 

@@ -27,25 +27,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 		..\Documentation\Changelog.md = ..\Documentation\Changelog.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gapotchenko.Turbo.CocoR.Build", "Integration\Build\Gapotchenko.Turbo.CocoR.Build\Gapotchenko.Turbo.CocoR.Build.csproj", "{6E9EF33B-ECCD-42D1-A690-E1F352C90898}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gapotchenko.Turbo.CocoR.Integration.MSBuild", "Integration\MSBuild\Gapotchenko.Turbo.CocoR.Integration.MSBuild\Gapotchenko.Turbo.CocoR.Integration.MSBuild.csproj", "{6E9EF33B-ECCD-42D1-A690-E1F352C90898}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{E3FA69FD-73DF-4A9D-B02F-F76C5A66C2DA}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MSBuild", "MSBuild", "{E3FA69FD-73DF-4A9D-B02F-F76C5A66C2DA}"
 	ProjectSection(SolutionItems) = preProject
 		Integration\Build\README.md = Integration\Build\README.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Integration", "Integration", "{193270DA-B46E-4E98-9A7D-0E1D05DE8093}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MSBuild", "MSBuild", "{301122A7-8447-4557-B59D-2A82631FC2AD}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{61D343F8-C742-4091-8BCA-306FFD91498C}"
-	ProjectSection(SolutionItems) = preProject
-		Integration\Build\MSBuild\Scripts\Gapotchenko.Turbo.CocoR.Build.MSBuild.props = Integration\Build\MSBuild\Scripts\Gapotchenko.Turbo.CocoR.Build.MSBuild.props
-		Integration\Build\MSBuild\Scripts\Gapotchenko.Turbo.CocoR.Build.MSBuild.targets = Integration\Build\MSBuild\Scripts\Gapotchenko.Turbo.CocoR.Build.MSBuild.targets
-		Integration\Build\MSBuild\Scripts\ProjectSchema.xaml = Integration\Build\MSBuild\Scripts\ProjectSchema.xaml
-	EndProjectSection
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gapotchenko.Turbo.CocoR.Build.MSBuild.Tasks", "Integration\Build\MSBuild\Gapotchenko.Turbo.CocoR.Build.MSBuild.Tasks\Gapotchenko.Turbo.CocoR.Build.MSBuild.Tasks.csproj", "{E667190A-54B7-4C5A-AE99-3B8E0A33F409}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gapotchenko.Turbo.CocoR.Integration.MSBuild.Tasks", "Integration\MSBuild\Gapotchenko.Turbo.CocoR.Integration.MSBuild.Tasks\Gapotchenko.Turbo.CocoR.Integration.MSBuild.Tasks.csproj", "{E667190A-54B7-4C5A-AE99-3B8E0A33F409}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Notes", "Notes", "{8521D030-CD2D-41C3-86FC-D19B74F974BB}"
 	ProjectSection(SolutionItems) = preProject
@@ -79,9 +70,7 @@ Global
 		{6E9EF33B-ECCD-42D1-A690-E1F352C90898} = {E3FA69FD-73DF-4A9D-B02F-F76C5A66C2DA}
 		{E3FA69FD-73DF-4A9D-B02F-F76C5A66C2DA} = {193270DA-B46E-4E98-9A7D-0E1D05DE8093}
 		{193270DA-B46E-4E98-9A7D-0E1D05DE8093} = {AF715B93-5752-4B50-BB40-8909BD731B53}
-		{301122A7-8447-4557-B59D-2A82631FC2AD} = {E3FA69FD-73DF-4A9D-B02F-F76C5A66C2DA}
-		{61D343F8-C742-4091-8BCA-306FFD91498C} = {301122A7-8447-4557-B59D-2A82631FC2AD}
-		{E667190A-54B7-4C5A-AE99-3B8E0A33F409} = {301122A7-8447-4557-B59D-2A82631FC2AD}
+		{E667190A-54B7-4C5A-AE99-3B8E0A33F409} = {E3FA69FD-73DF-4A9D-B02F-F76C5A66C2DA}
 		{8521D030-CD2D-41C3-86FC-D19B74F974BB} = {8BA0B816-BF22-4763-87A3-EBF1E7D752A9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution

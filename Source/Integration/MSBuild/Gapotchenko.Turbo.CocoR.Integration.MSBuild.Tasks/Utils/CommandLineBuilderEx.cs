@@ -1,6 +1,6 @@
 ﻿using Microsoft.Build.Utilities;
 
-namespace Gapotchenko.Turbo.CocoR.Build.MSBuild.Tasks.Utils;
+namespace Gapotchenko.Turbo.CocoR.Integration.MSBuild.Tasks.Utils;
 
 sealed class CommandLineBuilderEx : CommandLineBuilder
 {

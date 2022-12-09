@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Gapotchenko.Turbo.CocoR.Build.MSBuild.Tasks.Properties {
+namespace Gapotchenko.Turbo.CocoR.Integration.MSBuild.Tasks.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Gapotchenko.Turbo.CocoR.Build.MSBuild.Tasks.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Gapotchenko.Turbo.CocoR.Build.MSBuild.Tasks.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Gapotchenko.Turbo.CocoR.Integration.MSBuild.Tasks.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

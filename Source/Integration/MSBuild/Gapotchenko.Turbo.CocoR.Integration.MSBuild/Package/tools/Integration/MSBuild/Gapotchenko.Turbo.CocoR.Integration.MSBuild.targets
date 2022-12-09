@@ -1,11 +1,11 @@
 <Project>
 
   <PropertyGroup>
-    <TcrTasksAssemblyFile>$(MSBuildThisFileDirectory)net472\Gapotchenko.Turbo.CocoR.Build.MSBuild.Tasks.dll</TcrTasksAssemblyFile>
-    <TcrTasksAssemblyFile Condition=" '$(MSBuildRuntimeType)' == 'Core' ">$(MSBuildThisFileDirectory)net5.0\Gapotchenko.Turbo.CocoR.Build.MSBuild.Tasks.dll</TcrTasksAssemblyFile>
+    <TcrTasksAssemblyFile>$(MSBuildThisFileDirectory)net472\Gapotchenko.Turbo.CocoR.Integration.MSBuild.Tasks.dll</TcrTasksAssemblyFile>
+    <TcrTasksAssemblyFile Condition=" '$(MSBuildRuntimeType)' == 'Core' ">$(MSBuildThisFileDirectory)net5.0\Gapotchenko.Turbo.CocoR.Integration.MSBuild.Tasks.dll</TcrTasksAssemblyFile>
   </PropertyGroup>
 
-  <UsingTask TaskName="Gapotchenko.Turbo.CocoR.Build.MSBuild.Tasks.TcrCompileGrammar" AssemblyFile="$(TcrTasksAssemblyFile)" />
+  <UsingTask TaskName="Gapotchenko.Turbo.CocoR.Integration.MSBuild.Tasks.TcrCompileGrammar" AssemblyFile="$(TcrTasksAssemblyFile)" />
 
   <ItemGroup Condition=" '$(BuildingInsideVisualStudio)' == 'true' ">
     <!-- Add item names to AvailableItemName item, so that they can show up
