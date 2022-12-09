@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)ProjectSchema.xaml">
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)Rules\TcrGrammar.xaml">
       <Context>File</Context>
     </PropertyPageSchema>
   </ItemGroup>
