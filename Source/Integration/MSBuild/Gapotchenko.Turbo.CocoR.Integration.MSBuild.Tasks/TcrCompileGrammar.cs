@@ -1,4 +1,6 @@
-﻿using Gapotchenko.Turbo.CocoR.Integration.MSBuild.Tasks.Properties;
+﻿using Gapotchenko.Turbo.CocoR.Integration.MSBuild.Tasks.Diagnostics;
+using Gapotchenko.Turbo.CocoR.Integration.MSBuild.Tasks.Languages;
+using Gapotchenko.Turbo.CocoR.Integration.MSBuild.Tasks.Properties;
 using Gapotchenko.Turbo.CocoR.Integration.MSBuild.Tasks.Utils;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
@@ -35,15 +37,56 @@ public sealed class TcrCompileGrammar : ToolTask
         set => m_Grammar = value ?? throw new ArgumentNullException(nameof(value));
     }
 
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    string? m_Language;
+
     /// <summary>
     /// Gets or sets the programming language.
     /// </summary>
-    public string? Language { get; set; }
+    public string? Language
+    {
+        get => m_Language;
+        set
+        {
+            if (value != m_Language)
+            {
+                m_Language = value;
+                m_CachedLanguageProvider = null;
+            }
+        }
+    }
+
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    string? m_LanguageVersion;
 
     /// <summary>
     /// Gets or sets the programming language version.
     /// </summary>
-    public string? LanguageVersion { get; set; }
+    public string? LanguageVersion
+    {
+        get => m_LanguageVersion;
+        set
+        {
+            if (value != m_LanguageVersion)
+            {
+                m_LanguageVersion = value;
+                m_CachedLanguageProvider = null;
+            }
+        }
+    }
+
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    ILanguageProvider? m_CachedLanguageProvider;
+
+    ILanguageProvider? LanguageProvider => m_CachedLanguageProvider ??= GetLanguageProviderCore();
+
+    ILanguageProvider? GetLanguageProviderCore()
+    {
+        var language = Language;
+        if (string.IsNullOrEmpty(language))
+            return null;
+        return LanguageService.Default.CreateProvider(language, LanguageVersion);
+    }
 
     /// <summary>
     /// Gets or sets the root namespace of a project.
@@ -80,14 +123,10 @@ public sealed class TcrCompileGrammar : ToolTask
         clb.AppendSwitch("-q");
         clb.AppendSwitch("-f");
 
-        var language = Language;
-        if (!string.IsNullOrEmpty(language))
+        if (LanguageProvider is not null and var languageProvider)
         {
-            clb.AppendParameter("--lang", language);
-
-            var languageVersion = LanguageVersion;
-            if (!string.IsNullOrEmpty(languageVersion))
-                clb.AppendParameter("--lang-version", languageVersion);
+            clb.AppendParameter("--lang", languageProvider.Language);
+            clb.AppendParameter("--lang-version", languageProvider.LanguageVersion);
         }
 
         if (TryGetNamespaceHint() is not null and var namespaceHint)
@@ -100,14 +139,50 @@ public sealed class TcrCompileGrammar : ToolTask
 
     protected override MessageImportance StandardOutputLoggingImportance => MessageImportance.High;
 
+    protected override bool ValidateParameters()
+    {
+        try
+        {
+            _ = Grammar;
+            _ = LanguageProvider;
+            return true;
+        }
+        catch (Exception e)
+        {
+            LogException(e);
+            return false;
+        }
+    }
+
+    public override bool Execute()
+    {
+        try
+        {
+            return base.Execute();
+        }
+        catch (Exception e)
+        {
+            LogException(e);
+            return false;
+        }
+    }
+
+    void LogException(Exception e)
+    {
+        if (e.TryGetCode() is not null and var code)
+            Log.LogError(null, code, null, null, 0, 0, 0, 0, "{0}", e.Message);
+        else
+            Log.LogErrorFromException(e);
+    }
+
     string? TryGetNamespaceHint()
     {
-        string? namespaceHint = null;
-
         var rootNamespace = RootNamespace;
         var projectDir = ProjectDir;
 
-        if (!string.IsNullOrEmpty(rootNamespace) && !string.IsNullOrEmpty(projectDir))
+        if (!string.IsNullOrEmpty(rootNamespace) &&
+            !string.IsNullOrEmpty(projectDir) &&
+            LanguageProvider is not null and var languageProvider)
         {
             string relativePath = PathUtil.GetRelativePath(projectDir, Path.GetDirectoryName(Grammar) ?? ".");
             if (!Path.IsPathRooted(relativePath))
@@ -123,40 +198,14 @@ public sealed class TcrCompileGrammar : ToolTask
                     if (p.Length != 0 && p[0] == "..")
                         relativeNamespace = null;
                     else
-                        relativeNamespace = string.Join(LanguageNamespaceSeparator, p.Select(EscapeLanguageIdentifier));
+                        relativeNamespace = string.Join(languageProvider.NamespaceSeparator, p.Select(languageProvider.EscapeIdentifier));
                 }
 
                 if (relativeNamespace != null)
-                    namespaceHint = CombineLanguageNamespaces(rootNamespace, relativeNamespace);
+                    return languageProvider.CombineNamespaces(rootNamespace, relativeNamespace);
             }
         }
 
-        return namespaceHint;
-    }
-
-    [return: NotNullIfNotNull(nameof(id))]
-    string EscapeLanguageIdentifier(string id)
-    {
-        if (string.IsNullOrEmpty(id))
-            return id;
-
-        id = id.Replace(' ', '_');
-
-        if (char.IsDigit(id[0]))
-            id = "_" + id;
-
-        return id;
-    }
-
-    string LanguageNamespaceSeparator => ".";
-
-    string CombineLanguageNamespaces(string a, string b)
-    {
-        if (a.Length == 0)
-            return b;
-        if (b.Length == 0)
-            return a;
-        else
-            return a + LanguageNamespaceSeparator + b;
+        return null;
     }
 }
