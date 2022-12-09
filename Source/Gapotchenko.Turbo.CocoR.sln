@@ -42,6 +42,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{61D3
 	ProjectSection(SolutionItems) = preProject
 		Integration\Build\MSBuild\Scripts\Gapotchenko.Turbo.CocoR.Build.MSBuild.props = Integration\Build\MSBuild\Scripts\Gapotchenko.Turbo.CocoR.Build.MSBuild.props
 		Integration\Build\MSBuild\Scripts\Gapotchenko.Turbo.CocoR.Build.MSBuild.targets = Integration\Build\MSBuild\Scripts\Gapotchenko.Turbo.CocoR.Build.MSBuild.targets
+		Integration\Build\MSBuild\Scripts\ProjectSchema.xaml = Integration\Build\MSBuild\Scripts\ProjectSchema.xaml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gapotchenko.Turbo.CocoR.Build.MSBuild.Tasks", "Integration\Build\MSBuild\Gapotchenko.Turbo.CocoR.Build.MSBuild.Tasks\Gapotchenko.Turbo.CocoR.Build.MSBuild.Tasks.csproj", "{E667190A-54B7-4C5A-AE99-3B8E0A33F409}"

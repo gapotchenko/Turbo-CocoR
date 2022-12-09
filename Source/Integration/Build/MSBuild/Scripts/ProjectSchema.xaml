@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ProjectSchemaDefinitions xmlns="http://schemas.microsoft.com/build/2009/properties">
+  <FileExtension Name=".atg" ContentType="TcrGrammarSourceFile" />
+  <ContentType Name="TcrGrammarSourceFile" DisplayName="Turbo Coco/R grammar source file" ItemType="TcrGrammar" />
+  <ItemType Name="TcrGrammar" DisplayName="Turbo Coco/R grammar" />
+</ProjectSchemaDefinitions>

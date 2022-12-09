@@ -14,6 +14,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)ProjectSchema.xaml">
+      <Context>File</Context>
+    </PropertyPageSchema>
+  </ItemGroup>
+
+  <ItemGroup>
     <_Temp Remove="@(_Temp)" />
 
     <_Temp Include="@(TcrGrammar->'%(Identity)')" />
