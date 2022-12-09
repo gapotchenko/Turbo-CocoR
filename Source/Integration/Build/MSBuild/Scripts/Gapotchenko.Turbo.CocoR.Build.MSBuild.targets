@@ -7,10 +7,9 @@
 
   <UsingTask TaskName="Gapotchenko.Turbo.CocoR.Build.MSBuild.Tasks.TcrCompileGrammar" AssemblyFile="$(TcrTasksAssemblyFile)" />
 
-  <Target
-    Name="TcrValidatePrerequisites"
-    BeforeTargets="TcrCompileGrammar"
-    Condition=" '$(DesignTimeBuild)' != 'true' ">
+  <Target Name="TcrValidatePrerequisites"
+          BeforeTargets="TcrCompileGrammar"
+          Condition=" '$(DesignTimeBuild)' != 'true' ">
     
     <Error
       Condition=" '$(UsingMicrosoftNETSdk)' != 'true' "
@@ -24,12 +23,11 @@
  
   </Target>
   
-  <Target
-    Name="TcrCompileGrammar"
-    BeforeTargets="CoreCompile"
-    Condition=" '$(DesignTimeBuild)' != 'true' "
-    Inputs="%(TcrAtgFile.Identity);%(TcrAtgFile.ScannerFrame);%(TcrAtgFile.ParserFrame);%(TcrAtgFile.PrefaceFrame);%(TcrAtgFile.CopyrightFrame)"
-    Outputs="%(TcrAtgFile.Scanner);%(TcrAtgFile.Parser)">
+  <Target Name="TcrCompileGrammar"
+          BeforeTargets="CoreCompile"
+          Condition=" '$(DesignTimeBuild)' != 'true' "
+          Inputs="%(TcrAtgFile.Identity);%(TcrAtgFile.ScannerFrame);%(TcrAtgFile.ParserFrame);%(TcrAtgFile.PrefaceFrame);%(TcrAtgFile.CopyrightFrame)"
+          Outputs="%(TcrAtgFile.Scanner);%(TcrAtgFile.Parser)">
 
     <Message Importance="High" Text="+++ Justin Dearing +++ %(TcrAtgFile.Identity) %(TcrAtgFile.Scanner) %(TcrAtgFile.Frames)" />
 
