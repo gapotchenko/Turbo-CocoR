@@ -8,10 +8,6 @@
     <TcrGrammar>
       <Scanner>%(RelativeDir)Scanner$(TcrLangExtension)</Scanner>
       <Parser>%(RelativeDir)Parser$(TcrLangExtension)</Parser>
-      <!--<ScannerFrame>%(RelativeDir)Scanner.frame</ScannerFrame>
-      <ParserFrame>%(RelativeDir)Parser.frame</ParserFrame>-->
-      <!--<PrefaceFrame>%(RelativeDir)Preface.frame</PrefaceFrame>
-      <CopyrightFrame>%(RelativeDir)Copyright.frame</CopyrightFrame>-->
     </TcrGrammar>
   </ItemDefinitionGroup>
 

@@ -10,15 +10,15 @@ static class PathUtil
 {
     public static string GetRelativePath(string relativeTo, string path)
     {
-#if NET
+#if NETCOREAPP2_0_OR_GREATER || NETSTANDARD2_1_OR_GREATER
         return Path.GetRelativePath(relativeTo, path);
 #else
-        return GetRelativePathCore(relativeTo, path);
+        return GetRelativePathPolyfill(relativeTo, path);
 #endif
     }
 
-#if !NET
-    static string GetRelativePathCore(string relativeTo, string path)
+#if !(NETCOREAPP2_0_OR_GREATER || NETSTANDARD2_1_OR_GREATER)
+    static string GetRelativePathPolyfill(string relativeTo, string path)
     {
         path = Path.GetFullPath(path);
         relativeTo = Path.GetFullPath(relativeTo);
@@ -57,7 +57,7 @@ static class PathUtil
     }
 
     static StringComparison StringComparison =>
-        IsCaseSensitive?
+        IsCaseSensitive ?
             StringComparison.Ordinal :
             StringComparison.OrdinalIgnoreCase;
 

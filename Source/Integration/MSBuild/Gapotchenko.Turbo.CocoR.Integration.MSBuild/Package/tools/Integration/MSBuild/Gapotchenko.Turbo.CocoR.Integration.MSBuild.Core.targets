@@ -7,6 +7,17 @@
     <TcrGrammar Remove="@(None)" Condition=" '$(EnableDefaultItems)' == 'true' " />
 
     <_Temp Remove="@(_Temp)" />
+    <_Temp Include="@(TcrGrammar)">
+      <ScannerFrame Condition=" '%(TcrGrammar.ScannerFrame)' == '' AND Exists('%(RelativeDir)Scanner.frame') ">%(RelativeDir)Scanner.frame</ScannerFrame>
+      <ParserFrame Condition=" '%(TcrGrammar.ParserFrame)' == '' AND Exists('%(RelativeDir)Parser.frame') ">%(RelativeDir)Parser.frame</ParserFrame>
+      <PrefaceFrame Condition=" '%(TcrGrammar.PrefaceFrame)' == '' AND Exists('%(RelativeDir)Preface.frame') ">%(RelativeDir)Preface.frame</PrefaceFrame>
+      <CopyrightFrame Condition=" '%(TcrGrammar.CopyrightFrame)' == '' AND Exists('%(RelativeDir)Copyright.frame') ">%(RelativeDir)Copyright.frame</CopyrightFrame>
+    </_Temp>
+
+    <TcrGrammar Remove="@(TcrGrammar)" />
+    <TcrGrammar Include="@(_Temp)" />
+    
+    <_Temp Remove="@(_Temp)" />
     <_Temp Include="@(TcrGrammar->'%(Identity)')" />
     <_Temp Include="@(TcrGrammar->'%(ScannerFrame)')" />
     <_Temp Include="@(TcrGrammar->'%(ParserFrame)')" />
@@ -17,7 +28,7 @@
     <UpToDateCheckInput Include="@(_Temp)" Kind="ImplicitBuild" />
 
     <!-- Changes in grammar files lead to changes in generated code which should be recompiled. -->
-    <CustomAdditionalCompileInputs Include="@(_Temp)" />
+    <!--<CustomAdditionalCompileInputs Include="@(_Temp)" />-->
 
     <_Temp Remove="@(_Temp)" />
   </ItemGroup>
@@ -44,7 +55,7 @@
           Inputs="%(TcrGrammar.Identity);%(TcrGrammar.ScannerFrame);%(TcrGrammar.ParserFrame);%(TcrGrammar.PrefaceFrame);%(TcrGrammar.CopyrightFrame)"
           Outputs="%(TcrGrammar.Scanner);%(TcrGrammar.Parser)">
 
-    <Message Importance="High" Text="+++ Justin Dearing +++ %(TcrGrammar.Identity) %(TcrGrammar.Scanner) %(TcrGrammar.Frames)" />
+    <Message Importance="High" Text="+++ Justin Dearing +++ %(TcrGrammar.Identity) | Scanner: %(TcrGrammar.Scanner) | Parser: %(TcrGrammar.Parser) | ScannerFrame: %(TcrGrammar.ScannerFrame) | ParserFrame: %(TcrGrammar.ParserFrame) | PrefaceFrame: %(TcrGrammar.PrefaceFrame) | CopyrightFrame: %(TcrGrammar.CopyrightFrame)" />
 
     <TcrCompileGrammar
       Grammar="%(TcrGrammar.Identity)"
