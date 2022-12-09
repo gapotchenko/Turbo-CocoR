@@ -1,0 +1,10 @@
+﻿<Project>
+
+  <PropertyGroup>
+    <TcrTasksAssemblyFile>$(MSBuildThisFileDirectory)net472\Gapotchenko.Turbo.CocoR.Integration.MSBuild.Tasks.dll</TcrTasksAssemblyFile>
+    <TcrTasksAssemblyFile Condition=" '$(MSBuildRuntimeType)' == 'Core' ">$(MSBuildThisFileDirectory)net5.0\Gapotchenko.Turbo.CocoR.Integration.MSBuild.Tasks.dll</TcrTasksAssemblyFile>
+  </PropertyGroup>
+
+  <UsingTask TaskName="Gapotchenko.Turbo.CocoR.Integration.MSBuild.Tasks.TcrCompileGrammar" AssemblyFile="$(TcrTasksAssemblyFile)" />
+
+</Project>

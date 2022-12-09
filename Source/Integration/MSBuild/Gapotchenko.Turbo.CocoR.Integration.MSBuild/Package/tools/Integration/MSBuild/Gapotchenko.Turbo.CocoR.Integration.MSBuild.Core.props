@@ -1,0 +1,25 @@
+<Project>
+
+  <PropertyGroup>
+    <TcrLangExtension Condition=" '$(MSBuildProjectExtension)' == '.csproj' " >.cs</TcrLangExtension>
+  </PropertyGroup>
+
+  <ItemDefinitionGroup Condition=" '$(TcrLangExtension)' != '' ">
+    <TcrGrammar>
+      <Scanner>%(RelativeDir)Scanner$(TcrLangExtension)</Scanner>
+      <Parser>%(RelativeDir)Parser$(TcrLangExtension)</Parser>
+      <!--<ScannerFrame>%(RelativeDir)Scanner.frame</ScannerFrame>
+      <ParserFrame>%(RelativeDir)Parser.frame</ParserFrame>-->
+      <!--<PrefaceFrame>%(RelativeDir)Preface.frame</PrefaceFrame>
+      <CopyrightFrame>%(RelativeDir)Copyright.frame</CopyrightFrame>-->
+    </TcrGrammar>
+  </ItemDefinitionGroup>
+
+  <ItemGroup Condition=" '$(TcrLangExtension)' != '' AND '$(EnableDefaultItems)' == 'true' ">
+    <!-- Glob grammar files in project. -->
+    <TcrGrammar Include="**\*.atg" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
+
+    <None Remove="**\*.atg" Condition=" '$(EnableDefaultNoneItems)' == 'true' " />
+  </ItemGroup>
+
+</Project>

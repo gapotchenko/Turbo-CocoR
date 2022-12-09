@@ -1,0 +1,67 @@
+<Project>
+
+  <Import Project="Gapotchenko.Turbo.CocoR.Integration.MSBuild.Tasks.targets" />
+  <Import Project="Gapotchenko.Turbo.CocoR.Integration.MSBuild.DesignTime.targets" />
+
+  <ItemGroup>
+    <TcrGrammar Remove="@(None)" Condition=" '$(EnableDefaultItems)' == 'true' " />
+
+    <_Temp Remove="@(_Temp)" />
+    <_Temp Include="@(TcrGrammar->'%(Identity)')" />
+    <_Temp Include="@(TcrGrammar->'%(ScannerFrame)')" />
+    <_Temp Include="@(TcrGrammar->'%(ParserFrame)')" />
+    <_Temp Include="@(TcrGrammar->'%(PrefaceFrame)')" />
+    <_Temp Include="@(TcrGrammar->'%(CopyrightFrame)')" />
+
+    <!-- Changes in grammar files should trigger the build. -->
+    <UpToDateCheckInput Include="@(_Temp)" Kind="ImplicitBuild" />
+
+    <!-- Changes in grammar files lead to changes in generated code which should be recompiled. -->
+    <CustomAdditionalCompileInputs Include="@(_Temp)" />
+
+    <_Temp Remove="@(_Temp)" />
+  </ItemGroup>
+
+  <Target Name="TcrValidatePrerequisites"
+          BeforeTargets="TcrCompileGrammar"
+          Condition=" '$(DesignTimeBuild)' != 'true' ">
+
+    <Error
+      Condition=" '$(UsingMicrosoftNETSdk)' != 'true' "
+      Code="TCR1202"
+      Text="Turbo Coco/R project integration can only be used with SDK-style projects." />
+
+    <Error
+      Condition=" '$(TcrLangExtension)' == '' "
+      Code="TCR0001"
+      Text="Turbo Coco/R does not support $(Language) programming language." />
+
+  </Target>
+
+  <Target Name="TcrCompileGrammar"
+          BeforeTargets="CoreCompile"
+          Condition=" '$(DesignTimeBuild)' != 'true' "
+          Inputs="%(TcrGrammar.Identity);%(TcrGrammar.ScannerFrame);%(TcrGrammar.ParserFrame);%(TcrGrammar.PrefaceFrame);%(TcrGrammar.CopyrightFrame)"
+          Outputs="%(TcrGrammar.Scanner);%(TcrGrammar.Parser)">
+
+    <Message Importance="High" Text="+++ Justin Dearing +++ %(TcrGrammar.Identity) %(TcrGrammar.Scanner) %(TcrGrammar.Frames)" />
+
+    <TcrCompileGrammar
+      Grammar="%(TcrGrammar.Identity)"
+      Language="$(Language)"
+      LanguageVersion="$(LangVersion)"
+      RootNamespace="$(RootNamespace)"
+      ProjectDir="$(ProjectDir)" />
+
+    <Copy SourceFiles="%(TcrGrammar.Identity)" DestinationFiles="%(TcrGrammar.Scanner)" />
+    <Copy SourceFiles="%(TcrGrammar.Identity)" DestinationFiles="%(TcrGrammar.Parser)" />
+
+    <Touch Files="%(TcrGrammar.Scanner);%(TcrGrammar.Parser)" />
+
+    <ItemGroup>
+      <Compile Include="%(TcrGrammar.Scanner);%(TcrGrammar.Parser)" KeepDuplicates="false" />
+      <FileWrites Include="%(TcrGrammar.Scanner);%(TcrGrammar.Parser)" />
+    </ItemGroup>
+  </Target>
+
+</Project>
