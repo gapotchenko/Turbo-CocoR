@@ -1,5 +1,11 @@
 <Project>
 
+  <ItemGroup Condition=" '$(BuildingInsideVisualStudio)' == 'true' ">
+    <!-- Add item names to AvailableItemName item, so that they can show up
+         in a drop-down menu for Build Action field of the properties window in VisualStudio. -->
+    <AvailableItemName Include="TcrAtgFile" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TcrTasksAssemblyFile>$(MSBuildThisFileDirectory)net472\Gapotchenko.Turbo.CocoR.Build.MSBuild.Tasks.dll</TcrTasksAssemblyFile>
     <TcrTasksAssemblyFile Condition=" '$(MSBuildRuntimeType)' == 'Core' ">$(MSBuildThisFileDirectory)net5.0\Gapotchenko.Turbo.CocoR.Build.MSBuild.Tasks.dll</TcrTasksAssemblyFile>

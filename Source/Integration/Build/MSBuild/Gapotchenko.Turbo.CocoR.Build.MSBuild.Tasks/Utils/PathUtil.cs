@@ -27,10 +27,12 @@ static class PathUtil
         IReadOnlyList<string> p1 = path.Split(separators);
         IReadOnlyList<string> p2 = relativeTo.Split(separators, StringSplitOptions.RemoveEmptyEntries);
 
+        var sc = StringComparison;
+
         int i;
         int n = Math.Min(p1.Count, p2.Count);
         for (i = 0; i < n; i++)
-            if (!string.Equals(p1[i], p2[i], StringComparison))
+            if (!string.Equals(p1[i], p2[i], sc))
                 break;
 
         if (i == 0)

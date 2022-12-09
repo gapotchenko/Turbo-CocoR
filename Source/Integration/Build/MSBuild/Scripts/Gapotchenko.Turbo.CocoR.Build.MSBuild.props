@@ -4,9 +4,15 @@
     <TcrLangExtension Condition=" '$(MSBuildProjectExtension)' == '.csproj' " >.cs</TcrLangExtension>
   </PropertyGroup>
 
-  <ItemGroup Condition=" '$(TcrLangExtension)' != '' ">
+  <ItemDefinitionGroup>
+    <TcrAtgFile>
+      <SubType>Designer</SubType>
+    </TcrAtgFile>
+  </ItemDefinitionGroup>
+
+  <ItemGroup Condition=" '$(TcrLangExtension)' != '' AND '$(EnableDefaultItems)' == 'true' ">
     <!-- Gather project grammar files. -->
-    <TcrAtgFile Include="**\*.atg" Exclude="$(DefaultItemExcludes)">
+    <TcrAtgFile Include="**\*.atg" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)">
       <Scanner>%(RelativeDir)Scanner$(TcrLangExtension)</Scanner>
       <Parser>%(RelativeDir)Parser$(TcrLangExtension)</Parser>
       <ScannerFrame Condition=" Exists('%(RelativeDir)Scanner.frame') ">%(RelativeDir)Scanner.frame</ScannerFrame>
@@ -14,6 +20,8 @@
       <PrefaceFrame Condition=" Exists('%(RelativeDir)Preface.frame') ">%(RelativeDir)Preface.frame</PrefaceFrame>
       <CopyrightFrame Condition=" Exists('%(RelativeDir)Copyright.frame') ">%(RelativeDir)Copyright.frame</CopyrightFrame>
     </TcrAtgFile>
+
+    <None Remove="**\*.atg" Condition=" '$(EnableDefaultNoneItems)' == 'true' " />
 
     <TcrCompile Include="@(TcrAtgFile->'%(Identity)')" />
     <TcrCompile Include="@(TcrAtgFile->'%(ScannerFrame)')" />
