@@ -1,11 +1,5 @@
 <Project>
 
-  <ItemGroup Condition=" '$(BuildingInsideVisualStudio)' == 'true' ">
-    <!-- Add item names to AvailableItemName item, so that they can show up
-         in a drop-down menu for Build Action field of the properties window in VisualStudio. -->
-    <AvailableItemName Include="TcrAtgFile" />
-  </ItemGroup>
-
   <PropertyGroup>
     <TcrTasksAssemblyFile>$(MSBuildThisFileDirectory)net472\Gapotchenko.Turbo.CocoR.Build.MSBuild.Tasks.dll</TcrTasksAssemblyFile>
     <TcrTasksAssemblyFile Condition=" '$(MSBuildRuntimeType)' == 'Core' ">$(MSBuildThisFileDirectory)net5.0\Gapotchenko.Turbo.CocoR.Build.MSBuild.Tasks.dll</TcrTasksAssemblyFile>
@@ -13,10 +7,34 @@
 
   <UsingTask TaskName="Gapotchenko.Turbo.CocoR.Build.MSBuild.Tasks.TcrCompileGrammar" AssemblyFile="$(TcrTasksAssemblyFile)" />
 
+  <ItemGroup Condition=" '$(BuildingInsideVisualStudio)' == 'true' ">
+    <!-- Add item names to AvailableItemName item, so that they can show up
+         in a drop-down menu for Build Action field of the properties window in VisualStudio. -->
+    <AvailableItemName Include="TcrGrammar" Name="TEst 1" DisplayName="Test 2" Description="Test 3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_Temp Remove="@(_Temp)" />
+
+    <_Temp Include="@(TcrGrammar->'%(Identity)')" />
+    <_Temp Include="@(TcrGrammar->'%(ScannerFrame)')" />
+    <_Temp Include="@(TcrGrammar->'%(ParserFrame)')" />
+    <_Temp Include="@(TcrGrammar->'%(PrefaceFrame)')" />
+    <_Temp Include="@(TcrGrammar->'%(CopyrightFrame)')" />
+
+    <!-- Changes in grammar files should trigger the build. -->
+    <UpToDateCheckInput Include="@(_Temp)" Kind="ImplicitBuild" />
+
+    <!-- Changes in grammar files lead to changes in generated code which should be recompiled. -->
+    <CustomAdditionalCompileInputs Include="@(_Temp)" />
+
+    <_Temp Remove="@(_Temp)" />
+  </ItemGroup>
+  
   <Target Name="TcrValidatePrerequisites"
           BeforeTargets="TcrCompileGrammar"
           Condition=" '$(DesignTimeBuild)' != 'true' ">
-    
+
     <Error
       Condition=" '$(UsingMicrosoftNETSdk)' != 'true' "
       Code="TCR1202"
@@ -26,32 +44,32 @@
       Condition=" '$(TcrLangExtension)' == '' "
       Code="TCR0001"
       Text="Turbo Coco/R does not support $(Language) programming language." />
- 
+
   </Target>
-  
+
   <Target Name="TcrCompileGrammar"
           BeforeTargets="CoreCompile"
           Condition=" '$(DesignTimeBuild)' != 'true' "
-          Inputs="%(TcrAtgFile.Identity);%(TcrAtgFile.ScannerFrame);%(TcrAtgFile.ParserFrame);%(TcrAtgFile.PrefaceFrame);%(TcrAtgFile.CopyrightFrame)"
-          Outputs="%(TcrAtgFile.Scanner);%(TcrAtgFile.Parser)">
+          Inputs="%(TcrGrammar.Identity);%(TcrGrammar.ScannerFrame);%(TcrGrammar.ParserFrame);%(TcrGrammar.PrefaceFrame);%(TcrGrammar.CopyrightFrame)"
+          Outputs="%(TcrGrammar.Scanner);%(TcrGrammar.Parser)">
 
-    <Message Importance="High" Text="+++ Justin Dearing +++ %(TcrAtgFile.Identity) %(TcrAtgFile.Scanner) %(TcrAtgFile.Frames)" />
+    <Message Importance="High" Text="+++ Justin Dearing +++ %(TcrGrammar.Identity) %(TcrGrammar.Scanner) %(TcrGrammar.Frames)" />
 
     <TcrCompileGrammar
-      Grammar="%(TcrAtgFile.Identity)"
+      Grammar="%(TcrGrammar.Identity)"
       Language="$(Language)"
       LanguageVersion="$(LangVersion)"
       RootNamespace="$(RootNamespace)"
       ProjectDir="$(ProjectDir)" />
-    
-    <Copy SourceFiles="%(TcrAtgFile.Identity)" DestinationFiles="%(TcrAtgFile.Scanner)" />
-    <Copy SourceFiles="%(TcrAtgFile.Identity)" DestinationFiles="%(TcrAtgFile.Parser)" />
 
-    <Touch Files="%(TcrAtgFile.Scanner);%(TcrAtgFile.Parser)" />
+    <Copy SourceFiles="%(TcrGrammar.Identity)" DestinationFiles="%(TcrGrammar.Scanner)" />
+    <Copy SourceFiles="%(TcrGrammar.Identity)" DestinationFiles="%(TcrGrammar.Parser)" />
+
+    <Touch Files="%(TcrGrammar.Scanner);%(TcrGrammar.Parser)" />
 
     <ItemGroup>
-      <Compile Include="%(TcrAtgFile.Scanner);%(TcrAtgFile.Parser)" KeepDuplicates="false" />
-      <FileWrites Include="%(TcrAtgFile.Scanner);%(TcrAtgFile.Parser)" />
+      <Compile Include="%(TcrGrammar.Scanner);%(TcrGrammar.Parser)" KeepDuplicates="false" />
+      <FileWrites Include="%(TcrGrammar.Scanner);%(TcrGrammar.Parser)" />
     </ItemGroup>
   </Target>
 
