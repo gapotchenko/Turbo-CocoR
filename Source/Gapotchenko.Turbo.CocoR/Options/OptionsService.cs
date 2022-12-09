@@ -1,6 +1,7 @@
 ﻿using Gapotchenko.FX;
 using Gapotchenko.Turbo.CocoR.Deployment;
 using Gapotchenko.Turbo.CocoR.Framework.Diagnostics;
+using System.Diagnostics.SymbolStore;
 
 #nullable enable
 
@@ -32,9 +33,13 @@ sealed class OptionsService : IOptionsService
                 outputDirectoryPath = Empty.Nullify(args[++i]);
             else if (args[i] is "--lines" or "-lines")
                 EmitLines = true;
+            else if (args[i] is "--lang" && i < argc - 1)
+                Language = Empty.Nullify(Empty.Nullify(args[++i]), "auto", StringComparison.OrdinalIgnoreCase);
+            else if (args[i] is "--lang-version" && i < argc - 1)
+                LanguageVersion = Empty.Nullify(args[++i]);
             else if (args[i] is "-f" or "--force")
                 force = true;
-            else if (args[i] is "--property" && i < argc - 2)
+            else if (args[i] is "-p" or "--property" && i < argc - 2)
                 m_Properties[args[++i]] = args[++i];
             else if (args[i] is "--no-logo")
                 NoLogo = true;
@@ -101,6 +106,10 @@ sealed class OptionsService : IOptionsService
     public string? Namespace { get; }
 
     public bool EmitLines { get; }
+
+    public string? Language { get; }
+
+    public string? LanguageVersion { get; }
 
     string? m_OutputDirectoryPath;
 

@@ -5,7 +5,7 @@
     <TargetFrameworks>net472;net5.0</TargetFrameworks>
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
     <ImplicitUsings>false</ImplicitUsings>
-    <Nullable Condition=" '$(TargetFrameworkIdentifier)' == 'NETFramework' ">annotations</Nullable>
+    <Nullable Condition=" '$(MasteringFrameworkIdentifier)' == '.NETFramework' ">annotations</Nullable>
   </PropertyGroup>
 
   <ItemGroup Condition=" '$(MasteringFrameworkIdentifier)' == '.NETFramework' ">

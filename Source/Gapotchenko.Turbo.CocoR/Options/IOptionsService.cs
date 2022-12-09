@@ -16,6 +16,10 @@ interface IOptionsService
 
     bool EmitLines { get; }
 
+    string? Language { get; }
+
+    string? LanguageVersion { get; }
+
     string? Command { get; }
 
     IReadOnlyList<string> CommandArguments { get; }
