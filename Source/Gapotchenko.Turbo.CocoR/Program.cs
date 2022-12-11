@@ -1,5 +1,4 @@
 ﻿using Gapotchenko.FX;
-using Gapotchenko.FX.Linq;
 using Gapotchenko.Turbo.CocoR.Deployment;
 using Gapotchenko.Turbo.CocoR.Diagnostics;
 using Gapotchenko.Turbo.CocoR.Framework.Diagnostics;
@@ -108,20 +107,15 @@ static class Program
         if (!optionsService.IntCall)
             return false;
 
-        var args = optionsService.CommandArguments;
-
         switch (optionsService.Command)
         {
             case "compile-project-grammar":
                 {
-                    if (args.Count < 1)
-                        throw new Exception("Too few command-line parameters.");
+                    var args = optionsService.CommandArguments;
+                    if (args.Count != 1)
+                        throw new Exception("Invalid command-line parameters.");
 
-                    using var container = CreateContainer(
-                        new OptionsService(new[] { "-p", "Mode", "Integrated" }.Concat(args.Skip(1)).ToArray())
-                        {
-                            NoLogo = true
-                        });
+                    using var container = CreateContainer(optionsService);
                     var orchestrationService = container.GetExport<IOrchestrationService>();
                     orchestrationService.CompileProjectGrammar(args[0]);
                 }

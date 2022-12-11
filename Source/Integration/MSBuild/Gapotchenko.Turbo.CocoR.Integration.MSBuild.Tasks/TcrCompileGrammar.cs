@@ -146,9 +146,6 @@ public sealed class TcrCompileGrammar : ToolTask
 
         clb.AppendFileNameIfNotNull(GenerateFullPathToTool());
         clb.AppendSwitch("--no-logo");
-        clb.AppendSwitch("--int-call");
-        clb.AppendSwitch("compile-project-grammar");
-        clb.AppendFileNameIfNotNull(Grammar);
         clb.AppendSwitch("-q");
         clb.AppendSwitch("-f");
 
@@ -178,6 +175,10 @@ public sealed class TcrCompileGrammar : ToolTask
 
         if (TryGetNamespaceHint() is not null and var namespaceHint)
             clb.AppendProperty("NamespaceHint", namespaceHint);
+
+        clb.AppendSwitch("--int-call");
+        clb.AppendSwitch("compile-project-grammar");
+        clb.AppendFileNameIfNotNull(Grammar);
 
         return clb.ToString();
     }

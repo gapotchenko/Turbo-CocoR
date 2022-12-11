@@ -16,7 +16,6 @@ sealed class OptionsService : IOptionsService
 
         bool help = false;
         var positionalOptions = new List<string>();
-        string? outputDirectoryPath = null;
         bool force = false;
 
         int argc = args.Count;
@@ -29,7 +28,7 @@ sealed class OptionsService : IOptionsService
             else if (args[i] is "--trace" or "-trace" && i < argc - 1)
                 Trace = Empty.Nullify(args[++i].Trim());
             else if (args[i] is "-o" or "--output" && i < argc - 1)
-                outputDirectoryPath = Empty.Nullify(args[++i]);
+                m_OutputDirectoryPath = Empty.Nullify(args[++i]);
             else if (args[i] is "--lines" or "-lines")
                 EmitLines = true;
             else if (args[i] is "--lang" && i < argc - 1)
@@ -78,12 +77,7 @@ sealed class OptionsService : IOptionsService
 
         #region Calculated options
 
-        if (outputDirectoryPath == null)
-        {
-            KeepOldFiles = !force;
-            outputDirectoryPath = Path.GetDirectoryName(m_SourceFilePath) ?? ".";
-        }
-        m_OutputDirectoryPath = outputDirectoryPath;
+        KeepOldFiles = m_OutputDirectoryPath == null && !force;
 
         #endregion
     }
@@ -110,7 +104,7 @@ sealed class OptionsService : IOptionsService
 
     string? m_OutputDirectoryPath;
 
-    public string OutputDirectoryPath => m_OutputDirectoryPath ?? throw new Exception("Output directory path is not defined.");
+    public string OutputDirectoryPath => m_OutputDirectoryPath ?? Path.GetDirectoryName(m_SourceFilePath) ?? ".";
 
     public string? Command { get; }
 
@@ -124,7 +118,7 @@ sealed class OptionsService : IOptionsService
 
     public IReadOnlyDictionary<string, string> Properties => m_Properties;
 
-    public bool NoLogo { get; init; }
+    public bool NoLogo { get; }
 
     public bool Quiet { get; }
 

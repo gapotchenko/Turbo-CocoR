@@ -116,7 +116,6 @@ sealed class ScaffoldingService : IScaffoldingService
 
         string outputFileNameWithoutExtension = Path.GetFileNameWithoutExtension(outputFilePath);
         var properties = m_OptionsService.Properties;
-        var mode = properties.GetValueOrDefault("Mode", "Standalone");
         string? @namespace = m_OptionsService.Namespace ?? properties.GetValueOrDefault("NamespaceHint");
 
         var variables = new Dictionary<string, object?>(StringComparer.Ordinal)
@@ -129,7 +128,7 @@ sealed class ScaffoldingService : IScaffoldingService
             ["lang_version"] = "7.0",
             ["lang_namespace"] = @namespace,
             ["has_lang_namespace"] = @namespace != null,
-            ["standalone"] = mode.Equals("Standalone", StringComparison.OrdinalIgnoreCase)
+            ["standalone"] = !m_OptionsService.IntCall
         };
 
         ExtractTemplate(template, outputFilePath, variables);
