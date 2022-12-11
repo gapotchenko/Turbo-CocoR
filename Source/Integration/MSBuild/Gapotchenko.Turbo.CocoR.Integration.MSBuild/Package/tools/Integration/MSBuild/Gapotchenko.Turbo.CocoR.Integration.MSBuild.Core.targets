@@ -22,16 +22,15 @@
     <!-- Removal of an optional file should trigger the build. -->
     <CustomAdditionalCompileInputs Include="@(TcrGrammar->'%(CopyrightFrameTemplate)')" />
     <CustomAdditionalCompileInputs Include="@(TcrGrammar->'%(PrefaceFrameTemplate)')"  />
-  </ItemGroup>
 
-  <ItemGroup Condition=" '$(TcrLangExtension)' != '' ">
+    <!-- Semantically group generated files with a grammar. -->
     <Compile Update="@(TcrGrammar->'%(Scanner)')">
       <DependentUpon>%(TcrGrammar.Filename)%(TcrGrammar.Extension)</DependentUpon>
     </Compile>
-    
     <Compile Update="@(TcrGrammar->'%(Parser)')">
       <DependentUpon>%(TcrGrammar.Filename)%(TcrGrammar.Extension)</DependentUpon>
     </Compile>
+
   </ItemGroup>
 
   <Target Name="TcrValidatePrerequisites"
@@ -76,6 +75,7 @@
         <DependentUpon>%(TcrGrammar.Filename)%(TcrGrammar.Extension)</DependentUpon>
       </Compile>
     </ItemGroup>
+    
   </Target>
 
 </Project>
