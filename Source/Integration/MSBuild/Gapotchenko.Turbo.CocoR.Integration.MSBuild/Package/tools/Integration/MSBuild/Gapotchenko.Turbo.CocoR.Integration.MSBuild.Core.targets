@@ -42,10 +42,10 @@
 
   <ItemGroup Condition=" '$(TcrLangExtension)' != '' ">
     <Compile Update="@(TcrGrammar->'%(Scanner)')">
-      <DependentUpon>%(TcrGrammar.Filename)%(TcrGrammar.Extension)</DependentUpon>
+      <DependentUpon>$([MSBuild]::MakeRelative($([MSBuild]::NormalizePath('%(TcrGrammar.Scanner)\..')), $([MSBuild]::ValueOrDefault('%(TcrGrammar.FullPath)', '.'))))</DependentUpon>
     </Compile>
     <Compile Update="@(TcrGrammar->'%(Parser)')">
-      <DependentUpon>%(TcrGrammar.Filename)%(TcrGrammar.Extension)</DependentUpon>
+      <DependentUpon>$([MSBuild]::MakeRelative($([MSBuild]::NormalizePath('%(TcrGrammar.Parser)\..')), $([MSBuild]::ValueOrDefault('%(TcrGrammar.FullPath)', '.'))))</DependentUpon>
     </Compile>
   </ItemGroup>
   
@@ -87,8 +87,11 @@
       ProjectDir="$(ProjectDir)" />
 
     <ItemGroup>
-      <Compile Include="%(TcrGrammar.Scanner);%(TcrGrammar.Parser)" KeepDuplicates="false">
-        <DependentUpon>%(TcrGrammar.Filename)%(TcrGrammar.Extension)</DependentUpon>
+      <Compile Include="%(TcrGrammar.Scanner)" KeepDuplicates="false">
+        <DependentUpon>$([MSBuild]::MakeRelative($([MSBuild]::NormalizePath('%(TcrGrammar.Scanner)\..')), $([MSBuild]::ValueOrDefault('%(TcrGrammar.FullPath)', '.'))))</DependentUpon>
+      </Compile>
+      <Compile Include="%(TcrGrammar.Parser)" KeepDuplicates="false">
+        <DependentUpon>$([MSBuild]::MakeRelative($([MSBuild]::NormalizePath('%(TcrGrammar.Parser)\..')), $([MSBuild]::ValueOrDefault('%(TcrGrammar.FullPath)', '.'))))</DependentUpon>
       </Compile>
     </ItemGroup>
   </Target>
