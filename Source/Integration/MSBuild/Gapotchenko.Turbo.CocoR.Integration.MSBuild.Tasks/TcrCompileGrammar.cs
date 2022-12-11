@@ -231,7 +231,7 @@ public sealed class TcrCompileGrammar : ToolTask
             !string.IsNullOrEmpty(projectDir) &&
             LanguageProvider is not null and var languageProvider)
         {
-            string relativePath = PathUtil.GetRelativePath(projectDir, Path.GetDirectoryName(Grammar) ?? ".");
+            string relativePath = PathUtil.GetRelativePath(projectDir, Empty.NullifyWhiteSpace(Path.GetDirectoryName(Grammar)) ?? ".");
             if (!Path.IsPathRooted(relativePath))
             {
                 string? relativeNamespace;
