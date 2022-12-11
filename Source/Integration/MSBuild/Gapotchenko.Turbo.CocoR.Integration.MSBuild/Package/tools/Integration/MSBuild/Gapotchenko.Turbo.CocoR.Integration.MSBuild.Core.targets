@@ -40,6 +40,15 @@
     <_Temp Remove="@(_Temp)" />
   </ItemGroup>
 
+  <ItemGroup Condition=" '$(TcrLangExtension)' != '' ">
+    <Compile Update="@(TcrGrammar->'%(Scanner)')">
+      <DependentUpon>%(TcrGrammar.Filename)%(TcrGrammar.Extension)</DependentUpon>
+    </Compile>
+    <Compile Update="@(TcrGrammar->'%(Parser)')">
+      <DependentUpon>%(TcrGrammar.Filename)%(TcrGrammar.Extension)</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  
   <Target Name="TcrValidatePrerequisites"
           BeforeTargets="TcrCompileGrammar"
           Condition=" '$(DesignTimeBuild)' != 'true' ">
@@ -78,7 +87,9 @@
       ProjectDir="$(ProjectDir)" />
 
     <ItemGroup>
-      <Compile Include="%(TcrGrammar.Scanner);%(TcrGrammar.Parser)" KeepDuplicates="false" />
+      <Compile Include="%(TcrGrammar.Scanner);%(TcrGrammar.Parser)" KeepDuplicates="false">
+        <DependentUpon>%(TcrGrammar.Filename)%(TcrGrammar.Extension)</DependentUpon>
+      </Compile>
     </ItemGroup>
   </Target>
 
