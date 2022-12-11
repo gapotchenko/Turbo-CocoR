@@ -19,11 +19,11 @@
       Include="@(TcrGrammar->'%(Identity)');@(TcrGrammar->'%(ScannerFrame)');@(TcrGrammar->'%(ParserFrame)');@(TcrGrammar->'%(CopyrightFrame)');@(TcrGrammar->'%(PrefaceFrame)')"
       Kind="ImplicitBuild" />
 
-    <!-- Removal of an optional file should trigger the build. -->
+    <!-- Removal of an optional grammar file should trigger the build. -->
     <CustomAdditionalCompileInputs Include="@(TcrGrammar->'%(CopyrightFrameTemplate)')" />
     <CustomAdditionalCompileInputs Include="@(TcrGrammar->'%(PrefaceFrameTemplate)')"  />
 
-    <!-- Semantically group generated files with a grammar. -->
+    <!-- Semantically group the generated files together with the source grammar. -->
     <Compile Update="@(TcrGrammar->'%(Scanner)')">
       <DependentUpon>%(TcrGrammar.Filename)%(TcrGrammar.Extension)</DependentUpon>
     </Compile>
@@ -75,7 +75,7 @@
         <DependentUpon>%(TcrGrammar.Filename)%(TcrGrammar.Extension)</DependentUpon>
       </Compile>
     </ItemGroup>
-    
+
   </Target>
 
 </Project>
