@@ -9,14 +9,21 @@
     <_Temp Remove="@(_Temp)" />
     <_Temp Include="@(TcrGrammar)">
       <ScannerFrame Condition=" '%(TcrGrammar.ScannerFrame)' == '' AND Exists('%(RelativeDir)Scanner.frame') ">%(RelativeDir)Scanner.frame</ScannerFrame>
+      <ScannerFrameTemplate Condition=" '%(TcrGrammar.ScannerFrame)' != '' ">%(TcrGrammar.ScannerFrame)</ScannerFrameTemplate>
+      <ScannerFrameTemplate Condition=" '%(TcrGrammar.ScannerFrame)' == '' ">%(RelativeDir)Scanner.frame</ScannerFrameTemplate>
+
       <ParserFrame Condition=" '%(TcrGrammar.ParserFrame)' == '' AND Exists('%(RelativeDir)Parser.frame') ">%(RelativeDir)Parser.frame</ParserFrame>
-      <PrefaceFrame Condition=" '%(TcrGrammar.PrefaceFrame)' == '' AND Exists('%(RelativeDir)Preface.frame') ">%(RelativeDir)Preface.frame</PrefaceFrame>
+      <ParserFrameTemplate Condition=" '%(TcrGrammar.ParserFrame)' != '' ">%(TcrGrammar.ParserFrame)</ParserFrameTemplate>
+      <ParserFrameTemplate Condition=" '%(TcrGrammar.ParserFrame)' == '' ">%(RelativeDir)Parser.frame</ParserFrameTemplate>
+
       <CopyrightFrame Condition=" '%(TcrGrammar.CopyrightFrame)' == '' AND Exists('%(RelativeDir)Copyright.frame') ">%(RelativeDir)Copyright.frame</CopyrightFrame>
+
+      <PrefaceFrame Condition=" '%(TcrGrammar.PrefaceFrame)' == '' AND Exists('%(RelativeDir)Preface.frame') ">%(RelativeDir)Preface.frame</PrefaceFrame>
     </_Temp>
 
     <TcrGrammar Remove="@(TcrGrammar)" />
     <TcrGrammar Include="@(_Temp)" />
-    
+
     <_Temp Remove="@(_Temp)" />
     <_Temp Include="@(TcrGrammar->'%(Identity)')" />
     <_Temp Include="@(TcrGrammar->'%(ScannerFrame)')" />
@@ -59,6 +66,10 @@
 
     <TcrCompileGrammar
       Grammar="%(TcrGrammar.Identity)"
+      ScannerFrame="%(TcrGrammar.ScannerFrameTemplate)"
+      ParserFrame="%(TcrGrammar.ParserFrameTemplate)"
+      CopyrightFrame="%(TcrGrammar.CopyrightFrame)"
+      PrefaceFrame="%(TcrGrammar.PrefaceFrame)"
       Language="$(Language)"
       LanguageVersion="$(LangVersion)"
       RootNamespace="$(RootNamespace)"

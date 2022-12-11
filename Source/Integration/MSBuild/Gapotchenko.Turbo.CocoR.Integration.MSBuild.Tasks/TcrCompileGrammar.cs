@@ -37,6 +37,26 @@ public sealed class TcrCompileGrammar : ToolTask
         set => m_Grammar = value ?? throw new ArgumentNullException(nameof(value));
     }
 
+    /// <summary>
+    /// Gets or sets the scanner frame file path.
+    /// </summary>
+    public string? ScannerFrame { get; set; }
+
+    /// <summary>
+    /// Gets or sets the parser frame file path.
+    /// </summary>
+    public string? ParserFrame { get; set; }
+
+    /// <summary>
+    /// Gets or sets the copyright frame file path.
+    /// </summary>
+    public string? CopyrightFrame { get; set; }
+
+    /// <summary>
+    /// Gets or sets the preface frame file path.
+    /// </summary>
+    public string? PrefaceFrame { get; set; }
+
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     string? m_Language;
 
@@ -122,6 +142,18 @@ public sealed class TcrCompileGrammar : ToolTask
         clb.AppendFileNameIfNotNull(Grammar);
         clb.AppendSwitch("-q");
         clb.AppendSwitch("-f");
+
+        if (!string.IsNullOrEmpty(ScannerFrame))
+            clb.AppendProperty("ScannerFrame", ScannerFrame);
+
+        if (!string.IsNullOrEmpty(ParserFrame))
+            clb.AppendProperty("ParserFrame", ParserFrame);
+
+        if (!string.IsNullOrEmpty(CopyrightFrame))
+            clb.AppendProperty("CopyrightFrame", CopyrightFrame);
+
+        if (!string.IsNullOrEmpty(PrefaceFrame))
+            clb.AppendProperty("PrefaceFrame", PrefaceFrame);
 
         if (LanguageProvider is not null and var languageProvider)
         {
