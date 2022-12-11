@@ -24,6 +24,8 @@ sealed class Compiler
 
     public void Compile(string grammarFilePath)
     {
+        m_OptionsService.SourceDirectoryPath = Path.GetDirectoryName(grammarFilePath);
+
         int errorsCount;
 
         string traceFilePath = Path.Combine(m_OptionsService.OutputDirectoryPath, "Trace.txt");
@@ -68,7 +70,7 @@ sealed class Compiler
         parser.dfa = new DFA(parser);
         parser.pgen = new ParserGen(parser);
 
-        parser.tab.srcName = m_OptionsService.SourceFilePath;
+        parser.tab.srcName = grammarFilePath;
         parser.tab.nsName = m_OptionsService.Namespace;
         parser.tab.emitLines = m_OptionsService.EmitLines;
         if (m_OptionsService.Trace is not null and var trace)

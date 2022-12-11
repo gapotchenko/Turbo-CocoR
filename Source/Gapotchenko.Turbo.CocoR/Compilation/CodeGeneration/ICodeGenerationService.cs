@@ -12,7 +12,9 @@ interface ICodeGenerationService
 
     ICodeFrame? TryOpenFrame(string fileName);
 
+    string GetCodeFilePath(string fileName);
+
     ICodeWriter CreateWriter(string fileName);
 
-    void GeneratePreface(ICodeWriter codeWriter);
+    void GenerateEpilogue(ICodeWriter codeWriter);
 }

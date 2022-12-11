@@ -1,4 +1,5 @@
 ﻿using Gapotchenko.Turbo.CocoR.Compilation;
+using Gapotchenko.Turbo.CocoR.Compilation.CodeGeneration;
 using Gapotchenko.Turbo.CocoR.Framework.Diagnostics;
 using Gapotchenko.Turbo.CocoR.Options;
 using Gapotchenko.Turbo.CocoR.Scaffolding;
@@ -6,24 +7,27 @@ using System.Composition;
 
 namespace Gapotchenko.Turbo.CocoR.Orchestration;
 
-[Export(typeof(IOrchestrationService))]
 [Shared]
+[Export(typeof(IOrchestrationService))]
 sealed class OrchestrationService : IOrchestrationService
 {
     [ImportingConstructor]
     public OrchestrationService(
         IOptionsService optionsService,
         Lazy<Compiler> compiler,
-        Lazy<IScaffoldingService> scaffoldingService)
+        Lazy<IScaffoldingService> scaffoldingService,
+        Lazy<ICodeGenerationService> codeGenerationService)
     {
         m_OptionsService = optionsService;
         m_Compiler = compiler;
         m_ScaffoldingService = scaffoldingService;
+        m_CodeGenerationService = codeGenerationService;
     }
 
     readonly IOptionsService m_OptionsService;
     readonly Lazy<Compiler> m_Compiler;
     readonly Lazy<IScaffoldingService> m_ScaffoldingService;
+    readonly Lazy<ICodeGenerationService> m_CodeGenerationService;
 
     public void CompileGrammar()
     {
@@ -35,9 +39,10 @@ sealed class OrchestrationService : IOrchestrationService
         bool quiet = m_OptionsService.Quiet;
         var scaffoldingService = m_ScaffoldingService.Value;
 
+        var category = scaffoldingService.GetItemCategory(itemCategory);
         foreach (var itemName in itemNames)
         {
-            var templateName = scaffoldingService.CreateItem(itemCategory, itemName);
+            var templateName = scaffoldingService.CreateItem(category, itemName);
             if (!quiet)
                 Console.WriteLine($"New \"{templateName}\" file created successfully.");
         }
@@ -59,9 +64,20 @@ sealed class OrchestrationService : IOrchestrationService
         }
 
         if (grammarIsEmpty)
-            m_ScaffoldingService.Value.CreateItem("grammar", grammarFilePath);
+            m_ScaffoldingService.Value.CreateItem(ScaffoldingItemCategory.Grammar, grammarFilePath);
+
+        var cgs = m_CodeGenerationService.Value;
+
+        var scannerFramePath = cgs.GetFrameFilePath(FrameFileNames.Scanner);
+        if (!File.Exists(scannerFramePath))
+            m_ScaffoldingService.Value.CreateItem(ScaffoldingItemCategory.Frame, ScaffoldingItemNames.Frame.Scanner);
+
+        var parserFramePath = cgs.GetFrameFilePath(FrameFileNames.Parser);
+        if (!File.Exists(parserFramePath))
+            m_ScaffoldingService.Value.CreateItem(ScaffoldingItemCategory.Frame, ScaffoldingItemNames.Frame.Parser);
+
+        m_Compiler.Value.Compile(grammarFilePath);
 
         // TODO
-
     }
 }

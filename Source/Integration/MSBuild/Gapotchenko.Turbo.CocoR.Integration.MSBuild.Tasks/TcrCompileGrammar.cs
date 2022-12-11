@@ -57,6 +57,16 @@ public sealed class TcrCompileGrammar : ToolTask
     /// </summary>
     public string? PrefaceFrame { get; set; }
 
+    /// <summary>
+    /// Gets or sets the scanner file path.
+    /// </summary>
+    public string? Scanner { get; set; }
+
+    /// <summary>
+    /// Gets or sets the parser file path.
+    /// </summary>
+    public string? Parser { get; set; }
+
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     string? m_Language;
 
@@ -153,6 +163,12 @@ public sealed class TcrCompileGrammar : ToolTask
 
         if (!string.IsNullOrEmpty(PrefaceFrame))
             clb.AppendProperty("PrefaceFrame", PrefaceFrame);
+
+        if (!string.IsNullOrEmpty(Scanner))
+            clb.AppendProperty("Scanner", Scanner);
+
+        if (!string.IsNullOrEmpty(Parser))
+            clb.AppendProperty("Parser", Parser);
 
         if (LanguageProvider is not null and var languageProvider)
         {

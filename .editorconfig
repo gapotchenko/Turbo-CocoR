@@ -4,6 +4,16 @@
 dotnet_style_require_accessibility_modifiers=omit_if_default:warning
 dotnet_diagnostic.IDE0005.severity = warning
 
+dotnet_naming_rule.private_members_with_underscore.symbols  = private_fields
+dotnet_naming_rule.private_members_with_underscore.style = prefix_underscore
+dotnet_naming_rule.private_members_with_underscore.severity = warning
+
+dotnet_naming_symbols.private_fields.applicable_kinds = field
+dotnet_naming_symbols.private_fields.applicable_accessibilities = private
+
+dotnet_naming_style.prefix_underscore.required_prefix = m_
+dotnet_naming_style.prefix_underscore.capitalization = pascal_case
+
 [*.xml]
 indent_style = space
 indent_size = 2

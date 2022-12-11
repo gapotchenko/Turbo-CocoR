@@ -9,8 +9,8 @@ using System.Globalization;
 
 namespace Gapotchenko.Turbo.CocoR.Scaffolding;
 
-[Export(typeof(IScaffoldingService))]
 [Shared]
+[Export(typeof(IScaffoldingService))]
 sealed class ScaffoldingService : IScaffoldingService
 {
     [ImportingConstructor]
@@ -71,35 +71,45 @@ sealed class ScaffoldingService : IScaffoldingService
         }
     }
 
-    public string CreateItem(string category, string name)
+    public ScaffoldingItemCategory GetItemCategory(string s) =>
+        s switch
+        {
+            "frame" => ScaffoldingItemCategory.Frame,
+            "grammar" => ScaffoldingItemCategory.Grammar,
+            null => throw new ArgumentNullException(nameof(s)),
+            _ => throw new Exception($"Unknown scaffolding category \"{s}\".")
+        };
+
+    public string CreateItem(ScaffoldingItemCategory category, string name)
     {
         string? templateName;
         string outputFilePath;
 
-        if (category == "frame")
+        switch (category)
         {
-            templateName =
-                name switch
-                {
-                    "scanner" => "Scanner.frame",
-                    "parser" => "Parser.frame",
-                    "preface" => "Preface.frame",
-                    _ => null
-                };
+            case ScaffoldingItemCategory.Frame:
+                templateName =
+                    name switch
+                    {
+                        ScaffoldingItemNames.Frame.Scanner => FrameFileNames.Scanner,
+                        ScaffoldingItemNames.Frame.Parser => FrameFileNames.Parser,
+                        ScaffoldingItemNames.Frame.Preface => FrameFileNames.Preface,
+                        _ => null
+                    };
 
-            if (templateName == null)
-                throw new Exception($"Unknown scaffolding item name \"{name}\" specified.");
+                if (templateName == null)
+                    throw new Exception($"Unknown scaffolding item name \"{name}\" specified.");
 
-            outputFilePath = m_CodeGenerationService.Value.TryGetExplicitFrameFilePath(templateName) ?? templateName;
-        }
-        else if (category == "grammar")
-        {
-            templateName = "Grammar.atg";
-            outputFilePath = name;
-        }
-        else
-        {
-            throw new Exception($"Unknown scaffolding category \"{category}\" specified.");
+                outputFilePath = m_CodeGenerationService.Value.TryGetExplicitFrameFilePath(templateName) ?? templateName;
+                break;
+
+            case ScaffoldingItemCategory.Grammar:
+                templateName = "Grammar.atg";
+                outputFilePath = name;
+                break;
+
+            default:
+                throw new ArgumentOutOfRangeException(nameof(category));
         }
 
         using var template = OpenTemplate(templateName);
@@ -119,7 +129,7 @@ sealed class ScaffoldingService : IScaffoldingService
             ["lang_version"] = "7.0",
             ["lang_namespace"] = @namespace,
             ["has_lang_namespace"] = @namespace != null,
-            ["standalone"] = mode.Equals("Standalone", StringComparison.OrdinalIgnoreCase) 
+            ["standalone"] = mode.Equals("Standalone", StringComparison.OrdinalIgnoreCase)
         };
 
         ExtractTemplate(template, outputFilePath, variables);

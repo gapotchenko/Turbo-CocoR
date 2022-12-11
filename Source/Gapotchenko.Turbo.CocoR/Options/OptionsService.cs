@@ -1,7 +1,6 @@
 ﻿using Gapotchenko.FX;
 using Gapotchenko.Turbo.CocoR.Deployment;
 using Gapotchenko.Turbo.CocoR.Framework.Diagnostics;
-using System.Diagnostics.SymbolStore;
 
 #nullable enable
 
@@ -79,12 +78,10 @@ sealed class OptionsService : IOptionsService
 
         #region Calculated options
 
-        m_SourceDirectoryPath = Path.GetDirectoryName(m_SourceFilePath);
-
         if (outputDirectoryPath == null)
         {
             KeepOldFiles = !force;
-            outputDirectoryPath = m_SourceDirectoryPath ?? ".";
+            outputDirectoryPath = Path.GetDirectoryName(m_SourceFilePath) ?? ".";
         }
         m_OutputDirectoryPath = outputDirectoryPath;
 
@@ -138,9 +135,14 @@ sealed class OptionsService : IOptionsService
     public bool HasSourceFile => m_SourceFilePath != null;
 
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    readonly string? m_SourceDirectoryPath;
+    string? m_SourceDirectoryPath;
 
-    public string SourceDirectoryPath => m_SourceDirectoryPath ?? throw new Exception("Source directory is unavailable.");
+    [AllowNull]
+    public string SourceDirectoryPath
+    {
+        get => m_SourceDirectoryPath ?? throw new Exception("Source directory is unavailable.");
+        set => m_SourceDirectoryPath = value;
+    }
 
     public bool KeepOldFiles { get; }
 

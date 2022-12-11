@@ -7,8 +7,8 @@ using System.Composition;
 
 namespace Gapotchenko.Turbo.CocoR.Compilation.CodeGeneration;
 
-[Export(typeof(ICodeGenerationService))]
 [Shared]
+[Export(typeof(ICodeGenerationService))]
 sealed class CodeGenerationService : ICodeGenerationService
 {
     [ImportingConstructor]
@@ -25,6 +25,21 @@ sealed class CodeGenerationService : ICodeGenerationService
     readonly IOptionsService m_OptionsService;
     readonly IIOService m_IOService;
     readonly IScaffoldingService m_ScaffoldingService;
+
+    string? TryGetExplicitFilePath(string? fileName, string propertySuffix)
+    {
+        if (string.IsNullOrEmpty(fileName))
+            return null;
+
+        if (!string.IsNullOrEmpty(Path.GetDirectoryName(fileName)))
+            return null;
+
+        string propertyName = Path.GetFileNameWithoutExtension(fileName) + propertySuffix;
+        if (m_OptionsService.Properties.TryGetValue(propertyName, out var value))
+            return value;
+
+        return null;
+    }
 
     public string GetFrameFilePath(string fileName) => GetFrameFilePathExplained(fileName).Path;
 
@@ -64,20 +79,7 @@ sealed class CodeGenerationService : ICodeGenerationService
         return (filePath, explanation);
     }
 
-    public string? TryGetExplicitFrameFilePath(string? fileName)
-    {
-        if (string.IsNullOrEmpty(fileName))
-            return null;
-
-        if (!string.IsNullOrEmpty(Path.GetDirectoryName(fileName)))
-            return null;
-
-        string propertyName = Path.GetFileNameWithoutExtension(fileName) + "Frame";
-        if (m_OptionsService.Properties.TryGetValue(propertyName, out var value))
-            return value;
-
-        return null;
-    }
+    public string? TryGetExplicitFrameFilePath(string? fileName) => TryGetExplicitFilePath(fileName, "Frame");
 
     public ICodeFrame? TryOpenFrame(string fileName)
     {
@@ -93,11 +95,11 @@ sealed class CodeGenerationService : ICodeGenerationService
         }
 
         bool useTemplate =
-        fileName switch
-        {
-            "Preface.frame" => true,
-            _ => false
-        };
+            fileName switch
+            {
+                FrameFileNames.Preface => true,
+                _ => false
+            };
 
         if (useTemplate)
         {
@@ -113,19 +115,25 @@ sealed class CodeGenerationService : ICodeGenerationService
         TryOpenFrame(fileName) ??
         throw new Exception("Cannot find : " + fileName);
 
+    public string GetCodeFilePath(string fileName) =>
+        TryGetExplicitCodeFilePath(fileName) ??
+        Path.Combine(m_OptionsService.OutputDirectoryPath, fileName);
+
+    string? TryGetExplicitCodeFilePath(string? fileName) => TryGetExplicitFilePath(fileName, "");
+
     public ICodeWriter CreateWriter(string fileName)
     {
-        string filePath = Path.Combine(m_OptionsService.OutputDirectoryPath, fileName);
+        string filePath = GetCodeFilePath(fileName);
         m_IOService.CreateFileBackup(filePath);
         return new CodeWriter(File.CreateText(filePath));
     }
 
-    public void GeneratePreface(ICodeWriter codeWriter)
+    public void GenerateEpilogue(ICodeWriter codeWriter)
     {
-        using (var frame = TryOpenFrame("Preface.frame"))
+        using (var frame = TryOpenFrame(FrameFileNames.Preface))
             frame?.CopyRest(codeWriter.Output);
 
-        using (var frame = TryOpenFrame("Copyright.frame"))
+        using (var frame = TryOpenFrame(FrameFileNames.Copyright))
             frame?.CopyRest(codeWriter.Output);
     }
 }

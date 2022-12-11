@@ -70,19 +70,15 @@
       ParserFrame="%(TcrGrammar.ParserFrameTemplate)"
       CopyrightFrame="%(TcrGrammar.CopyrightFrame)"
       PrefaceFrame="%(TcrGrammar.PrefaceFrame)"
+      Scanner="%(TcrGrammar.Scanner)"
+      Parser="%(TcrGrammar.Parser)"
       Language="$(Language)"
       LanguageVersion="$(LangVersion)"
       RootNamespace="$(RootNamespace)"
       ProjectDir="$(ProjectDir)" />
 
-    <Copy SourceFiles="%(TcrGrammar.Identity)" DestinationFiles="%(TcrGrammar.Scanner)" />
-    <Copy SourceFiles="%(TcrGrammar.Identity)" DestinationFiles="%(TcrGrammar.Parser)" />
-
-    <Touch Files="%(TcrGrammar.Scanner);%(TcrGrammar.Parser)" />
-
     <ItemGroup>
       <Compile Include="%(TcrGrammar.Scanner);%(TcrGrammar.Parser)" KeepDuplicates="false" />
-      <FileWrites Include="%(TcrGrammar.Scanner);%(TcrGrammar.Parser)" />
     </ItemGroup>
   </Target>
 

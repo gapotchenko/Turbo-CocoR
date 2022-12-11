@@ -4,6 +4,7 @@ using System.Text;
 using System.Collections;
 using Gapotchenko.Turbo.CocoR.Compilation.Grammar;
 using Gapotchenko.Turbo.CocoR.Framework.Collections;
+using Gapotchenko.Turbo.CocoR.Compilation.CodeGeneration;
 
 namespace Gapotchenko.Turbo.CocoR.Compilation;
 
@@ -1127,13 +1128,13 @@ class DFA
     {
         var cgs = tab.CodeGenerationService;
 
-        using var frame = cgs.OpenFrame("Scanner.frame");
+        using var frame = cgs.OpenFrame(FrameFileNames.Scanner);
         using var codeWriter = cgs.CreateWriter("Scanner.cs");
         gen = codeWriter.Output;
         if (dirtyDFA)
             MakeDeterministic();
 
-        cgs.GeneratePreface(codeWriter);
+        cgs.GenerateEpilogue(codeWriter);
         frame.SkipPart("-->begin");
 
         frame.CopyPart("-->namespace", gen);

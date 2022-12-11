@@ -1367,8 +1367,11 @@ class Tab
             // TODO
 
             // This is just a future implementation stub.
-            if (!value.Equals("Turbo Coco/R 2022.1", StringComparison.OrdinalIgnoreCase))
+            if (!(value.Equals("Turbo Coco/R 2022.1", StringComparison.OrdinalIgnoreCase) ||
+                value.Equals("Turbo Coco/R 2022.2", StringComparison.OrdinalIgnoreCase)))
+            {
                 parser.SynErr("unsupported compatibility version");
+            }
         }
         else if ("$lang".Equals(name, StringComparison.Ordinal))
         {

@@ -36,7 +36,8 @@ interface IOptionsService
 
     bool HasSourceFile { get; }
 
-    string SourceDirectoryPath { get; }
+    [AllowNull]
+    string SourceDirectoryPath { get; set; }
 
     bool KeepOldFiles { get; }
 

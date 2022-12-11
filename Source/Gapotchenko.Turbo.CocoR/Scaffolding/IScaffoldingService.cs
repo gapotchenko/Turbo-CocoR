@@ -2,11 +2,13 @@
 
 namespace Gapotchenko.Turbo.CocoR.Scaffolding;
 
-public interface IScaffoldingService
+interface IScaffoldingService
 {
     TextReader OpenTemplate(string templateName);
 
     TextReader? TryOpenTemplate(string templateName);
 
-    string CreateItem(string category, string name);
+    ScaffoldingItemCategory GetItemCategory(string s);
+
+    string CreateItem(ScaffoldingItemCategory category, string name);
 }

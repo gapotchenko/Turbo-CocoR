@@ -1,6 +1,7 @@
 // ParserGen.cs - Generation of the Recursive Descent Parser
 
 using System.Collections;
+using Gapotchenko.Turbo.CocoR.Compilation.CodeGeneration;
 using Gapotchenko.Turbo.CocoR.Compilation.Grammar;
 using Gapotchenko.Turbo.CocoR.Framework.Collections;
 
@@ -384,14 +385,14 @@ class ParserGen
         int oldPos = buffer.Pos;  // Pos is modified by CopySourcePart
         symSet.Add(tab.allSyncSets);
 
-        using var frame = cgs.OpenFrame("Parser.frame");
+        using var frame = cgs.OpenFrame(FrameFileNames.Parser);
         using var codeWriter = cgs.CreateWriter("Parser.cs");
         gen = codeWriter.Output;
         err = new StringWriter();
         foreach (Symbol sym in tab.terminals)
             GenErrorMsg(tErr, sym);
 
-        cgs.GeneratePreface(codeWriter);
+        cgs.GenerateEpilogue(codeWriter);
         frame.SkipPart("-->begin");
 
         if (usingPos != null) { CopySourcePart(usingPos, 0); gen.WriteLine(); }
