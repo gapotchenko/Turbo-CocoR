@@ -9,6 +9,7 @@ using System.Composition;
 namespace Gapotchenko.Turbo.CocoR.Compilation;
 
 [Export]
+[Shared]
 sealed class Compiler
 {
     [ImportingConstructor]
@@ -21,7 +22,7 @@ sealed class Compiler
     readonly IOptionsService m_OptionsService;
     readonly ICodeGenerationService m_CodeGenerationService;
 
-    public void Compile()
+    public void Compile(string grammarFilePath)
     {
         int errorsCount;
 
@@ -32,7 +33,7 @@ sealed class Compiler
             using var traceFile = File.CreateText(traceFilePath);
             try
             {
-                errorsCount = CompileCore(traceFile);
+                errorsCount = CompileCore(grammarFilePath, traceFile);
             }
             finally
             {
@@ -52,9 +53,9 @@ sealed class Compiler
             throw new ProgramExitException(1);
     }
 
-    int CompileCore(TextWriter traceTextWriter)
+    int CompileCore(string grammarFilePath, TextWriter traceTextWriter)
     {
-        var scanner = new Scanner(m_OptionsService.SourceFilePath);
+        var scanner = new Scanner(grammarFilePath);
         var parser = new Parser(scanner)
         {
             trace = traceTextWriter

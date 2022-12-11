@@ -6,6 +6,7 @@ using System.Composition;
 namespace Gapotchenko.Turbo.CocoR.IO;
 
 [Export(typeof(IIOService))]
+[Shared]
 sealed class IOService : IIOService
 {
     [ImportingConstructor]

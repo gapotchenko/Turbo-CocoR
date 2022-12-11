@@ -1,4 +1,5 @@
-﻿using Gapotchenko.Turbo.CocoR.Deployment;
+﻿using Gapotchenko.Turbo.CocoR.Compilation.CodeGeneration;
+using Gapotchenko.Turbo.CocoR.Deployment;
 using Gapotchenko.Turbo.CocoR.IO;
 using Gapotchenko.Turbo.CocoR.Options;
 using System.Composition;
@@ -9,22 +10,26 @@ using System.Globalization;
 namespace Gapotchenko.Turbo.CocoR.Scaffolding;
 
 [Export(typeof(IScaffoldingService))]
+[Shared]
 sealed class ScaffoldingService : IScaffoldingService
 {
     [ImportingConstructor]
     public ScaffoldingService(
         IOptionsService optionsService,
         IIOService ioService,
-        IProductInformationService productInformationService)
+        IProductInformationService productInformationService,
+        Lazy<ICodeGenerationService> codeGenerationService)
     {
         m_OptionsService = optionsService;
         m_IOService = ioService;
         m_ProductInformationService = productInformationService;
+        m_CodeGenerationService = codeGenerationService;
     }
 
     readonly IOptionsService m_OptionsService;
     readonly IIOService m_IOService;
     readonly IProductInformationService m_ProductInformationService;
+    readonly Lazy<ICodeGenerationService> m_CodeGenerationService;
 
     public TextReader? TryOpenTemplate(string templateName)
     {
@@ -85,7 +90,7 @@ sealed class ScaffoldingService : IScaffoldingService
             if (templateName == null)
                 throw new Exception($"Unknown scaffolding item name \"{name}\" specified.");
 
-            outputFilePath = templateName;
+            outputFilePath = m_CodeGenerationService.Value.TryGetExplicitFrameFilePath(templateName) ?? templateName;
         }
         else if (category == "grammar")
         {

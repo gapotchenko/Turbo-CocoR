@@ -121,11 +121,10 @@ public sealed class TcrCompileGrammar : ToolTask
     protected override string ToolName => "turbo-coco";
 
     protected override string GenerateFullPathToTool() =>
-        Path.GetFullPath(
-            Path.Combine(
-                typeof(TcrCompileGrammar).Assembly.Location,
-                @"..\..\..\..",
-                ToolName));
+        Path.GetFullPath(Path.Combine(
+            typeof(TcrCompileGrammar).Assembly.Location,
+            @"..\..\..\..",
+            ToolName));
 
     /// <summary>
     /// Creates the command line to execute.
