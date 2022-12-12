@@ -1,7 +1,6 @@
 ﻿# Turbo Coco/R MSBuild Integration
 
 `Gapotchenko.Turbo.CocoR.Integration.MSBuild` NuGet package allows you to integrate [Turbo Coco/R](https://github.com/gapotchenko/Turbo-CocoR) at the MSBuild project level.
-The integration currently supports C# MSBuild projects.
 
 ## Getting Started
 
