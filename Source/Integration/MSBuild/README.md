@@ -12,7 +12,7 @@ The integration currently supports C# MSBuild projects.
     - The scanner and parser files will be automatically generated for the corresponding `.atg` file
 3. That's it!
 
-Project integration significantly reduces the development time compared to the traditional approach that uses `turbo-coco` command-line interface.
+Project integration significantly reduces the development time compared to the traditional approach that uses `turbo-coco` command-line tool.
 
 ## Requirements
 
