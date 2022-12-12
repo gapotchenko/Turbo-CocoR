@@ -58,6 +58,11 @@ public sealed class TcrCompileGrammar : ToolTask
     public string? PrefaceFrame { get; set; }
 
     /// <summary>
+    /// Gets or sets the custom additional inputs for up-to-date checks.
+    /// </summary>
+    public string[] CustomAdditionalInputs { get; set; } = Array.Empty<string>();
+
+    /// <summary>
     /// Gets or sets the scanner file path.
     /// </summary>
     public string? Scanner { get; set; }
@@ -160,6 +165,9 @@ public sealed class TcrCompileGrammar : ToolTask
 
         if (!string.IsNullOrEmpty(PrefaceFrame))
             clb.AppendProperty("PrefaceFrame", PrefaceFrame);
+
+        if (CustomAdditionalInputs.Length != 0)
+            clb.AppendProperty("CustomAdditionalInputs", string.Join("*", CustomAdditionalInputs));
 
         if (!string.IsNullOrEmpty(Scanner))
             clb.AppendProperty("Scanner", Scanner);

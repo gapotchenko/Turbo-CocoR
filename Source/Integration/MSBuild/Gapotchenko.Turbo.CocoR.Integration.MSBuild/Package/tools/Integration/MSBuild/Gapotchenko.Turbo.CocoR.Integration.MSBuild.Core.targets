@@ -20,8 +20,8 @@
       Kind="ImplicitBuild" />
 
     <!-- Removal of an optional grammar file should trigger the build. -->
-    <CustomAdditionalCompileInputs Include="@(TcrGrammar->'%(CopyrightFrameTemplate)')" />
-    <CustomAdditionalCompileInputs Include="@(TcrGrammar->'%(PrefaceFrameTemplate)')"  />
+    <!--<CustomAdditionalCompileInputs Include="@(TcrGrammar->'%(CopyrightFrame)')" />
+    <CustomAdditionalCompileInputs Include="@(TcrGrammar->'%(PrefaceFrame)')"  />-->
 
     <!-- Semantically group the generated files together with the source grammar. -->
     <Compile Update="@(TcrGrammar->'%(Scanner)')">
@@ -54,7 +54,7 @@
   <Target Name="TcrCompileGrammar"
           BeforeTargets="CoreCompile"
           Condition=" '$(DesignTimeBuild)' != 'true' "
-          Inputs="%(TcrGrammar.Identity);%(TcrGrammar.ScannerFrame);%(TcrGrammar.ParserFrame);%(TcrGrammar.PrefaceFrame);%(TcrGrammar.CopyrightFrame)"
+          Inputs="%(TcrGrammar.Identity);%(TcrGrammar.ScannerFrame);%(TcrGrammar.ParserFrame);%(TcrGrammar.PrefaceFrame);%(TcrGrammar.CopyrightFrame);@(TcrCustomAdditionalCompileGrammarInputs)"
           Outputs="%(TcrGrammar.Scanner);%(TcrGrammar.Parser)">
 
     <Message Importance="High" Text="+++ Justin Dearing +++ %(TcrGrammar.Identity) | Scanner: %(TcrGrammar.Scanner) | Parser: %(TcrGrammar.Parser) | ScannerFrame: %(TcrGrammar.ScannerFrame) | ParserFrame: %(TcrGrammar.ParserFrame) | PrefaceFrame: %(TcrGrammar.PrefaceFrame) | CopyrightFrame: %(TcrGrammar.CopyrightFrame)" />
@@ -65,6 +65,7 @@
       ParserFrame="%(TcrGrammar.ParserFrame)"
       CopyrightFrame="%(TcrGrammar.CopyrightFrame)"
       PrefaceFrame="%(TcrGrammar.PrefaceFrame)"
+      CustomAdditionalInputs="@(TcrCustomAdditionalCompileGrammarInputs)"
       Scanner="%(TcrGrammar.Scanner)"
       Parser="%(TcrGrammar.Parser)"
       Language="$(Language)"

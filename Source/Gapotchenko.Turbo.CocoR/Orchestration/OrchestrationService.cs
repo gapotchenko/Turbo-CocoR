@@ -119,6 +119,14 @@ sealed class OrchestrationService : IOrchestrationService
         {
             tsSync.AddFileIfExists(cgs.GetFrameFilePath(FrameFileNames.Copyright));
             tsSync.AddFileIfExists(cgs.GetFrameFilePath(FrameFileNames.Preface));
+
+            var s = m_OptionsService.Properties.GetValueOrDefault("CustomAdditionalInputs");
+            if (!string.IsNullOrEmpty(s))
+            {
+                var filePaths = s.Split('*', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+                foreach (var filePath in filePaths)
+                    tsSync.AddFileIfExists(filePath);
+            }
         }
 
         m_Compiler.Value.Compile(grammarFilePath);
