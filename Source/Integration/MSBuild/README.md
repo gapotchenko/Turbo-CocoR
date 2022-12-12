@@ -11,7 +11,7 @@ The integration currently supports C# MSBuild projects.
     - Frame files will be automatically created if they do not exist yet
     - The scanner and parser files will be generated automatically on every grammar modification
 
-Project integration significantly reduces development time compared to the traditional approach that implies the manual usage of `turbo-coco` command-line tool.
+Project integration significantly reduces development time compared to the traditional approach with the manual usage of `turbo-coco` command-line tool.
 
 ## Requirements
 
