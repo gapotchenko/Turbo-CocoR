@@ -19,10 +19,6 @@
       Include="@(TcrGrammar->'%(Identity)');@(TcrGrammar->'%(ScannerFrame)');@(TcrGrammar->'%(ParserFrame)');@(TcrGrammar->'%(CopyrightFrame)');@(TcrGrammar->'%(PrefaceFrame)')"
       Kind="ImplicitBuild" />
 
-    <!-- Removal of an optional grammar file should trigger the build. -->
-    <!--<CustomAdditionalCompileInputs Include="@(TcrGrammar->'%(CopyrightFrame)')" />
-    <CustomAdditionalCompileInputs Include="@(TcrGrammar->'%(PrefaceFrame)')"  />-->
-
     <!-- Semantically group the generated files together with the source grammar. -->
     <Compile Update="@(TcrGrammar->'%(Scanner)')">
       <AutoGen>True</AutoGen>
@@ -51,11 +47,39 @@
 
   </Target>
 
+  <Target Name="TcrGenerateCompileGrammarDependencyCache"
+          Condition=" '$(DesignTimeBuild)' != 'true' AND '$(BuildingProject)' == 'true' ">
+
+    <!-- The target handles cases where items are added or removed from a glob (e.g.
+         <TcrGrammar Include="**\*.atg" />) and can't otherwise be detected with timestamp
+         comparisons.-->
+    
+    <ItemGroup>
+      <TcrCustomAdditionalCompileGrammarInputs Include="$(IntermediateOutputPath)TurboCocoR\$(MSBuildProjectFile).CompileGrammarInputs.cache" />
+      <TcrCompileGrammarCache Include="%(TcrGrammar.Identity);%(TcrGrammar.ScannerFrame);%(TcrGrammar.ParserFrame);%(TcrGrammar.PrefaceFrame);%(TcrGrammar.CopyrightFrame)" />
+    </ItemGroup>
+
+    <Hash ItemsToHash="@(TcrCompileGrammarCache)">
+      <Output TaskParameter="HashResult" PropertyName="TcrCompileGrammarDependencyHash" />
+    </Hash>
+
+    <WriteLinesToFile
+      Lines="$(TcrCompileGrammarDependencyHash)"
+      File="$(IntermediateOutputPath)TurboCocoR\$(MSBuildProjectFile).CompileGrammarInputs.cache"
+      Overwrite="True"
+      WriteOnlyWhenDifferent="True" />
+    
+    <ItemGroup>
+      <FileWrites Include="$(IntermediateOutputPath)TurboCocoR\$(MSBuildProjectFile).CompileGrammarInputs.cache" />
+    </ItemGroup>
+  </Target>
+
   <Target Name="TcrCompileGrammar"
           BeforeTargets="CoreCompile"
           Condition=" '$(DesignTimeBuild)' != 'true' "
           Inputs="%(TcrGrammar.Identity);%(TcrGrammar.ScannerFrame);%(TcrGrammar.ParserFrame);%(TcrGrammar.PrefaceFrame);%(TcrGrammar.CopyrightFrame);@(TcrCustomAdditionalCompileGrammarInputs)"
-          Outputs="%(TcrGrammar.Scanner);%(TcrGrammar.Parser)">
+          Outputs="%(TcrGrammar.Scanner);%(TcrGrammar.Parser)"
+          DependsOnTargets="TcrGenerateCompileGrammarDependencyCache">
 
     <Message Importance="High" Text="+++ Justin Dearing +++ %(TcrGrammar.Identity) | Scanner: %(TcrGrammar.Scanner) | Parser: %(TcrGrammar.Parser) | ScannerFrame: %(TcrGrammar.ScannerFrame) | ParserFrame: %(TcrGrammar.ParserFrame) | PrefaceFrame: %(TcrGrammar.PrefaceFrame) | CopyrightFrame: %(TcrGrammar.CopyrightFrame)" />
 
@@ -65,7 +89,6 @@
       ParserFrame="%(TcrGrammar.ParserFrame)"
       CopyrightFrame="%(TcrGrammar.CopyrightFrame)"
       PrefaceFrame="%(TcrGrammar.PrefaceFrame)"
-      CustomAdditionalInputs="@(TcrCustomAdditionalCompileGrammarInputs)"
       Scanner="%(TcrGrammar.Scanner)"
       Parser="%(TcrGrammar.Parser)"
       Language="$(Language)"

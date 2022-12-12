@@ -4,9 +4,13 @@
     <!-- This set of TFMs allows the module to be consumed by MSBuild 16.0+ (Visual Studio 2019+). -->
     <TargetFrameworks>net472;net5.0</TargetFrameworks>
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
-    <ImplicitUsings>false</ImplicitUsings>
     <Nullable Condition=" '$(MasteringFrameworkIdentifier)' == '.NETFramework' ">annotations</Nullable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Avoid clash with MSBuild task. -->
+    <Using Remove="System.Threading.Tasks" />
+  </ItemGroup>
 
   <ItemGroup Condition=" '$(MasteringFrameworkIdentifier)' == '.NETFramework' ">
     <Reference Include="Microsoft.Build.Framework" />

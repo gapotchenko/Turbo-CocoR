@@ -1,27 +1,19 @@
-﻿using Gapotchenko.Turbo.CocoR.Integration.MSBuild.Tasks.Diagnostics;
-using Gapotchenko.Turbo.CocoR.Integration.MSBuild.Tasks.Languages;
+﻿using Gapotchenko.Turbo.CocoR.Integration.MSBuild.Tasks.Languages;
 using Gapotchenko.Turbo.CocoR.Integration.MSBuild.Tasks.Properties;
-using Gapotchenko.Turbo.CocoR.Integration.MSBuild.Tasks.Utils;
+using Gapotchenko.Turbo.CocoR.Integration.MSBuild.Tasks.Utilities;
 using Microsoft.Build.Framework;
-using Microsoft.Build.Utilities;
-using System;
-using System.IO;
-using System.Linq;
 
 namespace Gapotchenko.Turbo.CocoR.Integration.MSBuild.Tasks;
 
 /// <summary>
 /// Turbo Coco/R grammar compilation task for MSBuild.
 /// </summary>
-public sealed class TcrCompileGrammar : ToolTask
+public sealed class TcrCompileGrammar : TcrToolTask
 {
     public TcrCompileGrammar()
     {
-        // Use command interpreter to execute the command line.
-        UseCommandProcessor = true;
-
-        // Turn off echo for the command interpreter.
-        //EchoOff = true;
+        // Debug
+        EchoOff = false;
     }
 
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -133,14 +125,6 @@ public sealed class TcrCompileGrammar : ToolTask
     /// </summary>
     public string? ProjectDir { get; set; }
 
-    protected override string ToolName => "turbo-coco";
-
-    protected override string GenerateFullPathToTool() =>
-        Path.GetFullPath(Path.Combine(
-            typeof(TcrCompileGrammar).Assembly.Location,
-            @"..\..\..\..",
-            ToolName));
-
     /// <summary>
     /// Creates the command line to execute.
     /// </summary>
@@ -193,8 +177,6 @@ public sealed class TcrCompileGrammar : ToolTask
         return clb.ToString();
     }
 
-    protected override MessageImportance StandardErrorLoggingImportance => MessageImportance.High;
-
     protected override MessageImportance StandardOutputLoggingImportance => MessageImportance.High;
 
     protected override bool ValidateParameters()
@@ -210,27 +192,6 @@ public sealed class TcrCompileGrammar : ToolTask
             LogException(e);
             return false;
         }
-    }
-
-    public override bool Execute()
-    {
-        try
-        {
-            return base.Execute();
-        }
-        catch (Exception e)
-        {
-            LogException(e);
-            return false;
-        }
-    }
-
-    void LogException(Exception e)
-    {
-        if (e.TryGetCode() is not null and var code)
-            Log.LogError(null, code, null, null, 0, 0, 0, 0, "{0}", e.Message);
-        else
-            Log.LogErrorFromException(e);
     }
 
     string? TryGetNamespaceHint()

@@ -1,5 +1,4 @@
 ﻿using Gapotchenko.Turbo.CocoR.Integration.MSBuild.Tasks.Diagnostics;
-using System;
 
 namespace Gapotchenko.Turbo.CocoR.Integration.MSBuild.Tasks.Languages;
 

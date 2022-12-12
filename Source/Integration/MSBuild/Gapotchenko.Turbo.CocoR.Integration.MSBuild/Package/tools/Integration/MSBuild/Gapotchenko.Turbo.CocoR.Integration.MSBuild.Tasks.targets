@@ -6,5 +6,6 @@
   </PropertyGroup>
 
   <UsingTask TaskName="Gapotchenko.Turbo.CocoR.Integration.MSBuild.Tasks.TcrCompileGrammar" AssemblyFile="$(TcrTasksAssemblyFile)" />
+  <UsingTask TaskName="Gapotchenko.Turbo.CocoR.Integration.MSBuild.Tasks.TcrSynchronizeTimestamp" AssemblyFile="$(TcrTasksAssemblyFile)" />
 
 </Project>

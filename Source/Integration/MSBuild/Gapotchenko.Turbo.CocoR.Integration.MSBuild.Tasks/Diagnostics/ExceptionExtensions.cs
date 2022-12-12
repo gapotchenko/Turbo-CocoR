@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Gapotchenko.Turbo.CocoR.Integration.MSBuild.Tasks.Diagnostics;
+﻿namespace Gapotchenko.Turbo.CocoR.Integration.MSBuild.Tasks.Diagnostics;
 
 static class ExceptionExtensions
 {

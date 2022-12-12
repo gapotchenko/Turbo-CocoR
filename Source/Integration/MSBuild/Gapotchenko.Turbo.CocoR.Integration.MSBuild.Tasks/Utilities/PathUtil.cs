@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 
-namespace Gapotchenko.Turbo.CocoR.Integration.MSBuild.Tasks.Utils;
+namespace Gapotchenko.Turbo.CocoR.Integration.MSBuild.Tasks.Utilities;
 
 static class PathUtil
 {

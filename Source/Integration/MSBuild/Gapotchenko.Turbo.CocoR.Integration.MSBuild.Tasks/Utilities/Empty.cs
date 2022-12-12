@@ -1,4 +1,4 @@
-﻿namespace Gapotchenko.Turbo.CocoR.Integration.MSBuild.Tasks.Utils;
+﻿namespace Gapotchenko.Turbo.CocoR.Integration.MSBuild.Tasks.Utilities;
 
 static class Empty
 {

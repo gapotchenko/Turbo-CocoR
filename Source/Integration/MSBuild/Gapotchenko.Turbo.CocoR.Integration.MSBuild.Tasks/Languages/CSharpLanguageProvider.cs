@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Gapotchenko.Turbo.CocoR.Integration.MSBuild.Tasks.Languages;
+﻿namespace Gapotchenko.Turbo.CocoR.Integration.MSBuild.Tasks.Languages;
 
 sealed class CSharpLanguageProvider : ILanguageProvider
 {
