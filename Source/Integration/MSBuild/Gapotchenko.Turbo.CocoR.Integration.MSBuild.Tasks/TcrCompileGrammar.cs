@@ -176,6 +176,8 @@ public sealed class TcrCompileGrammar : ToolTask
         if (TryGetNamespaceHint() is not null and var namespaceHint)
             clb.AppendProperty("NamespaceHint", namespaceHint);
 
+        clb.AppendProperty("SyncTimestamp", "true");
+
         clb.AppendSwitch("--int-call");
         clb.AppendSwitch("compile-project-grammar");
         clb.AppendFileNameIfNotNull(Grammar);

@@ -31,7 +31,9 @@ sealed class OrchestrationService : IOrchestrationService
 
     public void CompileGrammar()
     {
-        m_Compiler.Value.Compile(m_OptionsService.SourceFilePath);
+        string filePath = m_OptionsService.SourceFilePath;
+        m_OptionsService.SourceDirectoryPath = Path.GetDirectoryName(filePath);
+        m_Compiler.Value.Compile(filePath);
     }
 
     public void Scaffold(string itemCategory, IEnumerable<string> itemNames)
@@ -66,18 +68,39 @@ sealed class OrchestrationService : IOrchestrationService
         if (grammarIsEmpty)
             m_ScaffoldingService.Value.CreateItem(ScaffoldingItemCategory.Grammar, grammarFilePath);
 
+        m_OptionsService.SourceDirectoryPath = Path.GetDirectoryName(grammarFilePath);
+
+        var tsSync =
+            m_OptionsService.Properties.GetValueOrDefault("SyncTimestamp") == "true" ?
+                new TimestampSynchronizer() :
+                null;
+
+        tsSync?.AddFile(grammarFilePath);
+
         var cgs = m_CodeGenerationService.Value;
 
         var scannerFramePath = cgs.GetFrameFilePath(FrameFileNames.Scanner);
         if (!File.Exists(scannerFramePath))
             m_ScaffoldingService.Value.CreateItem(ScaffoldingItemCategory.Frame, ScaffoldingItemNames.Frame.Scanner);
+        tsSync?.AddFile(scannerFramePath);
 
         var parserFramePath = cgs.GetFrameFilePath(FrameFileNames.Parser);
         if (!File.Exists(parserFramePath))
             m_ScaffoldingService.Value.CreateItem(ScaffoldingItemCategory.Frame, ScaffoldingItemNames.Frame.Parser);
+        tsSync?.AddFile(parserFramePath);
+
+        if (tsSync != null)
+        {
+            tsSync.AddFile(cgs.GetFrameFilePath(FrameFileNames.Copyright));
+            tsSync.AddFile(cgs.GetFrameFilePath(FrameFileNames.Preface));
+        }
 
         m_Compiler.Value.Compile(grammarFilePath);
 
-        // TODO
+        if (tsSync?.Timestamp is not null and var timestamp)
+        {
+            File.SetLastWriteTimeUtc(cgs.GetCodeFilePath("Scanner.cs"), timestamp.Value);
+            File.SetLastWriteTimeUtc(cgs.GetCodeFilePath("Parser.cs"), timestamp.Value);
+        }
     }
 }

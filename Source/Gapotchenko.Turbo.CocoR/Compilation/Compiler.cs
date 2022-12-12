@@ -24,8 +24,6 @@ sealed class Compiler
 
     public void Compile(string grammarFilePath)
     {
-        m_OptionsService.SourceDirectoryPath = Path.GetDirectoryName(grammarFilePath);
-
         int errorsCount;
 
         string traceFilePath = Path.Combine(m_OptionsService.OutputDirectoryPath, "Trace.txt");
