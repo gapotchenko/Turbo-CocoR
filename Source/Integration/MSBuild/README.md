@@ -27,4 +27,4 @@ Please note that:
 - `Gapotchenko.Turbo.CocoR.Integration.MSBuild` NuGet package can be used in a project targeting not only .NET 7.0+ but any other framework without restrictions
 - `Gapotchenko.Turbo.CocoR.Integration.MSBuild` NuGet package does not rely on the installed `turbo-coco` command-line tool.
   Instead, the package comes with the tool bundled inside.
-  This allows you to use the specific version of Turbo Coco/R just by selecting the corresponding version of `Gapotchenko.Turbo.CocoR.Integration.MSBuil` NuGet package in your project
+  This allows you to use the specific version of Turbo Coco/R just by selecting the corresponding version of `Gapotchenko.Turbo.CocoR.Integration.MSBuild` NuGet package in your project
