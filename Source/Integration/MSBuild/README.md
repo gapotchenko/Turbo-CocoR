@@ -6,13 +6,12 @@ The integration currently supports C# MSBuild projects.
 ## Getting Started
 
 1. Add [`Gapotchenko.Turbo.CocoR.Integration.MSBuild`](https://www.nuget.org/packages/Gapotchenko.Turbo.CocoR.Integration.MSBuild) NuGet package to your MSBuild project
-2. Every attributed grammar file with `.atg` extension will be automatically processed with `turbo-coco` tool during the build using the following rules:
-    - If the `.atg` file is empty then it will be automatically filled with a starter Turbo Coco/R grammar for your convenience
+2. Every attributed grammar file with `.atg` extension will be automatically processed by Turbo Coco/R during the build using the following rules:
+    - If the `.atg` file is empty then it will be automatically filled with a starter grammar for your convenience
     - Frame files will be automatically created if they do not exist yet
-    - The scanner and parser files will be automatically generated for the corresponding `.atg` file
-3. That's it!
+    - The scanner and parser files will be generated automatically on every grammar modification
 
-Project integration significantly reduces the development time compared to the traditional approach that uses `turbo-coco` command-line tool.
+Project integration significantly reduces development time compared to the traditional approach that implies the manual usage of `turbo-coco` command-line tool.
 
 ## Requirements
 
