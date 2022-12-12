@@ -7,12 +7,15 @@ sealed class TimestampSynchronizer
 
     public void AddFile(string filePath)
     {
+        var ts = File.GetLastWriteTimeUtc(filePath);
+        if (ts > m_Timestamp)
+            m_Timestamp = ts;
+    }
+
+    public void AddFileIfExists(string filePath)
+    {
         if (File.Exists(filePath))
-        {
-            var ts = File.GetLastWriteTimeUtc(filePath);
-            if (ts > m_Timestamp)
-                m_Timestamp = ts;
-        }
+            AddFile(filePath);
     }
 
     public DateTime? Timestamp => m_Timestamp == default ? null : m_Timestamp;

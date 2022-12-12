@@ -24,5 +24,12 @@ sealed class IOService : IIOService
             if (File.Exists(filePath))
                 File.Copy(filePath, filePath + ".old", true);
         }
+
+        m_ModifiedFiles.Add(filePath);
     }
+
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    readonly List<string> m_ModifiedFiles = new();
+
+    public IReadOnlyList<string> ModifiedFiles => m_ModifiedFiles;
 }

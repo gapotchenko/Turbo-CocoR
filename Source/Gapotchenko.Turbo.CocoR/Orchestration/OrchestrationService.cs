@@ -1,6 +1,7 @@
 ﻿using Gapotchenko.Turbo.CocoR.Compilation;
 using Gapotchenko.Turbo.CocoR.Compilation.CodeGeneration;
 using Gapotchenko.Turbo.CocoR.Framework.Diagnostics;
+using Gapotchenko.Turbo.CocoR.IO;
 using Gapotchenko.Turbo.CocoR.Options;
 using Gapotchenko.Turbo.CocoR.Scaffolding;
 using System.Composition;
@@ -16,18 +17,21 @@ sealed class OrchestrationService : IOrchestrationService
         IOptionsService optionsService,
         Lazy<Compiler> compiler,
         Lazy<IScaffoldingService> scaffoldingService,
-        Lazy<ICodeGenerationService> codeGenerationService)
+        Lazy<ICodeGenerationService> codeGenerationService,
+        Lazy<IIOService> ioService)
     {
         m_OptionsService = optionsService;
         m_Compiler = compiler;
         m_ScaffoldingService = scaffoldingService;
         m_CodeGenerationService = codeGenerationService;
+        m_IOService = ioService;
     }
 
     readonly IOptionsService m_OptionsService;
     readonly Lazy<Compiler> m_Compiler;
     readonly Lazy<IScaffoldingService> m_ScaffoldingService;
     readonly Lazy<ICodeGenerationService> m_CodeGenerationService;
+    readonly Lazy<IIOService> m_IOService;
 
     public void CompileGrammar()
     {
@@ -50,12 +54,22 @@ sealed class OrchestrationService : IOrchestrationService
         }
     }
 
+    /// <summary>
+    /// Compiles the grammar for a project.
+    /// Used by MSBuild integration.
+    /// </summary>
+    /// <param name="grammarFilePath">The grammar file path.</param>
     public void CompileProjectGrammar(string grammarFilePath)
     {
         var grammarFile = new FileInfo(grammarFilePath);
 
         if (!grammarFile.Exists)
             throw new Exception(string.Format("Grammar file \"{0}\" does not exist.", grammarFilePath)).Categorize("TCR0003");
+
+        var tsSync =
+            string.Equals(m_OptionsService.Properties.GetValueOrDefault("SyncTimestamp"), "true", StringComparison.OrdinalIgnoreCase) ?
+                new TimestampSynchronizer() :
+                null;
 
         bool grammarIsEmpty = grammarFile.Length == 0;
         if (!grammarIsEmpty)
@@ -66,41 +80,53 @@ sealed class OrchestrationService : IOrchestrationService
         }
 
         if (grammarIsEmpty)
+        {
             m_ScaffoldingService.Value.CreateItem(ScaffoldingItemCategory.Grammar, grammarFilePath);
+            tsSync = null;
+        }
+        else
+        {
+            tsSync?.AddFile(grammarFilePath);
+        }
 
         m_OptionsService.SourceDirectoryPath = Path.GetDirectoryName(grammarFilePath);
-
-        var tsSync =
-            m_OptionsService.Properties.GetValueOrDefault("SyncTimestamp") == "true" ?
-                new TimestampSynchronizer() :
-                null;
-
-        tsSync?.AddFile(grammarFilePath);
 
         var cgs = m_CodeGenerationService.Value;
 
         var scannerFramePath = cgs.GetFrameFilePath(FrameFileNames.Scanner);
         if (!File.Exists(scannerFramePath))
+        {
             m_ScaffoldingService.Value.CreateItem(ScaffoldingItemCategory.Frame, ScaffoldingItemNames.Frame.Scanner);
-        tsSync?.AddFile(scannerFramePath);
+            tsSync = null;
+        }
+        else
+        {
+            tsSync?.AddFile(scannerFramePath);
+        }
 
         var parserFramePath = cgs.GetFrameFilePath(FrameFileNames.Parser);
         if (!File.Exists(parserFramePath))
+        {
             m_ScaffoldingService.Value.CreateItem(ScaffoldingItemCategory.Frame, ScaffoldingItemNames.Frame.Parser);
-        tsSync?.AddFile(parserFramePath);
+            tsSync = null;
+        }
+        else
+        {
+            tsSync?.AddFile(parserFramePath);
+        }
 
         if (tsSync != null)
         {
-            tsSync.AddFile(cgs.GetFrameFilePath(FrameFileNames.Copyright));
-            tsSync.AddFile(cgs.GetFrameFilePath(FrameFileNames.Preface));
+            tsSync.AddFileIfExists(cgs.GetFrameFilePath(FrameFileNames.Copyright));
+            tsSync.AddFileIfExists(cgs.GetFrameFilePath(FrameFileNames.Preface));
         }
 
         m_Compiler.Value.Compile(grammarFilePath);
 
         if (tsSync?.Timestamp is not null and var timestamp)
         {
-            File.SetLastWriteTimeUtc(cgs.GetCodeFilePath("Scanner.cs"), timestamp.Value);
-            File.SetLastWriteTimeUtc(cgs.GetCodeFilePath("Parser.cs"), timestamp.Value);
+            foreach (var filePath in m_IOService.Value.ModifiedFiles)
+                File.SetLastWriteTimeUtc(filePath, timestamp.Value);
         }
     }
 }
