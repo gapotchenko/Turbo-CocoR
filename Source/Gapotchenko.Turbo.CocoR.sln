@@ -31,7 +31,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gapotchenko.Turbo.CocoR.Int
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MSBuild", "MSBuild", "{E3FA69FD-73DF-4A9D-B02F-F76C5A66C2DA}"
 	ProjectSection(SolutionItems) = preProject
-		Integration\Build\README.md = Integration\Build\README.md
+		Integration\MSBuild\README.md = Integration\MSBuild\README.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Integration", "Integration", "{193270DA-B46E-4E98-9A7D-0E1D05DE8093}"
