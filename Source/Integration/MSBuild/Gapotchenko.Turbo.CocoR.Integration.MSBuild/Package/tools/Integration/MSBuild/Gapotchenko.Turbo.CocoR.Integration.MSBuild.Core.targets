@@ -25,9 +25,11 @@
 
     <!-- Semantically group the generated files together with the source grammar. -->
     <Compile Update="@(TcrGrammar->'%(Scanner)')">
+      <AutoGen>True</AutoGen>
       <DependentUpon>%(TcrGrammar.Filename)%(TcrGrammar.Extension)</DependentUpon>
     </Compile>
     <Compile Update="@(TcrGrammar->'%(Parser)')">
+      <AutoGen>True</AutoGen>
       <DependentUpon>%(TcrGrammar.Filename)%(TcrGrammar.Extension)</DependentUpon>
     </Compile>
 

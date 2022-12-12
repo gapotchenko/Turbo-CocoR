@@ -6,6 +6,7 @@
 
   <ItemDefinitionGroup Condition=" '$(TcrLangExtension)' != '' ">
     <TcrGrammar>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <ScannerFrame>%(RelativeDir)Scanner.frame</ScannerFrame>
       <ParserFrame>%(RelativeDir)Parser.frame</ParserFrame>
       <Scanner>%(RelativeDir)Scanner$(TcrLangExtension)</Scanner>
