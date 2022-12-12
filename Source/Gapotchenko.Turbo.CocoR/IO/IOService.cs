@@ -22,10 +22,15 @@ sealed class IOService : IIOService
         if (m_OptionsService.KeepOldFiles)
         {
             if (File.Exists(filePath))
-                File.Copy(filePath, filePath + ".old", true);
+                BackupFile(filePath);
         }
 
         m_ModifiedFiles.Add(filePath);
+    }
+
+    static void BackupFile(string filePath)
+    {
+        File.Copy(filePath, filePath + ".old", true);
     }
 
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
