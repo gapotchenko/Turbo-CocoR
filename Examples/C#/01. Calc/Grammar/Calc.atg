@@ -8,46 +8,46 @@ COMPILER Calc
 public int Result { get; private set; }
 
 CHARACTERS
-	digit = "0123456789" .
+    digit = "0123456789" .
 
 TOKENS
-	integer = digit { digit } .
+    integer = digit { digit } .
 
 PRODUCTIONS
     Calc						
-		= Expression <out var value>			(. Result = value; .) .
+        = Expression <out var value>			(. Result = value; .) .
 
-	Number <out int r>
-		= integer								(. if (!int.TryParse(t.val, out r))
-													SemErr("invalid integer format"); .) .
+    Number <out int r>
+        = integer								(. if (!int.TryParse(t.val, out r))
+                                                    SemErr("invalid integer format"); .) .
 
-	Literal <out int r>
-		= Number <out r> .
+    Literal <out int r>
+        = Number <out r> .
 
-	Primary <out int r>							(. r = default; .)
-		= Literal <out r>
-		| "(" Expression <out r> ")" .
+    Primary <out int r>							(. r = default; .)
+        = Literal <out r>
+        | "(" Expression <out r> ")" .
 
-	Factor <out int r>
-		= Primary <out r>.
+    Factor <out int r>
+        = Primary <out r>.
 
-	Term <out int r>
-		=
-		Factor <out r>
-		{ "*" Factor <out var factor>			(. r = r * factor; .)
-		| "/" Factor <out var factor>			(. r = r / factor; .)
-		} .
+    Term <out int r>
+        =
+        Factor <out r>
+        { "*" Factor <out var factor>			(. r = r * factor; .)
+        | "/" Factor <out var factor>			(. r = r / factor; .)
+        } .
 
-	SimpleExpression <out int r>				(. r = default; .)
-		=
-		( "+" Term <out var value>				(. r = value; .)
-		| "-" Term <out var value>				(. r = -value; .)
-		| Term <out r> )
-		{ "+" Term <out var term>				(. r += term; .)
-		| "-" Term <out var term>				(. r -= term; .)
-		} .
+    SimpleExpression <out int r>				(. r = default; .)
+        =
+        ( "+" Term <out var value>				(. r = value; .)
+        | "-" Term <out var value>				(. r = -value; .)
+        | Term <out r> )
+        { "+" Term <out var term>				(. r += term; .)
+        | "-" Term <out var term>				(. r -= term; .)
+        } .
 
-	Expression <out int r>      
-		= SimpleExpression <out r> .
+    Expression <out int r>      
+        = SimpleExpression <out r> .
 
 END Calc.
