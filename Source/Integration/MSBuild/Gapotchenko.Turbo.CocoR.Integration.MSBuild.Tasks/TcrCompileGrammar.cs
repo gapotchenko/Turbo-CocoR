@@ -12,8 +12,9 @@ public sealed class TcrCompileGrammar : TcrToolTask
 {
     public TcrCompileGrammar()
     {
-        // Debug
+#if DEBUG
         EchoOff = false;
+#endif
     }
 
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -209,7 +210,7 @@ public sealed class TcrCompileGrammar : TcrToolTask
                 string? relativeNamespace;
                 if (relativePath == ".")
                 {
-                    relativeNamespace = "";
+                    relativeNamespace = string.Empty;
                 }
                 else
                 {

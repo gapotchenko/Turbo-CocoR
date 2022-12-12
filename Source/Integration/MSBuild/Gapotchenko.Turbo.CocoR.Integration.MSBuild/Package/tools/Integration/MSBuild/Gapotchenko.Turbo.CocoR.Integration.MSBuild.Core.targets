@@ -19,7 +19,7 @@
       Include="@(TcrGrammar->'%(Identity)');@(TcrGrammar->'%(ScannerFrame)');@(TcrGrammar->'%(ParserFrame)');@(TcrGrammar->'%(CopyrightFrame)');@(TcrGrammar->'%(PrefaceFrame)')"
       Kind="ImplicitBuild" />
 
-    <!-- Semantically group the generated files together with the source grammar. -->
+    <!-- Semantically group the generated files together with a source grammar. -->
     <Compile Update="@(TcrGrammar->'%(Scanner)')">
       <AutoGen>True</AutoGen>
       <DependentUpon>%(TcrGrammar.Filename)%(TcrGrammar.Extension)</DependentUpon>
@@ -53,9 +53,10 @@
     <!-- The target handles cases where items are added or removed from a glob (e.g.
          <TcrGrammar Include="**\*.atg" />) and can't otherwise be detected with timestamp
          comparisons.-->
-    
+
     <ItemGroup>
       <TcrCustomAdditionalCompileGrammarInputs Include="$(IntermediateOutputPath)TurboCocoR\$(MSBuildProjectFile).CompileGrammarInputs.cache" />
+      <TcrCompileGrammarCache Include="$(TcrVersion)" />
       <TcrCompileGrammarCache Include="%(TcrGrammar.Identity);%(TcrGrammar.ScannerFrame);%(TcrGrammar.ParserFrame);%(TcrGrammar.PrefaceFrame);%(TcrGrammar.CopyrightFrame)" />
     </ItemGroup>
 
@@ -68,7 +69,7 @@
       File="$(IntermediateOutputPath)TurboCocoR\$(MSBuildProjectFile).CompileGrammarInputs.cache"
       Overwrite="True"
       WriteOnlyWhenDifferent="True" />
-    
+
     <ItemGroup>
       <FileWrites Include="$(IntermediateOutputPath)TurboCocoR\$(MSBuildProjectFile).CompileGrammarInputs.cache" />
     </ItemGroup>

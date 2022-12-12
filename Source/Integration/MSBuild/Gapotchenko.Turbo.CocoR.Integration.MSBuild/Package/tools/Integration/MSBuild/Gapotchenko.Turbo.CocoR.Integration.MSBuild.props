@@ -1,6 +1,8 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
   <PropertyGroup>
+    <TcrVersion>2022.2.3</TcrVersion>
+    <TcrSignificantVersion>2022.2</TcrSignificantVersion>
     <TcrMSBuildMinVersion>16.5</TcrMSBuildMinVersion>
     <TcrMSBuildVersionIsOK>false</TcrMSBuildVersionIsOK>
     <TcrMSBuildVersionIsOK Condition=" '$(MSBuildVersion)' &gt;= '$(TcrMSBuildMinVersion)' " >true</TcrMSBuildVersionIsOK>
