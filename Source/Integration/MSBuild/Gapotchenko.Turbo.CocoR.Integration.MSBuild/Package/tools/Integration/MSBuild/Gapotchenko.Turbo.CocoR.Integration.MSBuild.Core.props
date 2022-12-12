@@ -9,8 +9,8 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <ScannerFrame>%(RelativeDir)Scanner.frame</ScannerFrame>
       <ParserFrame>%(RelativeDir)Parser.frame</ParserFrame>
-      <Scanner>%(RelativeDir)Scanner$(TcrLangExtension)</Scanner>
-      <Parser>%(RelativeDir)Parser$(TcrLangExtension)</Parser>
+      <Scanner>%(RelativeDir)%(Filename).Scanner$(TcrLangExtension)</Scanner>
+      <Parser>%(RelativeDir)%(Filename).Parser$(TcrLangExtension)</Parser>
     </TcrGrammar>
   </ItemDefinitionGroup>
 

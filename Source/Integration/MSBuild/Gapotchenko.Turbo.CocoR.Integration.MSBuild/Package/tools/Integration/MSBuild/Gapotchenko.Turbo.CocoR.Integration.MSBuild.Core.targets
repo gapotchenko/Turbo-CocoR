@@ -74,6 +74,7 @@
 
     <ItemGroup>
       <Compile Include="%(TcrGrammar.Scanner);%(TcrGrammar.Parser)" KeepDuplicates="false">
+        <AutoGen>True</AutoGen>
         <DependentUpon>%(TcrGrammar.Filename)%(TcrGrammar.Extension)</DependentUpon>
       </Compile>
     </ItemGroup>
