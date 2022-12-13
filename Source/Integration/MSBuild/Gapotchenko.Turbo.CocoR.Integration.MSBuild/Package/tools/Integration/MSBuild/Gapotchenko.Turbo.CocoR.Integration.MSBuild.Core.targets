@@ -101,8 +101,6 @@ Copyright (C) Gapotchenko and Contributors
           Outputs="%(TcrGrammar.Scanner);%(TcrGrammar.Parser)"
           DependsOnTargets="TcrGenerateCompileGrammarDependencyCache">
 
-    <Message Importance="High" Text="+++ Justin Dearing +++ %(TcrGrammar.Identity) | Scanner: %(TcrGrammar.Scanner) | Parser: %(TcrGrammar.Parser) | ScannerFrame: %(TcrGrammar.ScannerFrame) | ParserFrame: %(TcrGrammar.ParserFrame) | PrefaceFrame: %(TcrGrammar.PrefaceFrame) | CopyrightFrame: %(TcrGrammar.CopyrightFrame)" />
-
     <TcrCompileGrammar
       Grammar="%(TcrGrammar.Identity)"
       ScannerFrame="%(TcrGrammar.ScannerFrame)"

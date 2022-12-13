@@ -13,7 +13,7 @@ public sealed class TcrCompileGrammar : TcrToolTask
     public TcrCompileGrammar()
     {
 #if DEBUG
-        EchoOff = false;
+        //EchoOff = false;
 #endif
     }
 
