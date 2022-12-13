@@ -1,3 +1,15 @@
+<!--
+******************************************************************************
+Gapotchenko.Turbo.CocoR.Integration.MSBuild.Core.targets
+
+WARNING:  DO NOT MODIFY this file. Incorrect changes to this file will make it
+          impossible to load or build your Turbo Coco/R projects from the
+          command line or the IDE.
+
+Copyright (C) Gapotchenko and Contributors
+******************************************************************************
+-->
+
 <Project>
 
   <Import Project="Gapotchenko.Turbo.CocoR.Integration.MSBuild.Tasks.targets" />
@@ -14,7 +26,7 @@
       <PrefaceFrameTemplate>$([MSBuild]::ValueOrDefault('%(TcrGrammar.PrefaceFrame)', '%(RelativeDir)Preface.frame'))</PrefaceFrameTemplate>
     </TcrGrammar>
 
-    <!-- Changes in grammar files should trigger the build. -->
+    <!-- Changes in auxiliary grammar files should trigger the build. -->
     <UpToDateCheckInput
       Include="@(TcrGrammar->'%(ScannerFrame)');@(TcrGrammar->'%(ParserFrame)');@(TcrGrammar->'%(CopyrightFrame)');@(TcrGrammar->'%(PrefaceFrame)')"
       Kind="ImplicitBuild" />

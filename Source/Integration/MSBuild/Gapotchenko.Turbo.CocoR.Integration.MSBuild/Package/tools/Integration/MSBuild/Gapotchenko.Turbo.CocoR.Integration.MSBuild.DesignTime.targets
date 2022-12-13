@@ -1,12 +1,21 @@
-﻿<Project>
+﻿<!--
+******************************************************************************
+Gapotchenko.Turbo.CocoR.Integration.MSBuild.DesignTime.targets
 
-  <ItemGroup Condition=" '$(BuildingInsideVisualStudio)' == 'true' ">
-    <!-- Add item names to AvailableItemName item, so that they can show up
-         in a drop-down menu for Build Action field of the properties window in VisualStudio. -->
-    <AvailableItemName Include="TcrGrammar" />
-  </ItemGroup>
+WARNING:  DO NOT MODIFY this file. Incorrect changes to this file will make it
+          impossible to load or build your Turbo Coco/R projects from the
+          command line or the IDE.
+
+Copyright (C) Gapotchenko and Contributors
+******************************************************************************
+-->
+
+<Project>
 
   <ItemGroup>
+    <!-- Allow the items to appear in IDE solution explorer. -->
+    <AvailableItemName Include="TcrGrammar" />
+
     <PropertyPageSchema Include="$(MSBuildThisFileDirectory)Rules\TcrGrammar.xaml">
       <Context>File</Context>
     </PropertyPageSchema>
