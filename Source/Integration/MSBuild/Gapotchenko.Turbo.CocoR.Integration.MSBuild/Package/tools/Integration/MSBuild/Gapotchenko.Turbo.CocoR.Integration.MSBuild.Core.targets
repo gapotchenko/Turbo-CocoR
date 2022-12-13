@@ -16,7 +16,7 @@
 
     <!-- Changes in grammar files should trigger the build. -->
     <UpToDateCheckInput
-      Include="@(TcrGrammar->'%(Identity)');@(TcrGrammar->'%(ScannerFrame)');@(TcrGrammar->'%(ParserFrame)');@(TcrGrammar->'%(CopyrightFrame)');@(TcrGrammar->'%(PrefaceFrame)')"
+      Include="@(TcrGrammar->'%(ScannerFrame)');@(TcrGrammar->'%(ParserFrame)');@(TcrGrammar->'%(CopyrightFrame)');@(TcrGrammar->'%(PrefaceFrame)')"
       Kind="ImplicitBuild" />
 
     <!-- Semantically group the generated files together with a source grammar. -->
