@@ -1,12 +1,6 @@
 # Turbo Coco/R
 Turbo Coco/R is a compile-time compiler generator which takes an attributed grammar of a source language and generates a scanner and a parser for this language. It is based on the de-facto Coco/R standard and extends it to be more useful in commercial settings.
 
-## Features
-
-- Follows the baseline [Coco/R standard](https://ssw.jku.at/Research/Projects/Coco/) with some extensions
-- Multilingual support: C#, other languages are coming
-- Ready for consumption: available in a handy regularly-updated prebuilt package
-
 ## Basics
 
 Turbo Coco/R is very similar to once popular `lex` and `yacc` tools and their open-source `flex` and `bison` counterparts.
@@ -17,6 +11,8 @@ The produced scanners and parsers are tiny, do not have external dependendencies
 The scanner works as a deterministic finite automaton.
 The parser uses recursive descent.
 A multi-symbol lookahead or semantic checks can resolve LL(1) conflicts. Thus the class of accepted grammars is LL(k) for an arbitrary k.
+
+Turbo Coco/R rigorously follows the baseline [Coco/R standard](https://ssw.jku.at/Research/Projects/Coco/) while providing a plethora of improvements, extensions, and integrations.
 
 ## Getting Started
 
