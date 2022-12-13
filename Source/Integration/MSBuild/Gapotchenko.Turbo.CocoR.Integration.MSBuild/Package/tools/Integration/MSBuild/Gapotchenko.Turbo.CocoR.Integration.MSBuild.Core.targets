@@ -72,10 +72,10 @@ Copyright (C) Gapotchenko and Contributors
       <!-- Rebuild regenerated source files when needed. -->
       <CustomAdditionalCompileInputs Include="$(IntermediateOutputPath)TurboCocoR\$(MSBuildProjectFile).CompileGrammarInputs.cache" />
 
-      <!-- Regenerate source files on change of Turbo Coco/R version. -->
+      <!-- Regenerate source files on a change of Turbo Coco/R version. -->
       <TcrCompileGrammarCache Include="$(TcrVersion)" />
 
-      <!-- Regenerate source files on change of optional auxiliary grammar files. -->
+      <!-- Regenerate source files on a change of optional auxiliary grammar files. -->
       <TcrCompileGrammarCache Include="%(TcrGrammar.CopyrightFrame);%(TcrGrammar.PrefaceFrame)" />
     </ItemGroup>
 
