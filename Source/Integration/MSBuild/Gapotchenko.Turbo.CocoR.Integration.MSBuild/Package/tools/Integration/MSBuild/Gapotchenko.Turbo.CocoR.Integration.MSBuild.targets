@@ -4,7 +4,7 @@ Gapotchenko.Turbo.CocoR.Integration.MSBuild.targets
 
 WARNING:  DO NOT MODIFY this file. Incorrect changes to this file will make it
           impossible to load or build your Turbo Coco/R projects from the
-          command line or the IDE.
+          command line or IDE.
 
 Copyright (C) Gapotchenko and Contributors
 ******************************************************************************
