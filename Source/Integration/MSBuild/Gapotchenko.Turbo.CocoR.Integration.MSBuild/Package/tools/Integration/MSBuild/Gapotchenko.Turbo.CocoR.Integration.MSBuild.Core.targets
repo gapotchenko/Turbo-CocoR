@@ -117,7 +117,7 @@ Copyright (C) Gapotchenko and Contributors
       ProjectDir="$(ProjectDir)" />
 
     <!-- Synchronize file modification timestamps to avoid breaking fast up-to-date checks. -->
-    <TcrSynchronizeTimestamp
+    <TcrSynchronizeTimestamps
       SourceFiles="%(TcrGrammar.Identity);%(TcrGrammar.ScannerFrame);%(TcrGrammar.ParserFrame);%(TcrGrammar.CopyrightFrame);%(TcrGrammar.PrefaceFrame)"
       DestinationFiles="%(TcrGrammar.Scanner);%(TcrGrammar.Parser)" />
 

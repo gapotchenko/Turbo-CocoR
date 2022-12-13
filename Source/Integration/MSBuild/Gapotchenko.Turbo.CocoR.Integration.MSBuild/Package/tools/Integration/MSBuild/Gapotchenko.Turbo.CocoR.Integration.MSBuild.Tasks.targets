@@ -18,6 +18,6 @@ Copyright (C) Gapotchenko and Contributors
   </PropertyGroup>
 
   <UsingTask TaskName="Gapotchenko.Turbo.CocoR.Integration.MSBuild.Tasks.TcrCompileGrammar" AssemblyFile="$(TcrTasksAssemblyFile)" />
-  <UsingTask TaskName="Gapotchenko.Turbo.CocoR.Integration.MSBuild.Tasks.TcrSynchronizeTimestamp" AssemblyFile="$(TcrTasksAssemblyFile)" />
+  <UsingTask TaskName="Gapotchenko.Turbo.CocoR.Integration.MSBuild.Tasks.TcrSynchronizeTimestamps" AssemblyFile="$(TcrTasksAssemblyFile)" />
 
 </Project>

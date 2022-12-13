@@ -5,7 +5,7 @@ namespace Gapotchenko.Turbo.CocoR.Integration.MSBuild.Tasks;
 /// <summary>
 /// Turbo Coco/R file timestamps synchronization task for MSBuild.
 /// </summary>
-public sealed class TcrSynchronizeTimestamp : Task
+public sealed class TcrSynchronizeTimestamps : Task
 {
     /// <summary>
     /// Gets or sets the source files names.
