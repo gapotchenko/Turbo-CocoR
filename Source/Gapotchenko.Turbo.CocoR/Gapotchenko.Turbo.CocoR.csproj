@@ -12,35 +12,31 @@
   <PropertyGroup>
     <IsPackable>true</IsPackable>
     <Description>Turbo Coco/R is a compile-time compiler generator which takes an attributed grammar of a source language and generates a scanner and a parser for this language. It is based on the de-facto Coco/R standard and extends it to be more useful in commercial settings.</Description>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageReadmeFile>docs\README.md</PackageReadmeFile>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>turbo-coco</ToolCommandName>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+    <None Include="..\..\README.md" Pack="true" PackagePath="docs" />
   </ItemGroup>
 
   <!-- #endregion -->
-  
-  <ItemGroup>
-    <None Remove="Scaffolding\Templates\Grammar.atg" />
-    <None Remove="Scaffolding\Templates\Parser.frame" />
-    <None Remove="Scaffolding\Templates\Preface.frame" />
-    <None Remove="Scaffolding\Templates\Scanner.frame" />
-  </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Scaffolding\Templates\Grammar.atg" />
-    <EmbeddedResource Include="Scaffolding\Templates\Parser.frame" />
-    <EmbeddedResource Include="Scaffolding\Templates\Preface.frame" />
-    <EmbeddedResource Include="Scaffolding\Templates\Scanner.frame" />
+    <None Remove="Scaffolding\Templates\**\*" />
+    <TcrGrammar Remove="Scaffolding\Templates\*.atg" />
+    <EmbeddedResource Include="Scaffolding\Templates\**\*" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Gapotchenko.FX" Version="2022.2.7" />
     <PackageReference Include="Gapotchenko.FX.AppModel.Information" Version="2022.2.7" />
     <PackageReference Include="Gapotchenko.FX.Linq" Version="2022.2.7" />
+    <PackageReference Include="Gapotchenko.Turbo.CocoR.Integration.MSBuild" Version="2022.2.11">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="StringTemplate4" Version="4.0.8" />
     <PackageReference Include="System.Composition" Version="7.0.0" />
     <PackageReference Include="System.Composition.AttributedModel" Version="7.0.0" />
