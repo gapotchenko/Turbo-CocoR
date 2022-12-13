@@ -1,6 +1,7 @@
 ﻿<Project>
 
   <PropertyGroup>
+    <!-- Update version in Gapotchenko.Turbo.CocoR.Integration.MSBuild.props file as well. -->
     <Version>2022.2.3</Version>
   </PropertyGroup>
 
