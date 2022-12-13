@@ -48,7 +48,8 @@ sealed class Compiler
                 File.Delete(traceFilePath);
         }
 
-        Console.WriteLine("{0} errors detected.", errorsCount);
+        if (!m_OptionsService.Quiet)
+            Console.WriteLine("{0} errors detected.", errorsCount);
         if (errorsCount != 0)
             throw new ProgramExitException(1);
     }
@@ -63,7 +64,8 @@ sealed class Compiler
 
         parser.tab = new Tab(parser)
         {
-            CodeGenerationService = m_CodeGenerationService
+            CodeGenerationService = m_CodeGenerationService,
+            Quiet = m_OptionsService.Quiet
         };
         parser.dfa = new DFA(parser);
         parser.pgen = new ParserGen(parser);

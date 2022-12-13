@@ -156,6 +156,8 @@ class Tab
     public bool emitLines;            // emit #line pragmas for semantic actions
                                       //   in the generated parser
 
+    public bool Quiet { get; init; }
+
     BitArray visited;                 // mark list for graph traversals
     Symbol curSy;                     // current symbol in computation of sets
 
@@ -1395,4 +1397,48 @@ class Tab
         }
     }
 
+    public void Finish(bool genScanner)
+    {
+        var tab = this;
+        var dfa = parser.dfa;
+        var pgen = parser.pgen;
+        bool quiet = Quiet;
+
+        tab.SetupAnys();
+        tab.RenumberPragmas();
+        if (tab.ddt[2])
+            tab.PrintNodes();
+        if (errors.count == 0)
+        {
+            if (!quiet)
+                Console.WriteLine("Checking:");
+            tab.CompSymbolSets();
+            if (tab.ddt[7]) tab.XRef();
+            if (tab.GrammarOk())
+            {
+                if (!quiet)
+                {
+                    Console.WriteLine();
+                    Console.Write("Generated: ");
+                    Console.Write("parser");
+                }
+                pgen.WriteParser();
+                if (genScanner)
+                {
+                    if (!quiet)
+                        Console.Write(", scanner");
+                    dfa.WriteScanner();
+                    if (tab.ddt[0])
+                        dfa.PrintStates();
+                }
+                if (!quiet)
+                    Console.WriteLine(".");
+                if (tab.ddt[8])
+                    pgen.WriteStatistics();
+            }
+        }
+
+        if (tab.ddt[6])
+            tab.PrintSymbolTable();
+    }
 }

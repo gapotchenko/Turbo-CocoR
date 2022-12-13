@@ -264,28 +264,7 @@ namespace Gapotchenko.Turbo.CocoR.Compilation.Grammar
 			   SemErr("grammar symbol must not have attributes");
 			}
 			tab.noSym = tab.NewSym(Node.t, "???", 0); // noSym gets highest number
-			tab.SetupAnys();
-			tab.RenumberPragmas();
-			if (tab.ddt[2]) tab.PrintNodes();
-			if (errors.count == 0) {
-			 Console.WriteLine("Checking:");
-			 tab.CompSymbolSets();
-			 if (tab.ddt[7]) tab.XRef();
-			 if (tab.GrammarOk()) {
-			   Console.WriteLine();
-			   Console.Write("Generated: ");
-			   Console.Write("parser");
-			   pgen.WriteParser();
-			   if (genScanner) {
-			     Console.Write(", scanner");
-			     dfa.WriteScanner();
-			     if (tab.ddt[0]) dfa.PrintStates();
-			   }
-			   Console.WriteLine(".");
-			   if (tab.ddt[8]) pgen.WriteStatistics();
-			 }
-			}
-			if (tab.ddt[6]) tab.PrintSymbolTable();
+			tab.Finish(genScanner);
 			
 			Expect(18);
 		}
