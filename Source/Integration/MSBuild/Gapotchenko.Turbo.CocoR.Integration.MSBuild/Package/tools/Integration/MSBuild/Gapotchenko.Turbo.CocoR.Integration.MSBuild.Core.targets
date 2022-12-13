@@ -16,8 +16,6 @@ Copyright (C) Gapotchenko and Contributors
   <Import Project="Gapotchenko.Turbo.CocoR.Integration.MSBuild.DesignTime.targets" />
 
   <ItemGroup>
-    <TcrGrammar Remove="@(None)" Condition=" '$(EnableDefaultItems)' == 'true' " />
-
     <TcrGrammar Update="@(TcrGrammar)">
       <CopyrightFrame Condition=" '%(TcrGrammar.CopyrightFrame)' == '' AND Exists('%(RelativeDir)Copyright.frame') ">%(RelativeDir)Copyright.frame</CopyrightFrame>
       <CopyrightFrameTemplate>$([MSBuild]::ValueOrDefault('%(TcrGrammar.CopyrightFrame)', '%(RelativeDir)Copyright.frame'))</CopyrightFrameTemplate>
