@@ -66,11 +66,6 @@ sealed class OrchestrationService : IOrchestrationService
         if (!grammarFile.Exists)
             throw new Exception(string.Format("Grammar file \"{0}\" does not exist.", grammarFilePath)).Categorize("TCR0003");
 
-        var tsSync =
-            string.Equals(m_OptionsService.Properties.GetValueOrDefault("SyncTimestamp"), "true", StringComparison.OrdinalIgnoreCase) ?
-                new TimestampSynchronizer() :
-                null;
-
         bool grammarIsEmpty = grammarFile.Length == 0;
         if (!grammarIsEmpty)
         {
@@ -80,14 +75,7 @@ sealed class OrchestrationService : IOrchestrationService
         }
 
         if (grammarIsEmpty)
-        {
             m_ScaffoldingService.Value.CreateItem(ScaffoldingItemCategory.Grammar, grammarFilePath);
-            tsSync = null;
-        }
-        else
-        {
-            tsSync?.AddFile(grammarFilePath);
-        }
 
         m_OptionsService.SourceDirectoryPath = Path.GetDirectoryName(grammarFilePath);
 
@@ -95,46 +83,12 @@ sealed class OrchestrationService : IOrchestrationService
 
         var scannerFramePath = cgs.GetFrameFilePath(FrameFileNames.Scanner);
         if (!File.Exists(scannerFramePath))
-        {
             m_ScaffoldingService.Value.CreateItem(ScaffoldingItemCategory.Frame, ScaffoldingItemNames.Frame.Scanner);
-            tsSync = null;
-        }
-        else
-        {
-            tsSync?.AddFile(scannerFramePath);
-        }
 
         var parserFramePath = cgs.GetFrameFilePath(FrameFileNames.Parser);
         if (!File.Exists(parserFramePath))
-        {
             m_ScaffoldingService.Value.CreateItem(ScaffoldingItemCategory.Frame, ScaffoldingItemNames.Frame.Parser);
-            tsSync = null;
-        }
-        else
-        {
-            tsSync?.AddFile(parserFramePath);
-        }
-
-        if (tsSync != null)
-        {
-            tsSync.AddFileIfExists(cgs.GetFrameFilePath(FrameFileNames.Copyright));
-            tsSync.AddFileIfExists(cgs.GetFrameFilePath(FrameFileNames.Preface));
-
-            var s = m_OptionsService.Properties.GetValueOrDefault("CustomAdditionalInputs");
-            if (!string.IsNullOrEmpty(s))
-            {
-                var filePaths = s.Split('*', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-                foreach (var filePath in filePaths)
-                    tsSync.AddFileIfExists(filePath);
-            }
-        }
 
         m_Compiler.Value.Compile(grammarFilePath);
-
-        if (tsSync?.Timestamp is not null and var timestamp)
-        {
-            foreach (var filePath in m_IOService.Value.ModifiedFiles)
-                File.SetLastWriteTimeUtc(filePath, timestamp.Value);
-        }
     }
 }

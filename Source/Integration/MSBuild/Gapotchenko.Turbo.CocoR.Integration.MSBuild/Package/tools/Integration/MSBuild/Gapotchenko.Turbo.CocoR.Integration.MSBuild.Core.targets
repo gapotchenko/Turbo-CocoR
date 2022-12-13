@@ -98,6 +98,11 @@
       RootNamespace="$(RootNamespace)"
       ProjectDir="$(ProjectDir)" />
 
+    <!-- Synchronize file modification timestamps to avoid breaking fast up-to-date checks. -->
+    <TcrSynchronizeTimestamp
+      SourceFiles="%(TcrGrammar.Identity);%(TcrGrammar.ScannerFrame);%(TcrGrammar.ParserFrame);%(TcrGrammar.CopyrightFrame);%(TcrGrammar.PrefaceFrame)"
+      DestinationFiles="%(TcrGrammar.Scanner);%(TcrGrammar.Parser)" />
+
     <ItemGroup>
       <Compile Include="%(TcrGrammar.Scanner);%(TcrGrammar.Parser)" KeepDuplicates="false">
         <AutoGen>True</AutoGen>

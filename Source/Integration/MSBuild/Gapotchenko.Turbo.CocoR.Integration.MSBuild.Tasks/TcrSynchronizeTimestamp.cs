@@ -7,12 +7,12 @@ public sealed class TcrSynchronizeTimestamp : Task
     /// <summary>
     /// Gets or sets the source files names.
     /// </summary>
-    public string[] Sources { get; set; } = Array.Empty<string>();
+    public string[] SourceFiles { get; set; } = Array.Empty<string>();
 
     /// <summary>
-    /// Gets or sets the destination file name.
+    /// Gets or sets the destination file names.
     /// </summary>
-    public string Destination { get; set; } = string.Empty;
+    public string[] DestinationFiles { get; set; } = Array.Empty<string>();
 
     public override bool Execute()
     {
@@ -30,22 +30,26 @@ public sealed class TcrSynchronizeTimestamp : Task
 
     void ExecuteCore()
     {
-        if (!File.Exists(Destination))
+        var destinations = DestinationFiles.Where(File.Exists).ToList();
+        if (destinations.Count == 0)
             return;
 
         var timestamp = DateTime.MinValue;
 
-        foreach (var fileName in Sources)
+        foreach (var source in SourceFiles)
         {
-            if (File.Exists(fileName))
+            if (File.Exists(source))
             {
-                var ts = File.GetLastWriteTimeUtc(fileName);
+                var ts = File.GetLastWriteTimeUtc(source);
                 if (ts > timestamp)
                     timestamp = ts;
             }
         }
 
         if (timestamp != DateTime.MinValue)
-            File.SetLastWriteTimeUtc(Destination, timestamp);
+        {
+            foreach (var destination in destinations)
+                File.SetLastWriteTimeUtc(destination, timestamp);
+        }
     }
 }

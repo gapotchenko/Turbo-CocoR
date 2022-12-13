@@ -24,17 +24,7 @@ sealed class IOService : IIOService
             if (File.Exists(filePath))
                 BackupFile(filePath);
         }
-
-        m_ModifiedFiles.Add(filePath);
     }
 
-    static void BackupFile(string filePath)
-    {
-        File.Copy(filePath, filePath + ".old", true);
-    }
-
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    readonly List<string> m_ModifiedFiles = new();
-
-    public IReadOnlyList<string> ModifiedFiles => m_ModifiedFiles;
+    static void BackupFile(string filePath) => File.Copy(filePath, filePath + ".old", true);
 }
