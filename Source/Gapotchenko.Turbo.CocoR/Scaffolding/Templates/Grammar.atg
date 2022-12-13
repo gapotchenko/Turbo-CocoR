@@ -19,6 +19,6 @@ TOKENS
 PRODUCTIONS
 	Number = integer | float .
 	SignedNumber = [ "+" | "-" ] Number .
-    %coco_lang% = SignedNumber { "," SignedNumber } .
+	%coco_lang% = SignedNumber { "," SignedNumber } .
 
 END %coco_lang%.
