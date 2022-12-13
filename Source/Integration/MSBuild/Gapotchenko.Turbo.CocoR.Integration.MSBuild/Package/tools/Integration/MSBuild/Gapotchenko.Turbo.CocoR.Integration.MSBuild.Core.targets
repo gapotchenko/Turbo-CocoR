@@ -56,6 +56,7 @@
 
     <ItemGroup>
       <TcrCustomAdditionalCompileGrammarInputs Include="$(IntermediateOutputPath)TurboCocoR\$(MSBuildProjectFile).CompileGrammarInputs.cache" />
+      <CustomAdditionalCompileInputs Include="$(IntermediateOutputPath)TurboCocoR\$(MSBuildProjectFile).CompileGrammarInputs.cache" />
       <TcrCompileGrammarCache Include="$(TcrVersion)" />
       <TcrCompileGrammarCache Include="%(TcrGrammar.Identity);%(TcrGrammar.ScannerFrame);%(TcrGrammar.ParserFrame);%(TcrGrammar.PrefaceFrame);%(TcrGrammar.CopyrightFrame)" />
     </ItemGroup>
