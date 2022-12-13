@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <!-- This set of TFMs allows the module to be consumed by MSBuild 16.0+ (Visual Studio 2019+). -->
@@ -16,7 +16,7 @@
     <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="Microsoft.Build.Utilities.v4.0" />
     <!-- 'Nullable' package allows to keep a single code base including .NET Framework targets
-         which do not support nullable checks out of the box. -->
+         which do not support nullable checks by default. -->
     <PackageReference Include="Nullable" Version="1.3.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
