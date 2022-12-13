@@ -27,7 +27,7 @@ Copyright (C) Gapotchenko and Contributors
   </ItemDefinitionGroup>
 
   <ItemGroup Condition=" '$(TcrLangExtension)' != '' AND '$(EnableDefaultItems)' == 'true' ">
-    <!-- Glob grammar files in project. -->
+    <!-- Include grammar files by glob. -->
     <TcrGrammar Include="**\*.atg" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
 
     <None Remove="**\*.atg" Condition=" '$(EnableDefaultNoneItems)' == 'true' " />

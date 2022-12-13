@@ -68,9 +68,15 @@ Copyright (C) Gapotchenko and Contributors
 
     <ItemGroup>
       <TcrCustomAdditionalCompileGrammarInputs Include="$(IntermediateOutputPath)TurboCocoR\$(MSBuildProjectFile).CompileGrammarInputs.cache" />
+
+      <!-- Rebuild regenerated source files when needed. -->
       <CustomAdditionalCompileInputs Include="$(IntermediateOutputPath)TurboCocoR\$(MSBuildProjectFile).CompileGrammarInputs.cache" />
+
+      <!-- Regenerate source files on change of Turbo Coco/R version. -->
       <TcrCompileGrammarCache Include="$(TcrVersion)" />
-      <TcrCompileGrammarCache Include="%(TcrGrammar.Identity);%(TcrGrammar.ScannerFrame);%(TcrGrammar.ParserFrame);%(TcrGrammar.PrefaceFrame);%(TcrGrammar.CopyrightFrame)" />
+
+      <!-- Regenerate source files on change of optional auxiliary grammar files. -->
+      <TcrCompileGrammarCache Include="%(TcrGrammar.CopyrightFrame);%(TcrGrammar.PrefaceFrame)" />
     </ItemGroup>
 
     <Hash ItemsToHash="@(TcrCompileGrammarCache)">
@@ -91,7 +97,7 @@ Copyright (C) Gapotchenko and Contributors
   <Target Name="TcrCompileGrammar"
           BeforeTargets="CoreCompile"
           Condition=" '$(DesignTimeBuild)' != 'true' "
-          Inputs="%(TcrGrammar.Identity);%(TcrGrammar.ScannerFrame);%(TcrGrammar.ParserFrame);%(TcrGrammar.PrefaceFrame);%(TcrGrammar.CopyrightFrame);@(TcrCustomAdditionalCompileGrammarInputs)"
+          Inputs="%(TcrGrammar.Identity);%(TcrGrammar.ScannerFrame);%(TcrGrammar.ParserFrame);%(TcrGrammar.CopyrightFrame);%(TcrGrammar.PrefaceFrame);@(TcrCustomAdditionalCompileGrammarInputs)"
           Outputs="%(TcrGrammar.Scanner);%(TcrGrammar.Parser)"
           DependsOnTargets="TcrGenerateCompileGrammarDependencyCache">
 
