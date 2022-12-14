@@ -1,3 +1,24 @@
-﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\tools\Integration\MSBuild\Gapotchenko.Turbo.CocoR.Integration.MSBuild.targets" />
+﻿<!--
+******************************************************************************
+Gapotchenko.Turbo.CocoR.Integration.MSBuild.targets
+
+WARNING:  DO NOT MODIFY this file. Incorrect changes to this file will make it
+          impossible to load or build your Turbo Coco/R projects from the
+          command line or IDE.
+
+Copyright (C) Gapotchenko and Contributors
+******************************************************************************
+-->
+
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <Import Project="Gapotchenko.Turbo.CocoR.Integration.MSBuild.Core.targets" Condition=" '$(TcrMSBuildVersionIsOK)' == 'true' " />
+
+  <Target Name="TcrValidateMSBuild" BeforeTargets="CoreCompile">
+    <Error
+      Condition=" '$(TcrMSBuildVersionIsOK)' != 'true' "
+      Code="TCR1201"
+      Text="Turbo Coco/R project integration requires MSBuild version $(TcrMSBuildMinVersion) or newer." />
+  </Target>
+
 </Project>

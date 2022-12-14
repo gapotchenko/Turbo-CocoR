@@ -20,7 +20,9 @@ public abstract class TcrToolTask : ToolTask
     protected override string GenerateFullPathToTool() =>
         Path.GetFullPath(Path.Combine(
             typeof(TcrToolTask).Assembly.Location,
-            @"..\..\..\..",
+            "..", // discard assembly file name
+            @"..\..", // go to the root of the package
+            "tools",
             ToolName));
 
     protected override MessageImportance StandardErrorLoggingImportance => MessageImportance.High;

@@ -39,7 +39,7 @@
       <_CopyItems Remove="@(_CopyItems)" />
       <_CopyItems Include="..\Gapotchenko.Turbo.CocoR.Integration.MSBuild.Tasks\bin\$(Configuration)\**\*.*" />
     </ItemGroup>
-    <Copy SourceFiles="@(_CopyItems)" DestinationFolder="$(_PackageContentDir)\tools\Integration\MSBuild\%(RecursiveDir)" />
+    <Copy SourceFiles="@(_CopyItems)" DestinationFolder="$(_PackageContentDir)\build\%(RecursiveDir)" />
 
     <ItemGroup>
       <_CopyItems Remove="@(_CopyItems)" />
