@@ -2,6 +2,9 @@
 
 interface ILanguageProvider
 {
+    /// <summary>
+    /// Gets the canonical language name.
+    /// </summary>
     string Language { get; }
 
     string LanguageVersion { get; }

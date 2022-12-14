@@ -185,6 +185,10 @@ public sealed class TcrCompileGrammar : TcrToolTask
         }
     }
 
+    /// <summary>
+    /// Infers the namespace of the grammar file.
+    /// </summary>
+    /// <returns>The inferred namespace or <see langword="null"/> if namespace cannot be inferred.</returns>
     string? TryGetNamespaceHint()
     {
         var rootNamespace = RootNamespace;
