@@ -18,7 +18,7 @@ Operations are grouped according to their natural math order but can be prioriti
 ```
 
 If you want to play with the grammar, you can modify the `.atg` or a `.frame` file.
-To produce updated scanner and parser files run the following command:
+Then run the following command to produce the updated scanner and parser files:
 
 ```
 > turbo-coco Calc.atg
