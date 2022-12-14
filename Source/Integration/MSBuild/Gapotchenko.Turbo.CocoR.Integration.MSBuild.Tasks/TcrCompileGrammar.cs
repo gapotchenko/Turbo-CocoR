@@ -160,8 +160,7 @@ public sealed class TcrCompileGrammar : TcrToolTask
 
         if (TryGetNamespaceHint() is not null and var namespaceHint)
         {
-            // Essential for the newly scaffolded .atg file to define the sane namespace
-            // unconsciously expected by a user.
+            // Namespace hint is essential for the newly scaffolded .atg files.
             clb.AppendProperty("NamespaceHint", namespaceHint);
         }
 
