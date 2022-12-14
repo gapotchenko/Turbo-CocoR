@@ -6,7 +6,7 @@
 
 Release date: December 14, 2022
 
-- Added MSBuild integration
+- MSBuild integration
 - Improved visualization of messages, warnings and errors
 - Fixed issue with an empty `Trace.txt` file that could be left behind when `turbo-coco` exited with an error
 
