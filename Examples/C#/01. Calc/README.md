@@ -1,8 +1,8 @@
 # Calc
 
-Calc is the simplest Turbo Coco/R sample for C#.
+Calc is the easiest Turbo Coco/R sample for C#.
 It asks a user to enter a math expression and then calculates the result.
-The sample demonstrates the simplest single pass architecture: the result is being calculated as the parsing progresses.
+The sample demonstrates the simplest single-pass architecture: the result is being calculated as the parsing progresses.
 
 Only the basic math operations are supported:
 
