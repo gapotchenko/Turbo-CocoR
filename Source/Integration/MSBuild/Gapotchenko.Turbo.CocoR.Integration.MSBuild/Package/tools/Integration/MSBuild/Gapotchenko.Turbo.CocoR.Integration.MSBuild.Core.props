@@ -21,8 +21,8 @@ Copyright (C) Gapotchenko and Contributors
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <ScannerFrame>%(RelativeDir)Scanner.frame</ScannerFrame>
       <ParserFrame>%(RelativeDir)Parser.frame</ParserFrame>
-      <Scanner>%(RelativeDir)%(Filename).Scanner$(TcrLangExtension)</Scanner>
-      <Parser>%(RelativeDir)%(Filename).Parser$(TcrLangExtension)</Parser>
+      <Scanner>%(RelativeDir)%(Filename).Scanner.gen$(TcrLangExtension)</Scanner>
+      <Parser>%(RelativeDir)%(Filename).Parser.gen$(TcrLangExtension)</Parser>
     </TcrGrammar>
   </ItemDefinitionGroup>
 
