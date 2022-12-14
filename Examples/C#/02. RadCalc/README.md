@@ -13,7 +13,7 @@ Supported math operators:
 
 Supported math functions:
 
-- `abs(x)`: gets absolute value of a number.
+- `abs(x)`: gets absolute value of a number
 
 Operations are grouped according to their natural math order but can be prioritized by brackets, like so:
 
