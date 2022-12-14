@@ -62,6 +62,8 @@ sealed class Compiler
             trace = traceTextWriter
         };
 
+        parser.errors.FileName = grammarFilePath;
+
         parser.tab = new Tab(parser)
         {
             CodeGenerationService = m_CodeGenerationService,

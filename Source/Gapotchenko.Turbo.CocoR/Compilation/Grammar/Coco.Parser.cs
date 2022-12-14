@@ -738,12 +738,11 @@ namespace Gapotchenko.Turbo.CocoR.Compilation.Grammar
 	{
 		public int count = 0;                                    // number of errors detected
 		public System.IO.TextWriter errorStream = Console.Out;   // error messages go to this stream
-		public string errMsgFormat = "-- line {0} col {1}: {2}"; // 0=line, 1=column, 2=text
+		public string FileName; 
 
 		public virtual void SynErr(int line, int col, string s)
 		{
-			errorStream.WriteLine(errMsgFormat, line, col, s);
-			count++;
+			WriteError(line, col, s);
 		}
 
 		public virtual void SynErr(int line, int col, int n)
@@ -813,24 +812,36 @@ namespace Gapotchenko.Turbo.CocoR.Compilation.Grammar
 
 		public virtual void SemErr(int line, int col, string s)
 		{
-			errorStream.WriteLine(errMsgFormat, line, col, s);
+			WriteError(line, col, s);
+		}
+
+		void WriteError(int line, int column, string s)
+		{
+			Console.WriteLine($"{FileName}({line},{column}): error: {CapitalizeSentence(s)}");
 			count++;
 		}
 		
 		public virtual void SemErr(string s)
 		{
-			errorStream.WriteLine(s);
-			count++;
+	        Console.WriteLine($"{FileName}: error: {CapitalizeSentence(s)}");
+	        count++;
 		}
 		
+		static string CapitalizeSentence(string s)
+		{
+			if (string.IsNullOrEmpty(s))
+				return s;
+			return string.Concat(new ReadOnlySpan<char>(char.ToUpperInvariant(s[0])), s.AsSpan(1));
+		}
+
 		public virtual void Warning(int line, int col, string s)
 		{
-			errorStream.WriteLine(errMsgFormat, line, col, s);
+	        Console.WriteLine($"{FileName}({line},{col}): warning: {CapitalizeSentence(s)}");
 		}
-		
+			
 		public virtual void Warning(string s)
 		{
-			errorStream.WriteLine(s);
-		}
+	        Console.WriteLine($"{FileName}: warning: {CapitalizeSentence(s)}");
+	    }
 	} // end Errors
 }

@@ -838,8 +838,13 @@ class Tab
                     sym.deletable = true; changed = true;
                 }
         } while (changed);
-        foreach (Symbol sym in nonterminals)
-            if (sym.deletable) errors.Warning("  " + sym.name + " deletable");
+
+        if (!Quiet)
+        {
+            foreach (Symbol sym in nonterminals)
+                if (sym.deletable)
+                    Console.WriteLine("  " + sym.name + " deletable");
+        }
     }
 
     public void RenumberPragmas()
