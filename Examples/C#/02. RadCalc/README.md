@@ -1,6 +1,6 @@
 # RadCalc
 
-RadCalc is a C# sample demonstrating the use of Turbo Coco/R MSBuild integration.
+RadCalc is a C# Turbo Coco/R example demonstrating the use of MSBuild project integration.
 It asks a user to enter a math expression and then calculates the result.
 The sample has a simple single-pass architecture: the result is being calculated as the parsing progresses.
 
