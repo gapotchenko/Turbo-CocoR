@@ -1418,6 +1418,8 @@ class Tab
             if (!quiet)
                 Console.WriteLine("Checking:");
             tab.CompSymbolSets();
+            if (!quiet)
+                Console.WriteLine("  done");
             if (tab.ddt[7]) tab.XRef();
             if (tab.GrammarOk())
             {
