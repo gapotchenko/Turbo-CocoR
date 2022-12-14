@@ -1,0 +1,92 @@
+﻿$namespace=RadCalc.Grammar
+$compatibility=Turbo Coco/R 2022.2
+
+COMPILER RadCalc
+
+public int Result { get; private set; }
+
+CHARACTERS
+    digit = '0'..'9' .
+    letter = 'a'..'z' + 'A'..'Z' .
+
+TOKENS
+    identifier =  letter { letter | digit } .
+    integer = digit { digit } .
+
+PRODUCTIONS
+    RadCalc						
+        = Expression <out var value>            (. Result = value; .) .
+
+    Number <out int r>
+        = integer                               (. if (!int.TryParse(t.val, out r))
+                                                       SemErr("invalid integer format"); .) .
+
+    Literal <out int r>
+        = Number <out r> .
+
+    Primary <out int r>                         (. r = default; .)
+        = Literal <out r>
+        | FunctionCall<out r>
+        | "(" Expression <out r> ")" .
+
+    Designator<out string s>
+        =
+        identifier                              (. s = t.val; .)
+        .
+
+    FunctionCall<out int r>                     (. string name;
+                                                   int[] args = Array.Empty<int>();
+                                                   r = default; .)
+        =
+        Designator<out name>
+        ActualParameters<out args>              (. switch (name)
+                                                   {
+                                                       case "abs":
+                                                           if (args.Length != 1)
+                                                           {
+                                                               SemErr("invalid number of arguments");
+                                                               break;
+                                                           }
+                                                           r = Math.Abs(args[0]);
+                                                           break;
+
+                                                       default:
+                                                           SemErr("unknown function");
+                                                           break;
+                                                   } .)
+        .
+
+    ActualParameters<out int[] r>               (. r = Array.Empty<int>(); .)
+        = "(" [ ExpList<out r> ] ")" .
+
+    ExpList<out int[] r>                        (. var list = new List<int>(); .)
+        =
+        Expression<out var e>                   (. list.Add(e); .)
+        {
+            "," Expression<out e>               (. list.Add(e); .)
+        }                                       (. r = list.ToArray(); .)
+        .
+
+    Factor <out int r>
+        = Primary <out r>.
+
+    Term <out int r>
+        =
+        Factor <out r>
+        { "*" Factor <out var factor>           (. r = r * factor; .)
+        | "/" Factor <out var factor>           (. r = r / factor; .)
+        } .
+
+    SimpleExpression <out int r>                (. r = default; .)
+        =
+        ( "+" Term <out var value>              (. r = value; .)
+        | "-" Term <out var value>              (. r = -value; .)
+        | Term <out r> )
+        { "+" Term <out var term>               (. r += term; .)
+        | "-" Term <out var term>               (. r -= term; .)
+        } .
+
+    Expression <out int r>      
+        = SimpleExpression <out r> .
+
+END RadCalc.
