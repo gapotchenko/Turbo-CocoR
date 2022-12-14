@@ -36,7 +36,7 @@ sealed class CSharpLanguageProvider : ILanguageProvider
     {
         if (a.Length == 0)
             return b;
-        if (b.Length == 0)
+        else if (b.Length == 0)
             return a;
         else
             return a + NamespaceSeparator + b;
