@@ -13,7 +13,7 @@
     <projectUrl>$projectUrl$</projectUrl>
     <description>$description$</description>
     <copyright>$copyright$</copyright>
-    <tags>$tags$ msbuild integration</tags>
+    <tags>$tags$</tags>
     <repository type="$repositoryType$" url="$repositoryUrl$" />
   </metadata>
 
