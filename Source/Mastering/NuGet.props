@@ -3,6 +3,7 @@
   <PropertyGroup>
     <IsPackable>false</IsPackable>
 
+    <Authors>$(Company)</Authors>
     <PackageLicenseExpression>GPL-2.0-only</PackageLicenseExpression>
     <PackageIcon>docs\assets\package-icon.png</PackageIcon>
     <PackageProjectUrl>https://github.com/gapotchenko/Turbo-CocoR</PackageProjectUrl>
