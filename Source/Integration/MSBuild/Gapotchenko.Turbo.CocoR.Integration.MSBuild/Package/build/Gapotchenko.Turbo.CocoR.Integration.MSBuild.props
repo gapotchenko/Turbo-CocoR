@@ -15,6 +15,7 @@ Copyright (C) Gapotchenko and Contributors
   <PropertyGroup>
     <TcrVersion>2022.3.1</TcrVersion>
     <TcrSignificantVersion>2022.3</TcrSignificantVersion>
+
     <TcrMSBuildMinVersion>16.5</TcrMSBuildMinVersion>
     <TcrMSBuildVersionIsOK>false</TcrMSBuildVersionIsOK>
     <TcrMSBuildVersionIsOK Condition=" '$(MSBuildVersion)' &gt;= '$(TcrMSBuildMinVersion)' " >true</TcrMSBuildVersionIsOK>
