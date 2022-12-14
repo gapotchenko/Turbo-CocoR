@@ -15,16 +15,16 @@ TOKENS
 
 PRODUCTIONS
     Calc						
-        = Expression <out var value>			(. Result = value; .) .
+        = Expression <out var value>            (. Result = value; .) .
 
     Number <out int r>
-        = integer								(. if (!int.TryParse(t.val, out r))
+        = integer                               (. if (!int.TryParse(t.val, out r))
                                                     SemErr("invalid integer format"); .) .
 
     Literal <out int r>
         = Number <out r> .
 
-    Primary <out int r>							(. r = default; .)
+    Primary <out int r>                         (. r = default; .)
         = Literal <out r>
         | "(" Expression <out r> ")" .
 
@@ -34,17 +34,17 @@ PRODUCTIONS
     Term <out int r>
         =
         Factor <out r>
-        { "*" Factor <out var factor>			(. r = r * factor; .)
-        | "/" Factor <out var factor>			(. r = r / factor; .)
+        { "*" Factor <out var factor>           (. r = r * factor; .)
+        | "/" Factor <out var factor>           (. r = r / factor; .)
         } .
 
-    SimpleExpression <out int r>				(. r = default; .)
+    SimpleExpression <out int r>                (. r = default; .)
         =
-        ( "+" Term <out var value>				(. r = value; .)
-        | "-" Term <out var value>				(. r = -value; .)
+        ( "+" Term <out var value>              (. r = value; .)
+        | "-" Term <out var value>              (. r = -value; .)
         | Term <out r> )
-        { "+" Term <out var term>				(. r += term; .)
-        | "-" Term <out var term>				(. r -= term; .)
+        { "+" Term <out var term>               (. r += term; .)
+        | "-" Term <out var term>               (. r -= term; .)
         } .
 
     Expression <out int r>      
