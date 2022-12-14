@@ -208,7 +208,7 @@ public sealed class TcrCompileGrammar : TcrToolTask
                     if (p.Length != 0 && p[0] == "..")
                         relativeNamespace = null;
                     else
-                        relativeNamespace = string.Join(languageProvider.NamespaceSeparator, p.Select(languageProvider.EscapeIdentifier));
+                        relativeNamespace = languageProvider.CombineNamespaces(p.Select(x => languageProvider.EscapeIdentifier(x)));
                 }
 
                 if (relativeNamespace != null)

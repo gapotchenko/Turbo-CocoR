@@ -12,4 +12,6 @@ interface ILanguageProvider
     string? EscapeIdentifier(string? id);
 
     string CombineNamespaces(string a, string b);
+
+    string CombineNamespaces(IEnumerable<string> ns);
 }

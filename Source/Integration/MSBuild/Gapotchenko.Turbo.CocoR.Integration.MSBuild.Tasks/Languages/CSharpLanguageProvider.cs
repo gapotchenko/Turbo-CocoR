@@ -41,4 +41,7 @@ sealed class CSharpLanguageProvider : ILanguageProvider
         else
             return a + NamespaceSeparator + b;
     }
+
+    public string CombineNamespaces(IEnumerable<string> ns) =>
+        string.Join(NamespaceSeparator, ns.Where(x => x.Length != 0));
 }
