@@ -17,7 +17,7 @@ Operations are grouped according to their natural math order but can be prioriti
 (10 + 20) * 3
 ```
 
-If you want to play with the grammar you can modify the `.atg` or a `.frame` file.
+If you want to play with the grammar, you can modify the `.atg` or a `.frame` file.
 To produce updated scanner and parser files run the following command:
 
 ```
