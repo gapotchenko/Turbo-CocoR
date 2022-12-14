@@ -159,7 +159,11 @@ public sealed class TcrCompileGrammar : TcrToolTask
         }
 
         if (TryGetNamespaceHint() is not null and var namespaceHint)
+        {
+            // Essential for the newly scaffolded .atg file to define the sane namespace
+            // unconsciously expected by a user.
             clb.AppendProperty("NamespaceHint", namespaceHint);
+        }
 
         clb.AppendSwitch("--int-call");
         clb.AppendSwitch("compile-project-grammar");
@@ -185,6 +189,10 @@ public sealed class TcrCompileGrammar : TcrToolTask
         }
     }
 
+    /// <summary>
+    /// Infers the namespace of the grammar file.
+    /// </summary>
+    /// <returns>The inferred namespace or <see langword="null"/> if namespace cannot be inferred.</returns>
     string? TryGetNamespaceHint()
     {
         var rootNamespace = RootNamespace;
