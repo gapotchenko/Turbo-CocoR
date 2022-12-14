@@ -4,9 +4,11 @@
 
 ### Turbo Coco/R 2022.2
 
-Release date: not released yet
+Release date: December 14, 2022
 
-- Fixed trace file deletion issue that occurred on an error
+- MSBuild integration
+- Improved visualization of messages, warnings and errors
+- Fixed issue with an empty `Trace.txt` file that could be left behind when `turbo-coco` exited with an error
 
 ### Turbo Coco/R 2022.1
 
