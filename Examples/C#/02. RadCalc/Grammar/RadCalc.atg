@@ -29,17 +29,15 @@ PRODUCTIONS
         | FunctionCall<out r>
         | "(" Expression <out r> ")" .
 
-    Designator<out string s>
+    Designator <out string s>
         =
         identifier                              (. s = t.val; .)
         .
 
-    FunctionCall<out int r>                     (. string name;
-                                                   int[] args = Array.Empty<int>();
-                                                   r = default; .)
+    FunctionCall <out int r>                    (. r = default; .)
         =
-        Designator<out name>
-        ActualParameters<out args>              (. switch (name)
+        Designator <out var name>
+        ActualParameters <out var args>         (. switch (name)
                                                    {
                                                        case "abs":
                                                            if (args.Length != 1)
@@ -56,14 +54,14 @@ PRODUCTIONS
                                                    } .)
         .
 
-    ActualParameters<out int[] r>               (. r = Array.Empty<int>(); .)
-        = "(" [ ExpList<out r> ] ")" .
+    ActualParameters <out int[] r>              (. r = Array.Empty<int>(); .)
+        = "(" [ ExpList <out r> ] ")" .
 
-    ExpList<out int[] r>                        (. var list = new List<int>(); .)
+    ExpList <out int[] r>                       (. var list = new List<int>(); .)
         =
-        Expression<out var e>                   (. list.Add(e); .)
+        Expression <out var e>                  (. list.Add(e); .)
         {
-            "," Expression<out e>               (. list.Add(e); .)
+            "," Expression <out e>              (. list.Add(e); .)
         }                                       (. r = list.ToArray(); .)
         .
 

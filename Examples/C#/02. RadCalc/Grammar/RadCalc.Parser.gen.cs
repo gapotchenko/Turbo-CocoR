@@ -123,11 +123,9 @@ namespace RadCalc.Grammar
 		}
 
 		void FunctionCall(out int r) {
-			string name;
-			int[] args = Array.Empty<int>();
 			r = default; 
-			Designator(out name);
-			ActualParameters(out args);
+			Designator(out var name);
+			ActualParameters(out var args);
 			switch (name)
 			{
 			   case "abs":
