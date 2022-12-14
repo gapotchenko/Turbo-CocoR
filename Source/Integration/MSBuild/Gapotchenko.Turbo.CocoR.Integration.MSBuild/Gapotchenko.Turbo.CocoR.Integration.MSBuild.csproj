@@ -21,7 +21,7 @@
 
     <ItemGroup>
       <_ProjectsToPublish Include="..\..\..\Gapotchenko.Turbo.CocoR\Gapotchenko.Turbo.CocoR.csproj">
-        <AdditionalProperties>TargetFramework=net7.0;UseAppHost=false;Configuration=$(Configuration);PublishDir=$(MSBuildThisFileDirectory)$(_PackageContentDir)tools\</AdditionalProperties>
+        <AdditionalProperties>TargetFramework=net7.0;UseAppHost=false;Configuration=$(Configuration);PublishDir=$(MSBuildThisFileDirectory)$(_PackageContentDir)tools\net7.0\any\</AdditionalProperties>
       </_ProjectsToPublish>
     </ItemGroup>
 
