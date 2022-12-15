@@ -7,6 +7,7 @@ namespace Gapotchenko.Turbo.CocoR.Integration.MSBuild.Tasks.Utilities;
 /// <summary>
 /// The base class for tasks built upon "turbo-coco" command-line tool.
 /// </summary>
+[EditorBrowsable(EditorBrowsableState.Never)]
 public abstract class TcrToolTask : ToolTask
 {
     public TcrToolTask()
