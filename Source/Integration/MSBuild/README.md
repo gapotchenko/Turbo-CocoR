@@ -9,7 +9,7 @@
     - If the `.atg` file is empty then it will be automatically filled up with a starter grammar for your convenience
     - Frame files will be automatically created if they do not exist yet
     - The scanner and parser files will be generated automatically on every grammar modification
-3. That's it. Enjoy and be rad (pun intended as RAD stands for rapid application development)
+3. That's it
 
 Project integration significantly reduces development time compared to the traditional approach with the manual usage of `turbo-coco` command-line tool.
 
