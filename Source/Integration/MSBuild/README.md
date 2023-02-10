@@ -6,7 +6,7 @@
 
 1. Add [`Gapotchenko.Turbo.CocoR.Integration.MSBuild`](https://www.nuget.org/packages/Gapotchenko.Turbo.CocoR.Integration.MSBuild) NuGet package to your MSBuild project
 2. Every attributed grammar file with `.atg` extension will be automatically processed by Turbo Coco/R during the build using the following rules:
-    - If the `.atg` file is empty then it will be automatically filled with a starter grammar for your convenience
+    - If the `.atg` file is empty then it will be automatically filled up with a starter grammar for your convenience
     - Frame files will be automatically created if they do not exist yet
     - The scanner and parser files will be generated automatically on every grammar modification
 3. That's it. Enjoy and be rad (pun intended as RAD stands for rapid application development)
