@@ -18,7 +18,7 @@ For further guidance, see the [examples](https://github.com/gapotchenko/Turbo-Co
 ## Requirements
 
 - Turbo Coco/R requires .NET 7.0+ to run
-- Turbo Coco/R MSBuild integration requires MSBuild 16.5+
+- Turbo Coco/R MSBuild integration requires MSBuild 16.5+. It comes with Visual Studio 2019 16.5 and newer
 - The MSBuild project must be in a new [SDK-style format](https://learn.microsoft.com/en-us/dotnet/core/project-sdk/overview).
   While that project format is mainly associated with newer target frameworks such as .NET Core and .NET, it is also perfectly usable for .NET Framework.
   
