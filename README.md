@@ -29,13 +29,13 @@ Turbo Coco/R rigorously follows the baseline [Coco/R standard](https://ssw.jku.a
    > turbo-coco new grammar MyLang.atg
    ```
 
-3. Create the customizable frame files for a scanner and parser:
+3. Create the customizable frame files* for a scanner and parser:
 
    ``` sh
    > turbo-coco new frame scanner parser
    ```
 
-   A frame file defines the basic code structure of a generated file.
+   \* A frame file defines the basic code structure of a source file generated from the grammar.
 
 Now you can generate the actual scanner and parser source files for your grammar:
 
@@ -43,7 +43,7 @@ Now you can generate the actual scanner and parser source files for your grammar
 > turbo-coco MyLang.atg
 ```
 
-Once generated, the files are ready to be compiled as a part of your project.
+Once generated, the files are ready to be compiled as parts of your project.
 
 For further guidance, see the [examples](https://github.com/gapotchenko/Turbo-CocoR/tree/main/Examples).
 
