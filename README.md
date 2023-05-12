@@ -57,7 +57,7 @@ In addition to the traditional command line approach, Turbo Coco/R offers automa
 
 Please note that:
 
-- The produced source files are not subject to any requirements and can work anywhere
+- The produced source files are not subject to the requirements and can work under any .NET target framework
 
 ## Licensing
 
