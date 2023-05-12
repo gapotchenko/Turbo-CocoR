@@ -26,7 +26,7 @@ For further guidance, see the [examples](https://github.com/gapotchenko/Turbo-Co
   Tools like [dotnet migrate-2019](https://github.com/hvanbakel/CsprojToVs2017) may help you with that)
 
 Please note that:
-- The produced source files are not subject to any requirements and can work anywhere
+- The produced source files are not subject to the requirements and can work under any .NET target framework
 - `Gapotchenko.Turbo.CocoR.Integration.MSBuild` NuGet package can be used in a project targeting not only .NET 7.0+ but any other framework without restrictions
 - `Gapotchenko.Turbo.CocoR.Integration.MSBuild` NuGet package does not rely on the installed `turbo-coco` command-line tool.
   Instead, the package comes with the tool bundled inside.
