@@ -26,4 +26,4 @@ Then run the following command to produce the updated scanner and parser files:
 > turbo-coco Calc.atg
 ```
 
-After thar, build your project to compile the newly produced scanner and parser files.
+After thar, build the project to compile the newly produced scanner and parser files.
