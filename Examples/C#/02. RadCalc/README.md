@@ -1,7 +1,8 @@
 # RadCalc
 
 RadCalc is a C# sample demonstrating the rapid application development (RAD) concept by using Turbo Coco/R [MSBuild project integration](https://github.com/gapotchenko/Turbo-CocoR/tree/main/Source/Integration/MSBuild).
-It asks a user to enter a math expression and then calculates the result.
+
+The resulting application asks a user to enter a math expression and then calculates the result.
 The sample has a simple single-pass architecture: the result is being calculated as the parsing progresses.
 
 Supported math operators:
