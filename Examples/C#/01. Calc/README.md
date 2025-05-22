@@ -17,9 +17,13 @@ Operations are grouped according to their natural math order but can be prioriti
 (10 + 20) * 3
 ```
 
-If you want to play with the grammar, you can modify the `.atg` or a `.frame` file.
+## Development
+
+If you want to play with the grammar, you can modify the `.atg` or a `.frame` file of the project.
 Then run the following command to produce the updated scanner and parser files:
 
 ```
 > turbo-coco Calc.atg
 ```
+
+After thar, build your project to compile the newly produced scanner and parser files.
