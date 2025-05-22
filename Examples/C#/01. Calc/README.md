@@ -20,7 +20,7 @@ Operations are grouped according to their natural math order but can be prioriti
 ## Development
 
 If you want to play with the grammar, you can modify the `.atg` or a `.frame` file of the project.
-Then run the following command to produce the updated scanner and parser files:
+Then run the following command to produce the updated scanner and parser files (*.gen.cs):
 
 ```
 > turbo-coco Calc.atg
