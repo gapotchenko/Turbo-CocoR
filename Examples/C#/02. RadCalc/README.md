@@ -23,4 +23,6 @@ Operations are grouped according to their natural math order but can be prioriti
 ```
 
 If you want to play with the grammar, you can modify the `.atg` or a `.frame` file.
-Thanks to the MSBuild integration, the updated Turbo Coco/R scanner and parser files are generated automatically during the build (`*.gen.cs`) whenever modification of a grammar file is detected. This allows you to significantly reduce the development time compared to the traditional approach with the manual invocation of `turbo-coco` command-line tool.
+
+Thanks to the MSBuild integration, the updated Turbo Coco/R scanner and parser files are generated automatically during the build (`*.gen.cs`) whenever modification of a grammar file is detected.
+Such approach allows you to significantly reduce the development time compared to the `turbo-coco` command-line approach.
